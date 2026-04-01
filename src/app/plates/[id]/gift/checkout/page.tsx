@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import {
   useParams,
   notFound,
@@ -11,14 +11,34 @@ import PlateViz from "@/components/plates/PlateViz";
 import IBox from "@/components/ui/IBox";
 import InfoBox from "@/components/ui/InfoBox";
 import PageHeader from "@/components/layout/PageHeader";
-import { getPlateById, aed, escrowFee, priceTier } from "@/lib/plates";
+import { aed, escrowFee, priceTier } from "@/lib/plates";
+import { getPlateById } from "@/lib/firestore";
+import type { FSPlate } from "@/types/firebase";
+import { Loader2 } from "lucide-react";
 
 function GiftCheckoutInner() {
   const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const plate = getPlateById(id);
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getPlateById(id ?? "").then((p) => {
+      setPlate(p);
+      setLoading(false);
+    });
+  }, [id]);
+
+  if (loading)
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
+        <Loader2 size={24} className="animate-spin" />
+      </div>
+    );
   if (!plate) return notFound();
 
   const recipientName = searchParams.get("name") || "";
@@ -29,7 +49,7 @@ function GiftCheckoutInner() {
 
   const handlePay = () => {
     const params = new URLSearchParams({
-      plateId: String(plate.id),
+      plateId: String(plate.id ?? id),
       from: "Mohammed Al Hamdan",
       name: recipientName,
       msg: message,
@@ -102,7 +122,7 @@ function GiftCheckoutInner() {
                 className="text-[11px] mt-0.5"
                 style={{ color: "var(--sakk-text3)" }}
               >
-                Sold by {plate.seller}
+                Sold by {plate.sellerName}
               </div>
             </div>
           </div>

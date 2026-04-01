@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, notFound, useRouter } from "next/navigation";
 import PlateViz from "@/components/plates/PlateViz";
 import PageHeader from "@/components/layout/PageHeader";
-import { getPlateById } from "@/lib/plates";
+import { getPlateById } from "@/lib/firestore";
+import type { FSPlate } from "@/types/firebase";
+import { Loader2 } from "lucide-react";
 
 const inp = {
   width: "100%",
@@ -46,12 +48,28 @@ const FIELDS = [
 export default function GiftSetupPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const plate = getPlateById(id);
-
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [loadingPlate, setLoadingPlate] = useState(true);
   const [name, setName] = useState("");
   const [msg, setMsg] = useState("");
   const [date, setDate] = useState("");
 
+  useEffect(() => {
+    getPlateById(id ?? "").then((p) => {
+      setPlate(p);
+      setLoadingPlate(false);
+    });
+  }, [id]);
+
+  if (loadingPlate)
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
+        <Loader2 size={24} className="animate-spin" />
+      </div>
+    );
   if (!plate) return notFound();
 
   const values: Record<string, string> = { name, msg, date };

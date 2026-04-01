@@ -1,10 +1,16 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
 import { HelpCircle, FileText, CheckCircle2, ShieldCheck } from "lucide-react";
-import { getPlateById, aed } from "@/lib/plates";
+import { getPlateById } from "@/lib/firestore";
+import type { FSPlate } from "@/types/firebase";
+
+function aed(n: number) {
+  return "AED " + n.toLocaleString();
+}
 
 const inp = (focused: boolean) => ({
   width: "100%",
@@ -26,9 +32,31 @@ function GiftRevealInner() {
   const plateId = searchParams.get("plateId") || "3";
   const from = searchParams.get("from") || "Someone special";
   const gMsg = searchParams.get("msg") || "";
-  const plate = getPlateById(plateId);
 
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [loadingPlate, setLoadingPlate] = useState(true);
   const [tcf, setTcf] = useState("");
+
+  useEffect(() => {
+    getPlateById(plateId).then((p) => {
+      setPlate(p);
+      setLoadingPlate(false);
+    });
+  }, [plateId]);
+
+  if (loadingPlate)
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ background: "var(--surface)" }}
+      >
+        <Loader2
+          size={28}
+          className="animate-spin"
+          style={{ color: "var(--outline)" }}
+        />
+      </div>
+    );
 
   if (!plate)
     return (

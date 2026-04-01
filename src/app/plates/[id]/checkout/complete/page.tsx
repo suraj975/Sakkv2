@@ -1,15 +1,35 @@
 "use client";
 
 import { useParams, notFound, useRouter } from "next/navigation";
-import { CheckCircle2, Download, Home } from "lucide-react";
+import { useState, useEffect } from "react";
+import { CheckCircle2, Download, Home, Loader2 } from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
-import { getPlateById, aed } from "@/lib/plates";
+import { aed } from "@/lib/plates";
+import { getPlateById } from "@/lib/firestore";
+import type { FSPlate } from "@/types/firebase";
 
 export default function CompletePage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const plate = getPlateById(id);
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getPlateById(id ?? "").then((p) => {
+      setPlate(p);
+      setLoading(false);
+    });
+  }, [id]);
+
+  if (loading)
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
+        <Loader2 size={24} className="animate-spin" />
+      </div>
+    );
   if (!plate) return notFound();
 
   const txRef = `SKK-2024-50124`;

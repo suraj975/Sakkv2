@@ -4,15 +4,16 @@ import { useRouter } from "next/navigation";
 import { BadgeCheck } from "lucide-react";
 import PlateViz from "./PlateViz";
 import { aed } from "@/lib/plates";
-import { cn } from "@/lib/utils";
-import type { Plate } from "@/types";
+import { cn, toISOString } from "@/lib/utils";
+import CountdownTimer from "@/components/ui/CountdownTimer";
+import type { FSPlate } from "@/types/firebase";
 
 interface PlateCardProps {
-  plate: Plate;
+  plate: FSPlate;
   index?: number;
 }
 
-function getEmirateAccent(type: Plate["type"]) {
+function getEmirateAccent(type: FSPlate["type"]) {
   switch (type) {
     case "gold": return "bg-[#C9A84C]";
     case "silver": return "bg-slate-400";
@@ -25,6 +26,7 @@ function getEmirateAccent(type: Plate["type"]) {
 export default function PlateCard({ plate, index = 0 }: PlateCardProps) {
   const router = useRouter();
   const delay = Math.min(index, 7) + 1;
+  const isAuction = plate.listingType === "auction";
 
   return (
     <div
@@ -32,6 +34,17 @@ export default function PlateCard({ plate, index = 0 }: PlateCardProps) {
       className={`group bg-[var(--surface-container-lowest)] rounded-2xl border cursor-pointer relative overflow-hidden flex flex-col transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg animate-fade-up stagger-${delay}`}
       style={{ borderColor: "rgba(187,202,199,0.15)", boxShadow: "0 2px 10px rgba(25,28,29,0.06)" }}
     >
+      {/* LIVE badge for auction cards */}
+      {isAuction && (
+        <div
+          className="absolute top-2.5 right-2.5 z-20 flex items-center gap-1 px-1.5 py-0.5 rounded-full"
+          style={{ background: "rgba(186,26,26,0.1)" }}
+        >
+          <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "var(--error)" }} />
+          <span className="text-[9px] font-black uppercase" style={{ color: "var(--error)" }}>LIVE</span>
+        </div>
+      )}
+
       {/* Emirate Ribbon */}
       <div
         className={cn(
@@ -61,37 +74,59 @@ export default function PlateCard({ plate, index = 0 }: PlateCardProps) {
           <div className="flex items-center gap-1.5">
             <BadgeCheck
               size={14}
-              strokeWidth={plate.verified ? 0 : 1.8}
-              fill={plate.verified ? "var(--primary-container)" : "none"}
-              style={{ color: plate.verified ? "var(--primary)" : "var(--outline)" }}
+              strokeWidth={plate.isVerified ? 0 : 1.8}
+              fill={plate.isVerified ? "var(--primary-container)" : "none"}
+              style={{ color: plate.isVerified ? "var(--primary)" : "var(--outline)" }}
             />
-            {plate.verified && (
+            {plate.isVerified && (
               <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: "var(--primary)" }}>
                 Verified
               </span>
             )}
           </div>
-          {plate.days && (
+          {plate.sellerName && (
             <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: "var(--outline)" }}>
-              {plate.days}d ago
+              {plate.sellerName}
             </span>
           )}
         </div>
 
-        {plate.orig && (
-          <p className="text-[10px] line-through" style={{ color: "var(--outline)" }}>
-            {aed(plate.orig)}
-          </p>
+        {!isAuction && (
+          <>
+            {plate.origPrice && (
+              <p className="text-[10px] line-through" style={{ color: "var(--outline)" }}>
+                {aed(plate.origPrice)}
+              </p>
+            )}
+            <div className="flex items-center justify-between">
+              <p className="text-base font-black" style={{ color: "var(--primary)" }}>
+                {aed(plate.price)}
+              </p>
+              <span className="text-[10px] font-bold" style={{ color: "var(--on-surface-variant)" }}>
+                {plate.emirate} · {plate.num.length}d
+              </span>
+            </div>
+          </>
         )}
 
-        <div className="flex items-center justify-between">
-          <p className="text-base font-black" style={{ color: "var(--primary)" }}>
-            {aed(plate.price)}
-          </p>
-          <span className="text-[10px] font-bold" style={{ color: "var(--on-surface-variant)" }}>
-            {plate.emirate} · {plate.num.length}d
-          </span>
-        </div>
+        {isAuction && (
+          <>
+            <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "var(--outline)" }}>
+              Current Bid
+            </p>
+            <div className="flex items-center justify-between mt-0.5">
+              <span className="text-base font-black" style={{ color: "var(--primary)" }}>
+                {aed(plate.currentBid ?? 0)}
+              </span>
+              {plate.auctionEndTime && (
+                <CountdownTimer endTime={toISOString(plate.auctionEndTime)} variant="pill" />
+              )}
+            </div>
+            <span className="text-[9px] font-semibold" style={{ color: "var(--on-surface-variant)" }}>
+              {plate.bidCount} bids
+            </span>
+          </>
+        )}
       </div>
     </div>
   );
