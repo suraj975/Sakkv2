@@ -26,6 +26,9 @@ import {
 } from "@/lib/plates";
 import CountdownTimer from "@/components/ui/CountdownTimer";
 import BidHistory from "@/components/ui/BidHistory";
+import Card from "@/components/ui/Card";
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 
 export default function PlateDetailPage() {
   const { id } = useParams<{ id: string }>();
