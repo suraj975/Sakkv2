@@ -1,470 +1,187 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Search,
-  ChevronDown,
-  ArrowRight,
-  Lightbulb,
-  Heart,
-} from "lucide-react";
+import { Search as SearchIcon, ChevronDown, Zap, X } from "lucide-react";
 import PlateCard from "@/components/plates/PlateCard";
 import { PLATES } from "@/lib/plates";
-import type { Plate } from "@/types";
-
-const EMIRATES = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "RAK"];
-const DIGIT_OPTS = ["1", "2", "3", "4", "5"];
-
-const inp = (style?: React.CSSProperties): React.CSSProperties => ({
-  width: "100%",
-  background: "var(--surface-container-low)",
-  border: "none",
-  borderRadius: 10,
-  padding: "13px 16px",
-  fontSize: 14,
-  color: "var(--on-surface)",
-  boxSizing: "border-box",
-  outline: "none",
-  fontFamily: "inherit",
-  fontWeight: 500,
-  appearance: "none",
-  ...style,
-});
+import Badge from "@/components/ui/Badge";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 
 export default function SearchPage() {
-  const [sQ, setSQ] = useState("");
-  const [sEm, setSEm] = useState("Dubai");
-  const [sCode, setSCode] = useState("");
-  const [sDig, setSDig] = useState("");
-  const [adv, setAdv] = useState(false);
-  const [searched, setSearched] = useState(false);
+  const [query, setQuery] = useState("");
+  const [emirate, setEmirate] = useState("All");
+  const [digits, setDigits] = useState("All");
 
-  const filtered: Plate[] = PLATES.filter((p) => {
-    if (sEm && p.emirate !== sEm) return false;
-    if (sCode && !p.code.toLowerCase().includes(sCode.toLowerCase()))
-      return false;
-    if (sDig && p.num.length !== parseInt(sDig)) return false;
-    if (sQ) {
-      const q = sQ.toLowerCase();
-      if (
-        !p.num.includes(q) &&
-        !p.code.toLowerCase().includes(q) &&
-        !p.emirate.toLowerCase().includes(q)
-      )
-        return false;
-    }
-    return true;
+  const filtered = PLATES.filter((p) => {
+    const matchQ = !query || p.num.includes(query) || p.code.toLowerCase().includes(query.toLowerCase());
+    const matchE = emirate === "All" || p.emirate === emirate;
+    const matchD = digits === "All" || p.num.length.toString() === digits;
+    return matchQ && matchE && matchD;
   });
-
-  const reset = () => {
-    setSEm("Dubai");
-    setSCode("");
-    setSDig("");
-    setSQ("");
-    setSearched(false);
-  };
 
   return (
     <div className="flex-1 overflow-y-auto">
-      {/* ══════════════════════ MOBILE LAYOUT ══════════════════════ */}
-      <div className="lg:hidden pb-28 px-4 pt-6 max-w-md mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-end mb-7">
-          <div>
-            <h2
-              className="text-3xl font-black tracking-tight"
-              style={{ color: "var(--on-surface)" }}
-            >
-              Find a Plate
-            </h2>
-            <p
-              className="text-sm mt-1"
-              style={{ color: "var(--on-surface-variant)" }}
-            >
-              Premium UAE assets explorer
-            </p>
-          </div>
-          <button
-            onClick={reset}
-            className="text-sm font-semibold cursor-pointer bg-transparent border-none mb-1"
-            style={{ color: "var(--primary)" }}
-          >
-            Reset
-          </button>
-        </div>
+      {/* Header */}
+      <header
+        className="sticky top-0 z-40 glass-nav flex items-center justify-between px-6 lg:px-8 h-14 lg:h-16"
+        style={{ borderBottom: "1px solid rgba(187,202,199,0.15)" }}
+      >
+        <h1 className="text-lg lg:text-xl font-black tracking-tight" style={{ color: "var(--on-surface)" }}>
+          Search Plates
+        </h1>
+      </header>
 
-        {/* Search Input */}
-        <div className="relative mb-4">
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2"
-            style={{ color: "var(--outline)" }}
-            strokeWidth={1.8}
-          />
-          <input
-            value={sQ}
-            onChange={(e) => setSQ(e.target.value)}
-            placeholder="Enter plate number..."
-            style={{
-              ...inp(),
-              paddingLeft: 46,
-              height: 56,
-              fontSize: 16,
-              borderRadius: 12,
-              background: "var(--surface-container-lowest)",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-            }}
-          />
-        </div>
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-10 pb-28 lg:pb-16">
 
-        {/* Filter Grid */}
-        <div className="grid grid-cols-3 gap-2.5 mb-4">
-          {[
-            {
-              label: "EMIRATE",
-              el: (
-                <select
-                  value={sEm}
-                  onChange={(e) => setSEm(e.target.value)}
-                  style={inp()}
-                >
-                  <option value="">Any</option>
-                  {EMIRATES.map((e) => (
-                    <option key={e}>{e}</option>
-                  ))}
-                </select>
-              ),
-            },
-            {
-              label: "CODE",
-              el: (
-                <input
-                  value={sCode}
-                  onChange={(e) => setSCode(e.target.value)}
-                  placeholder="All"
-                  style={inp()}
-                />
-              ),
-            },
-            {
-              label: "DIGITS",
-              el: (
-                <select
-                  value={sDig}
-                  onChange={(e) => setSDig(e.target.value)}
-                  style={inp()}
-                >
-                  <option value="">Any</option>
-                  {DIGIT_OPTS.map((d) => (
-                    <option key={d}>{d}</option>
-                  ))}
-                </select>
-              ),
-            },
-          ].map((f, i) => (
-            <div key={i} className="flex flex-col gap-1">
-              <label
-                className="text-[9px] font-black uppercase tracking-[2px] ml-1"
-                style={{ color: "var(--outline)" }}
-              >
-                {f.label}
+        {/* Page Title */}
+        <header className="space-y-4">
+          <Badge size="md" className="!bg-[var(--teal-light)] !text-[var(--primary)] !border-none !px-4 !py-1.5 rounded-full">
+            MARKETPLACE
+          </Badge>
+          <h1 className="text-4xl lg:text-6xl font-black tracking-tight leading-[0.95]" style={{ color: "var(--on-surface)" }}>
+            Find your plate
+          </h1>
+        </header>
+
+        {/* Search Card */}
+        <Card padding="xl" className="space-y-7" style={{ boxShadow: "0 8px 28px rgba(25,28,29,0.08)" }}>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+            {/* Search Number */}
+            <div className="md:col-span-5 space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest ml-1" style={{ color: "var(--outline)" }}>
+                SEARCH NUMBER
               </label>
               <div className="relative">
-                {f.el}
-                {(i === 0 || i === 2) && (
-                  <ChevronDown
-                    size={12}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
-                    style={{ color: "var(--on-surface-variant)" }}
-                  />
+                <SearchIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: "var(--outline)" }} />
+                <input
+                  type="text"
+                  placeholder="e.g. 786, 1234..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="w-full pl-12 pr-5 py-3.5 rounded-2xl text-base font-bold focus:outline-none transition-all"
+                  style={{
+                    background: "var(--surface-container-low)",
+                    border: "2px solid transparent",
+                    color: "var(--on-surface)",
+                    fontFamily: "inherit",
+                  }}
+                  onFocus={(e) => (e.target.style.borderColor = "var(--primary)")}
+                  onBlur={(e) => (e.target.style.borderColor = "transparent")}
+                />
+                {query && (
+                  <button
+                    onClick={() => setQuery("")}
+                    className="absolute right-4 top-1/2 -translate-y-1/2"
+                    style={{ color: "var(--outline)" }}
+                  >
+                    <X size={16} />
+                  </button>
                 )}
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Advanced Search Toggle */}
-        <div className="flex items-center justify-between py-2 mb-3">
-          <span
-            className="text-sm font-medium"
-            style={{ color: "var(--on-surface)" }}
-          >
-            Advanced Search
-          </span>
-          <button
-            onClick={() => setAdv(!adv)}
-            className="cursor-pointer"
-            style={{
-              width: 40,
-              height: 22,
-              borderRadius: 11,
-              background: adv
-                ? "var(--primary)"
-                : "var(--surface-container-high)",
-              border: "none",
-              position: "relative",
-              transition: "background 0.2s",
-            }}
-          >
-            <span
-              style={{
-                position: "absolute",
-                top: 3,
-                left: adv ? 20 : 3,
-                width: 16,
-                height: 16,
-                borderRadius: "50%",
-                background: "white",
-                transition: "left 0.2s",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.15)",
-              }}
-            />
-          </button>
-        </div>
-
-        {/* Search Button */}
-        <button
-          onClick={() => setSearched(true)}
-          className="w-full h-14 rounded-xl font-black text-lg flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-[0.98]"
-          style={{
-            background:
-              "linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%)",
-            color: "white",
-          }}
-        >
-          Search Plates <ArrowRight size={18} strokeWidth={2.5} />
-        </button>
-
-        {/* Results */}
-        <div className="mt-10">
-          <div className="flex items-baseline gap-2 mb-5">
-            <h3
-              className="text-lg font-bold"
-              style={{ color: "var(--on-surface)" }}
-            >
-              {searched ? "Search Results" : "Recent Listings"}
-            </h3>
-            <span className="text-sm" style={{ color: "var(--outline)" }}>
-              {searched
-                ? `${filtered.length} plates found`
-                : "128 plates found"}
-            </span>
-          </div>
-
-          {searched && filtered.length === 0 ? (
-            <div
-              className="text-center py-12"
-              style={{ color: "var(--on-surface-variant)" }}
-            >
-              <p className="font-medium">No plates found</p>
-              <p className="text-sm mt-1">Try adjusting your filters</p>
+            {/* Emirate */}
+            <div className="md:col-span-3 space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest ml-1" style={{ color: "var(--outline)" }}>EMIRATE</label>
+              <div className="relative">
+                <select
+                  value={emirate}
+                  onChange={(e) => setEmirate(e.target.value)}
+                  className="w-full px-4 py-3.5 rounded-2xl text-base font-bold focus:outline-none transition-all appearance-none cursor-pointer"
+                  style={{ background: "var(--surface-container-low)", border: "2px solid transparent", color: "var(--on-surface)", fontFamily: "inherit" }}
+                >
+                  <option>All</option>
+                  <option>Dubai</option>
+                  <option>Abu Dhabi</option>
+                  <option>Sharjah</option>
+                </select>
+                <ChevronDown size={15} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "var(--outline)" }} />
+              </div>
             </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-2 gap-3.5">
-                {(searched ? filtered : PLATES.slice(0, 4)).map((p, i) => (
-                  <PlateCard key={p.id} plate={p} index={i} />
-                ))}
-              </div>
-              <div className="mt-10 text-center">
-                <button
-                  className="px-8 h-12 rounded-xl font-bold cursor-pointer transition-colors"
-                  style={{
-                    background: "var(--surface-container-high)",
-                    color: "var(--primary)",
-                    border: "none",
-                  }}
+
+            {/* Digits */}
+            <div className="md:col-span-4 space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest ml-1" style={{ color: "var(--outline)" }}>DIGITS</label>
+              <div className="relative">
+                <select
+                  value={digits}
+                  onChange={(e) => setDigits(e.target.value)}
+                  className="w-full px-4 py-3.5 rounded-2xl text-base font-bold focus:outline-none transition-all appearance-none cursor-pointer"
+                  style={{ background: "var(--surface-container-low)", border: "2px solid transparent", color: "var(--on-surface)", fontFamily: "inherit" }}
                 >
-                  View More Results
-                </button>
+                  <option>All</option>
+                  <option value="1">1 Digit</option>
+                  <option value="2">2 Digits</option>
+                  <option value="3">3 Digits</option>
+                  <option value="4">4 Digits</option>
+                  <option value="5">5 Digits</option>
+                </select>
+                <ChevronDown size={15} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "var(--outline)" }} />
               </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* ══════════════════════ DESKTOP LAYOUT ══════════════════════ */}
-      <div className="hidden lg:block max-w-[760px] mx-auto px-6 py-8">
-        {/* Search Card */}
-        <section
-          className="rounded-2xl p-6 mb-10"
-          style={{
-            background: "var(--surface-container-lowest)",
-            boxShadow: "0 4px 18px rgba(25,28,29,0.08)",
-          }}
-        >
-          <div className="flex justify-between items-end mb-6">
-            <h2
-              className="text-2xl font-black tracking-tight"
-              style={{ color: "var(--on-surface)" }}
-            >
-              Find a Plate
-            </h2>
-            <button
-              onClick={reset}
-              className="text-sm font-semibold cursor-pointer bg-transparent border-none"
-              style={{ color: "var(--primary)" }}
-            >
-              Reset
-            </button>
+            </div>
           </div>
 
-          {/* Search input */}
-          <div className="relative mb-5">
-            <Search
-              size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2"
-              style={{ color: "var(--outline)" }}
-              strokeWidth={1.8}
-            />
-            <input
-              value={sQ}
-              onChange={(e) => setSQ(e.target.value)}
-              placeholder="Search by number, birthday, lucky digits..."
-              style={{
-                ...inp(),
-                paddingLeft: 46,
-                height: 52,
-                borderRadius: 12,
-              }}
-            />
-          </div>
-
-          {/* Filter row */}
-          <div className="grid grid-cols-3 gap-4 mb-5">
-            {[
-              {
-                label: "EMIRATE",
-                el: (
-                  <select
-                    value={sEm}
-                    onChange={(e) => setSEm(e.target.value)}
-                    style={inp()}
-                  >
-                    <option value="">Any Emirate</option>
-                    {EMIRATES.map((e) => (
-                      <option key={e}>{e}</option>
-                    ))}
-                  </select>
-                ),
-                hasChevron: true,
-              },
-              {
-                label: "CODE / LETTER",
-                el: (
-                  <input
-                    value={sCode}
-                    onChange={(e) => setSCode(e.target.value)}
-                    placeholder="e.g. R, AA, 12"
-                    style={inp()}
-                  />
-                ),
-              },
-              {
-                label: "DIGITS COUNT",
-                el: (
-                  <select
-                    value={sDig}
-                    onChange={(e) => setSDig(e.target.value)}
-                    style={inp()}
-                  >
-                    <option value="">Any digits</option>
-                    {DIGIT_OPTS.map((d) => (
-                      <option key={d}>
-                        {d} Digit{d !== "1" ? "s" : ""}
-                      </option>
-                    ))}
-                  </select>
-                ),
-                hasChevron: true,
-              },
-            ].map((f, i) => (
-              <div key={i} className="space-y-1.5">
-                <label
-                  className="block text-[10px] font-black uppercase tracking-[2px] ml-0.5"
-                  style={{ color: "var(--outline)" }}
-                >
-                  {f.label}
-                </label>
-                <div className="relative">
-                  {f.el}
-                  {f.hasChevron && (
-                    <ChevronDown
-                      size={14}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                      style={{ color: "var(--on-surface-variant)" }}
-                    />
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Smart search tip */}
           <div
-            className="rounded-xl p-4 flex items-start gap-3 mb-5"
-            style={{ background: "var(--surface-container-low)" }}
+            className="flex flex-col md:flex-row items-center justify-between gap-5 pt-4"
+            style={{ borderTop: "1px solid var(--surface-container)" }}
           >
-            <Lightbulb
-              size={18}
-              strokeWidth={1.8}
-              style={{ color: "var(--primary)", flexShrink: 0, marginTop: 1 }}
-            />
-            <p
-              className="text-sm leading-relaxed"
-              style={{ color: "var(--on-surface-variant)" }}
+            <div className="flex items-center gap-2" style={{ color: "var(--outline)" }}>
+              <Zap size={15} fill="var(--primary)" style={{ color: "var(--primary)" }} />
+              <span className="text-xs font-bold">Smart search: try "Dubai 786" or "4 digits"</span>
+            </div>
+            <Button
+              className="w-full md:w-auto !px-12 !py-3.5 !text-base !font-black !rounded-2xl"
+              style={{ boxShadow: "0 6px 20px rgba(0,106,102,0.25)" }}
             >
-              <span
-                className="font-bold"
-                style={{ color: "var(--on-surface)" }}
-              >
-                Smart search:
-              </span>{" "}
-              try your birthday (DDMM) or lucky digits. Our system prioritizes
-              meaningful combinations automatically.
-            </p>
+              Search Plates
+            </Button>
           </div>
-
-          <button
-            onClick={() => setSearched(true)}
-            className="w-full py-4 rounded-xl font-black text-lg cursor-pointer transition-all active:scale-[0.98]"
-            style={{
-              background:
-                "linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%)",
-              color: "white",
-              border: "none",
-            }}
-          >
-            Search Plates
-          </button>
-        </section>
+        </Card>
 
         {/* Results */}
-        {(searched || true) && (
-          <section>
-            <div className="flex items-center justify-between mb-6 px-1">
-              <span
-                className="text-sm font-medium"
-                style={{ color: "var(--outline)" }}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between px-1">
+            <p className="text-sm font-bold" style={{ color: "var(--outline)" }}>
+              Showing <span style={{ color: "var(--on-surface)" }}>{filtered.length} results</span>
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--outline)" }}>SORT BY</span>
+              <select
+                className="bg-transparent text-sm font-black focus:outline-none cursor-pointer"
+                style={{ color: "var(--on-surface)", fontFamily: "inherit" }}
               >
-                {searched
-                  ? `${filtered.length} plates found`
-                  : "32 plates found"}
-              </span>
-              <div
-                className="flex items-center gap-1 text-sm font-semibold cursor-pointer"
-                style={{ color: "var(--primary)" }}
-              >
-                Sort by: Relevance <ChevronDown size={14} />
-              </div>
+                <option>Newest First</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+              </select>
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              {(searched ? filtered : PLATES).map((p, i) => (
-                <PlateCard key={p.id} plate={p} index={i} />
+          </div>
+
+          {filtered.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+              {filtered.map((plate, i) => (
+                <PlateCard key={plate.id} plate={plate} index={i} />
               ))}
             </div>
-          </section>
-        )}
+          ) : (
+            <div className="py-24 text-center space-y-5">
+              <div
+                className="w-20 h-20 rounded-full flex items-center justify-center mx-auto"
+                style={{ background: "var(--surface-container-low)" }}
+              >
+                <SearchIcon size={36} style={{ color: "var(--outline)" }} />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-black" style={{ color: "var(--on-surface)" }}>No plates found</h3>
+                <p className="font-medium" style={{ color: "var(--on-surface-variant)" }}>Try adjusting your filters or search query.</p>
+              </div>
+              <Button variant="outline" onClick={() => { setQuery(""); setEmirate("All"); setDigits("All"); }}>
+                Reset Filters
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
