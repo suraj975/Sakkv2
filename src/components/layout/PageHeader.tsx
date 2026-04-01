@@ -6,42 +6,28 @@ import { ArrowLeft } from "lucide-react";
 interface PageHeaderProps {
   title: string;
   backHref?: string;
+  actions?: React.ReactNode;
 }
 
-export default function PageHeader({ title, backHref }: PageHeaderProps) {
+export default function PageHeader({ title, backHref, actions }: PageHeaderProps) {
   const router = useRouter();
-
-  const handleBack = () => {
-    if (backHref) {
-      router.push(backHref);
-    } else {
-      router.back();
-    }
-  };
 
   return (
     <div
-      className="flex items-center gap-2.5 px-4 py-3 flex-shrink-0"
-      style={{
-        background: "var(--sakk-card)",
-        borderBottom: "1px solid var(--sakk-border)",
-      }}
+      className="sticky top-0 z-40 glass-nav flex items-center justify-between px-4 lg:px-8 h-14 lg:h-16"
+      style={{ borderBottom: "1px solid rgba(187,202,199,0.15)" }}
     >
-      <button
-        onClick={handleBack}
-        className="flex items-center justify-center w-8 h-8 rounded-lg cursor-pointer border-none transition-colors"
-        style={{ background: "var(--teal-light)", color: "var(--teal-dark)" }}
-        aria-label="Go back"
-      >
-        <ArrowLeft size={16} strokeWidth={2.5} />
-      </button>
-      <span
-        className="text-[15px] font-semibold"
-        style={{ color: "var(--sakk-text)" }}
-      >
-        {title}
-      </span>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => backHref ? router.push(backHref) : router.back()}
+          className="w-9 h-9 flex items-center justify-center rounded-xl border-none cursor-pointer transition-colors hover:bg-[var(--surface-container-low)]"
+          style={{ background: "var(--teal-light)", color: "var(--primary)" }}
+        >
+          <ArrowLeft size={16} strokeWidth={2.5} />
+        </button>
+        <span className="text-base font-black" style={{ color: "var(--on-surface)" }}>{title}</span>
+      </div>
+      {actions && <div>{actions}</div>}
     </div>
   );
 }
-

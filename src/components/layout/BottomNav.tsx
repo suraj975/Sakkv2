@@ -2,32 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, PlusCircle, Calculator, UserCircle } from "lucide-react";
+import { Home, Search, Plus, Calculator, User } from "lucide-react";
 
 const NAV_ITEMS = [
-  { id: "home", href: "/", label: "Home", Icon: Home, isPost: false },
-  {
-    id: "search",
-    href: "/search",
-    label: "Search",
-    Icon: Search,
-    isPost: false,
-  },
-  { id: "post", href: "/post", label: "", Icon: PlusCircle, isPost: true },
-  {
-    id: "estimator",
-    href: "/estimator",
-    label: "Estimate",
-    Icon: Calculator,
-    isPost: false,
-  },
-  {
-    id: "account",
-    href: "#",
-    label: "Account",
-    Icon: UserCircle,
-    isPost: false,
-  },
+  { id: "home", href: "/", label: "Home", Icon: Home },
+  { id: "search", href: "/search", label: "Search", Icon: Search },
+  { id: "post", href: "/post", label: "", Icon: Plus, isPost: true },
+  { id: "estimator", href: "/estimator", label: "Estimate", Icon: Calculator },
+  { id: "profile", href: "#", label: "Profile", Icon: User },
 ];
 
 function isActive(href: string, pathname: string): boolean {
@@ -42,7 +24,7 @@ export default function BottomNav() {
     <nav
       className="flex-shrink-0 flex items-center h-20 lg:hidden rounded-t-3xl"
       style={{
-        background: "rgba(255,255,255,0.95)",
+        background: "rgba(255,255,255,0.96)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         borderTop: "1px solid rgba(187,202,199,0.15)",
@@ -58,12 +40,9 @@ export default function BottomNav() {
               <Link
                 href={item.href}
                 className="w-14 h-14 -mt-6 rounded-full flex items-center justify-center text-white"
-                style={{
-                  background: "var(--primary)",
-                  boxShadow: "0 4px 16px rgba(0,106,102,0.35)",
-                }}
+                style={{ background: "var(--primary)", boxShadow: "0 4px 16px rgba(0,106,102,0.35)" }}
               >
-                <PlusCircle size={22} strokeWidth={2} />
+                <Plus size={28} strokeWidth={2.5} />
               </Link>
             </div>
           );
@@ -76,7 +55,7 @@ export default function BottomNav() {
             className="flex-1 flex flex-col items-center justify-center gap-1 pb-1 transition-colors"
           >
             <item.Icon
-              size={21}
+              size={22}
               strokeWidth={active ? 2.2 : 1.6}
               style={{ color: active ? "var(--primary)" : "#94A3B8" }}
             />

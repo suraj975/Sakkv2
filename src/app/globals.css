@@ -187,3 +187,37 @@ body {
 .btn-gradient:hover { filter: brightness(1.06); }
 .btn-gradient:active { transform: scale(0.98); }
 
+/* ── Enterprise card ── */
+.enterprise-card {
+  background: var(--surface-container-lowest);
+  border: 1px solid rgba(187,202,199,0.15);
+  border-radius: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.enterprise-card:hover {
+  border-color: rgba(187,202,199,0.35);
+  box-shadow: 0 6px 24px rgba(25,28,29,0.10);
+  transform: translateY(-2px);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-container-high); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--surface-container-highest); }
+
+/* ── Float animation ── */
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+.animate-float { animation: float 3s ease-in-out infinite; }
+
+/* ── Pulse ring ── */
+@keyframes pulse-ring {
+  0%   { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.animate-pulse-ring { animation: pulse-ring 1.5s ease-out infinite; }
+
