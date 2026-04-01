@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { aed } from "@/lib/plates";
-import type { Bid } from "@/types";
+import type { FSBid } from "@/types/firebase";
 
 interface BidHistoryProps {
-  bids: Bid[];
+  bids: FSBid[];
   totalCount: number;
   defaultExpanded?: boolean;
 }
@@ -17,6 +17,17 @@ export default function BidHistory({
   defaultExpanded = false,
 }: BidHistoryProps) {
   const [expanded, setExpanded] = useState(defaultExpanded);
+
+  const relativeTime = (bid: FSBid): string => {
+    if (!bid.createdAt) return "";
+    const diff = Date.now() - bid.createdAt.toDate().getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins} min ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
+  };
 
   return (
     <div
@@ -68,31 +79,31 @@ export default function BidHistory({
         >
           {bids.map((bid, i) => (
             <div
-              key={i}
+              key={bid.id ?? i}
               className="flex items-center gap-3 px-4 py-3"
               style={{
                 borderBottom:
                   i < bids.length - 1
                     ? "1px solid rgba(187,202,199,0.08)"
                     : "none",
-                background: bid.isLeading
+                background: bid.isWinning
                   ? "rgba(0,110,45,0.04)"
                   : "transparent",
               }}
             >
               {/* Avatar */}
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black"
+                className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-xs font-black"
                 style={{
-                  background: bid.isLeading
+                  background: bid.isWinning
                     ? "rgba(0,110,45,0.15)"
                     : "var(--surface-container-low)",
-                  color: bid.isLeading
+                  color: bid.isWinning
                     ? "var(--tertiary)"
                     : "var(--on-surface-variant)",
                 }}
               >
-                {bid.bidderInitials}
+                {bid.bidderName.slice(0, 2).toUpperCase()}
               </div>
 
               {/* Name + time */}
@@ -102,11 +113,11 @@ export default function BidHistory({
                     className="text-sm font-semibold truncate"
                     style={{ color: "var(--on-surface)" }}
                   >
-                    {bid.bidderAlias}
+                    {bid.bidderName}
                   </span>
-                  {bid.isLeading && (
+                  {bid.isWinning && (
                     <span
-                      className="text-[9px] font-black px-1.5 py-0.5 rounded-full uppercase flex-shrink-0"
+                      className="text-[9px] font-black px-1.5 py-0.5 rounded-full uppercase shrink-0"
                       style={{
                         background: "rgba(0,110,45,0.15)",
                         color: "var(--tertiary)",
@@ -120,15 +131,15 @@ export default function BidHistory({
                   className="text-[10px] mt-0.5"
                   style={{ color: "var(--outline)" }}
                 >
-                  {bid.time}
+                  {relativeTime(bid)}
                 </p>
               </div>
 
               {/* Amount */}
               <span
-                className="text-sm font-black flex-shrink-0"
+                className="text-sm font-black shrink-0"
                 style={{
-                  color: bid.isLeading
+                  color: bid.isWinning
                     ? "var(--tertiary)"
                     : "var(--on-surface)",
                 }}

@@ -1,22 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, ListFilter, Clock } from "lucide-react";
 import AuctionCard, {
   AuctionCardMobile,
 } from "@/components/plates/AuctionCard";
-import { getAuctionPlates } from "@/lib/plates";
+import { getAuctionPlates } from "@/lib/firestore";
+import type { FSPlate } from "@/types/firebase";
 
 const DESKTOP_TABS = ["Ending Soon", "Newly Listed", "All", "Premium Only"];
 const MOBILE_TABS = ["Ending Soon", "Newly Listed", "All"];
 
-const AUCTION_PLATES = getAuctionPlates();
-
 export default function AuctionsPage() {
   const [desktopTab, setDesktopTab] = useState(0);
   const [mobileTab, setMobileTab] = useState(0);
+  const [auctionPlates, setAuctionPlates] = useState<FSPlate[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    getAuctionPlates()
+      .then(setAuctionPlates)
+      .catch((err) => console.error("Failed to load auctions:", err));
+  }, []);
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -129,7 +135,7 @@ export default function AuctionsPage() {
                 color: "var(--primary)",
               }}
             >
-              {AUCTION_PLATES.length} LIVE
+              {auctionPlates.length} LIVE
             </span>
           </div>
           <button
@@ -166,7 +172,7 @@ export default function AuctionsPage() {
 
         {/* 2-col grid with mobile auction cards */}
         <div className="px-4 grid grid-cols-2 gap-3">
-          {AUCTION_PLATES.map((p, i) => (
+          {auctionPlates.map((p, i) => (
             <AuctionCardMobile key={p.id} plate={p} index={i} />
           ))}
         </div>
@@ -286,7 +292,7 @@ export default function AuctionsPage() {
 
           {/* 4-col grid with desktop auction cards */}
           <div className="grid grid-cols-4 gap-5">
-            {AUCTION_PLATES.map((p, i) => (
+            {auctionPlates.map((p, i) => (
               <AuctionCard key={p.id} plate={p} index={i} />
             ))}
           </div>

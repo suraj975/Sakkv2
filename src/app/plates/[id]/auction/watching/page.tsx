@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
-import { Bell, ArrowLeft, Hammer, TrendingUp } from "lucide-react";
+import { Bell, ArrowLeft, Hammer, TrendingUp, Loader2 } from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
-import { getPlateById, aed, MOCK_BIDS, minNextBid } from "@/lib/plates";
+import { aed } from "@/lib/plates";
+import { getPlateById, subscribeBids, subscribePlate } from "@/lib/firestore";
+import { useAuth } from "@/context/AuthContext";
+import type { FSPlate, FSBid } from "@/types/firebase";
+import { toISOString } from "@/lib/utils";
 import CountdownTimer from "@/components/ui/CountdownTimer";
 import BidHistory from "@/components/ui/BidHistory";
 
@@ -13,19 +17,43 @@ const QUICK_INCREMENTS = [500, 1000, 5000];
 export default function AuctionWatchingPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const plate = getPlateById(id);
+  const { user } = useAuth();
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [bids, setBids] = useState<FSBid[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [pendingIncrement, setPendingIncrement] = useState<number | null>(null);
 
+  useEffect(() => {
+    getPlateById(id).then((p) => {
+      setPlate(p);
+      setLoading(false);
+    });
+  }, [id]);
+
+  useEffect(() => {
+    const unsub = subscribePlate(id, (p) => setPlate(p));
+    return unsub;
+  }, [id]);
+
+  useEffect(() => {
+    const unsub = subscribeBids(id, setBids);
+    return unsub;
+  }, [id]);
+
+  if (loading)
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
+        <Loader2 size={24} className="animate-spin" />
+      </div>
+    );
   if (!plate || plate.listingType !== "auction") return notFound();
 
-  const bids = MOCK_BIDS[plate.id] ?? [];
   const myBid = plate.currentBid ?? 0;
-  const isLeading = true; // mock: user is leading
-  const nextBid = plate.minBidIncrement
-    ? minNextBid(myBid, plate.minBidIncrement)
-    : myBid;
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [pendingIncrement, setPendingIncrement] = useState<number | null>(null);
+  const isLeading = bids.length > 0 && bids[0].bidderId === user?.uid;
+  const nextBid = plate.minBidIncrement ? myBid + plate.minBidIncrement : myBid;
 
   const handleIncrement = (inc: number) => {
     setPendingIncrement(inc);
@@ -180,7 +208,7 @@ export default function AuctionWatchingPage() {
               {plate.auctionEndTime ? (
                 <>
                   <CountdownTimer
-                    endTime={plate.auctionEndTime}
+                    endTime={toISOString(plate.auctionEndTime)}
                     variant="inline"
                   />
                   <p
@@ -256,8 +284,10 @@ export default function AuctionWatchingPage() {
                 { label: "RTA CERTIFIED", sub: "Verified asset" },
                 { label: plate.emirate.toUpperCase(), sub: "Emirates plate" },
                 {
-                  label: plate.verified ? "VERIFIED SELLER" : "DIRECT SELLER",
-                  sub: plate.seller,
+                  label: plate.sellerIsVerified
+                    ? "VERIFIED SELLER"
+                    : "DIRECT SELLER",
+                  sub: plate.sellerName,
                 },
               ].map((h, i) => (
                 <div
@@ -382,7 +412,7 @@ export default function AuctionWatchingPage() {
                 { label: "Category", value: `${plate.code} Series` },
                 {
                   label: "Seller Type",
-                  value: plate.verified ? "Verified" : "Individual",
+                  value: plate.sellerIsVerified ? "Verified" : "Individual",
                 },
                 { label: "Transfer", value: "Immediate RTA" },
               ].map((m, i) => (
@@ -479,7 +509,7 @@ export default function AuctionWatchingPage() {
                   Auction Ends In
                 </p>
                 <CountdownTimer
-                  endTime={plate.auctionEndTime}
+                  endTime={toISOString(plate.auctionEndTime)}
                   variant="boxes"
                 />
               </div>

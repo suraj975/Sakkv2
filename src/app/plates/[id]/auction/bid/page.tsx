@@ -1,38 +1,103 @@
 "use client";
 
-import { useState } from "react";
-import { useParams, useRouter, notFound } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft,
   AlertTriangle,
   ShieldCheck,
   Lock,
   BadgeCheck,
+  Loader2,
 } from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
-import { getPlateById, aed, MOCK_BIDS, minNextBid } from "@/lib/plates";
+import { aed, minNextBid } from "@/lib/plates";
+import { getPlateById, placeBid, subscribeBids } from "@/lib/firestore";
+import { useAuth } from "@/context/AuthContext";
+import { toISOString } from "@/lib/utils";
 import CountdownTimer from "@/components/ui/CountdownTimer";
+import type { FSPlate, FSBid } from "@/types/firebase";
 
 export default function AuctionBidPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const plate = getPlateById(id);
+  const { user, profile } = useAuth();
 
-  if (!plate || plate.listingType !== "auction") return notFound();
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [bids, setBids] = useState<FSBid[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [placing, setPlacing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [bidAmount, setBidAmount] = useState(0);
 
-  const bids = MOCK_BIDS[plate.id] ?? [];
+  // Load plate
+  useEffect(() => {
+    getPlateById(id).then((p) => {
+      setPlate(p);
+      if (p) {
+        const min =
+          p.currentBid && p.minBidIncrement
+            ? minNextBid(p.currentBid, p.minBidIncrement)
+            : (p.currentBid ?? 0);
+        setBidAmount(min);
+      }
+      setLoading(false);
+    });
+  }, [id]);
+
+  // Real-time bid feed
+  useEffect(() => {
+    if (!id) return;
+    const unsub = subscribeBids(id, setBids);
+    return () => unsub();
+  }, [id]);
+
   const minBid =
-    plate.currentBid && plate.minBidIncrement
+    plate?.currentBid && plate?.minBidIncrement
       ? minNextBid(plate.currentBid, plate.minBidIncrement)
-      : (plate.currentBid ?? 0);
+      : (plate?.currentBid ?? 0);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [bidAmount, setBidAmount] = useState(minBid);
   const isValid = bidAmount >= minBid;
 
-  const handleConfirm = () => {
-    router.push(`/plates/${plate.id}/auction/watching`);
+  const handleConfirm = async () => {
+    if (!user || !plate?.id) {
+      setError("You must be signed in to place a bid.");
+      return;
+    }
+    setPlacing(true);
+    setError(null);
+    try {
+      await placeBid(
+        plate.id,
+        user.uid,
+        profile?.displayName ?? user.displayName ?? "Anonymous",
+        bidAmount,
+      );
+      router.push(`/plates/${id}/auction/watching`);
+    } catch (err: unknown) {
+      setError(
+        (err as Error).message ?? "Failed to place bid. Please try again.",
+      );
+    } finally {
+      setPlacing(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
+        Loading auction...
+      </div>
+    );
+  }
+
+  if (!plate || plate.listingType !== "auction") {
+    router.replace("/auctions");
+    return null;
+  }
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -127,7 +192,10 @@ export default function AuctionBidPage() {
               >
                 Time Remaining
               </span>
-              <CountdownTimer endTime={plate.auctionEndTime} variant="strip" />
+              <CountdownTimer
+                endTime={toISOString(plate.auctionEndTime)}
+                variant="strip"
+              />
             </div>
           )}
 
@@ -209,9 +277,17 @@ export default function AuctionBidPage() {
           </div>
 
           {/* Confirm button */}
+          {error && (
+            <div
+              className="px-3 py-2.5 rounded-xl text-xs"
+              style={{ background: "rgba(186,26,26,0.08)", color: "#BA1A1A" }}
+            >
+              {error}
+            </div>
+          )}
           <button
             onClick={handleConfirm}
-            disabled={!isValid}
+            disabled={!isValid || placing}
             className="w-full h-14 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer border-none text-white"
             style={{
               background: isValid
@@ -220,6 +296,7 @@ export default function AuctionBidPage() {
               color: isValid ? "white" : "var(--outline)",
             }}
           >
+            {placing && <Loader2 size={16} className="animate-spin" />}
             Confirm Bid — {aed(bidAmount)}
           </button>
 
@@ -338,7 +415,7 @@ export default function AuctionBidPage() {
                       Time Left
                     </p>
                     <CountdownTimer
-                      endTime={plate.auctionEndTime}
+                      endTime={toISOString(plate.auctionEndTime)}
                       variant="inline"
                     />
                     <p
@@ -362,23 +439,23 @@ export default function AuctionBidPage() {
                     <div
                       className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black"
                       style={{
-                        background: bid.isLeading
+                        background: bid.isWinning
                           ? "rgba(0,110,45,0.15)"
                           : "var(--surface-container-low)",
-                        color: bid.isLeading
+                        color: bid.isWinning
                           ? "var(--tertiary)"
                           : "var(--on-surface-variant)",
                       }}
                     >
-                      {bid.bidderInitials}
+                      {bid.bidderName.slice(0, 2).toUpperCase()}
                     </div>
                     <span
                       className="text-sm"
                       style={{ color: "var(--on-surface)" }}
                     >
-                      {bid.bidderAlias}
+                      {bid.bidderName}
                     </span>
-                    {bid.isLeading && (
+                    {bid.isWinning && (
                       <span
                         className="text-[9px] font-black px-1.5 py-0.5 rounded-full"
                         style={{
@@ -488,9 +565,17 @@ export default function AuctionBidPage() {
               </div>
             </div>
 
+            {error && (
+              <div
+                className="px-3 py-2.5 rounded-xl text-xs"
+                style={{ background: "rgba(186,26,26,0.08)", color: "#BA1A1A" }}
+              >
+                {error}
+              </div>
+            )}
             <button
               onClick={handleConfirm}
-              disabled={!isValid}
+              disabled={!isValid || placing}
               className="w-full h-14 rounded-xl font-bold flex items-center justify-center cursor-pointer border-none text-white"
               style={{
                 background: isValid
@@ -499,6 +584,7 @@ export default function AuctionBidPage() {
                 color: isValid ? "white" : "var(--outline)",
               }}
             >
+              {placing && <Loader2 size={16} className="animate-spin mr-1" />}
               Confirm Bid — {aed(bidAmount)}
             </button>
 

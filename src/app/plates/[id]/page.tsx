@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
 import PlateViz from "@/components/plates/PlateViz";
 import {
@@ -16,14 +17,16 @@ import {
   Eye,
   Bell,
   ShieldCheck,
+  Loader2,
 } from "lucide-react";
+import { aed, escrowFee } from "@/lib/plates";
 import {
   getPlateById,
-  aed,
-  escrowFee,
-  MOCK_BIDS,
-  minNextBid,
-} from "@/lib/plates";
+  subscribeBids,
+  incrementPlateViews,
+} from "@/lib/firestore";
+import type { FSPlate, FSBid } from "@/types/firebase";
+import { toISOString } from "@/lib/utils";
 import CountdownTimer from "@/components/ui/CountdownTimer";
 import BidHistory from "@/components/ui/BidHistory";
 import Card from "@/components/ui/Card";
@@ -31,17 +34,41 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 
 export default function PlateDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params.id ?? "";
   const router = useRouter();
-  const plate = getPlateById(id);
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [bids, setBids] = useState<FSBid[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getPlateById(id).then((p) => {
+      setPlate(p);
+      setLoading(false);
+      if (p) incrementPlateViews(p.id ?? id);
+    });
+  }, [id]);
+
+  useEffect(() => {
+    const unsub = subscribeBids(id, setBids);
+    return unsub;
+  }, [id]);
+
+  if (loading)
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
+        <Loader2 size={24} className="animate-spin" />
+      </div>
+    );
   if (!plate) return notFound();
 
   const isAuction = plate.listingType === "auction";
-  const bids = MOCK_BIDS[plate.id] ?? [];
   const nextBid =
     isAuction && plate.currentBid && plate.minBidIncrement
-      ? minNextBid(plate.currentBid, plate.minBidIncrement)
+      ? plate.currentBid + plate.minBidIncrement
       : 0;
 
   const avg = plate.price * 1.12;
@@ -159,7 +186,10 @@ export default function PlateDetailPage() {
             <span className="text-[9px] font-black uppercase tracking-[2px] text-white opacity-70">
               AUCTION ENDS IN
             </span>
-            <CountdownTimer endTime={plate.auctionEndTime} variant="boxes" />
+            <CountdownTimer
+              endTime={toISOString(plate.auctionEndTime)}
+              variant="boxes"
+            />
           </div>
         )}
       </section>
@@ -240,7 +270,7 @@ export default function PlateDetailPage() {
                         Auction Ends In
                       </p>
                       <CountdownTimer
-                        endTime={plate.auctionEndTime}
+                        endTime={toISOString(plate.auctionEndTime)}
                         variant="strip"
                       />
                     </div>
@@ -275,12 +305,12 @@ export default function PlateDetailPage() {
                     >
                       Asking Price
                     </p>
-                    {plate.orig && (
+                    {plate.origPrice && (
                       <p
                         className="text-sm line-through"
                         style={{ color: "var(--outline)" }}
                       >
-                        {aed(plate.orig)}
+                        {aed(plate.origPrice)}
                       </p>
                     )}
                     <h2
@@ -289,7 +319,7 @@ export default function PlateDetailPage() {
                     >
                       {aed(plate.price)}
                     </h2>
-                    {plate.orig && (
+                    {plate.origPrice && (
                       <span
                         className="inline-block text-[9px] font-black px-2 py-0.5 rounded-full mt-1"
                         style={{
@@ -297,11 +327,12 @@ export default function PlateDetailPage() {
                           color: "var(--tertiary)",
                         }}
                       >
-                        SAVE {Math.round((1 - plate.price / plate.orig) * 100)}%
+                        SAVE{" "}
+                        {Math.round((1 - plate.price / plate.origPrice) * 100)}%
                       </span>
                     )}
                   </div>
-                  {plate.verified && (
+                  {plate.isVerified && (
                     <span
                       className="text-[10px] font-black px-2.5 py-1 rounded-full uppercase"
                       style={{
@@ -421,7 +452,7 @@ export default function PlateDetailPage() {
                     className="font-bold"
                     style={{ color: "var(--on-surface)" }}
                   >
-                    {plate.seller}
+                    {plate.sellerName}
                   </p>
                   <div
                     className="flex items-center gap-1 text-xs"
@@ -432,7 +463,11 @@ export default function PlateDetailPage() {
                       strokeWidth={2}
                       style={{ color: "var(--tertiary)" }}
                     />
-                    <span>Verified Broker · {plate.days * 3} deals</span>
+                    <span>
+                      {plate.sellerIsVerified
+                        ? "Verified Broker"
+                        : "Direct Seller"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -601,7 +636,7 @@ export default function PlateDetailPage() {
                 {plate.auctionEndTime && (
                   <div className="mb-4">
                     <CountdownTimer
-                      endTime={plate.auctionEndTime}
+                      endTime={toISOString(plate.auctionEndTime)}
                       variant="boxes"
                     />
                   </div>

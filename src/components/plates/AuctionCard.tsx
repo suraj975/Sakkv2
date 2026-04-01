@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { Clock, ArrowRight, Hammer } from "lucide-react";
 import PlateViz from "./PlateViz";
 import { aed, aedCompact, timeRemaining } from "@/lib/plates";
-import type { Plate } from "@/types";
+import { toISOString } from "@/lib/utils";
+import type { FSPlate } from "@/types/firebase";
 
 interface AuctionCardProps {
-  plate: Plate;
+  plate: FSPlate;
   index?: number;
 }
 
@@ -48,7 +49,7 @@ function formatCountdown(
 export default function AuctionCard({ plate, index = 0 }: AuctionCardProps) {
   const router = useRouter();
   const delay = Math.min(index, 7) + 1;
-  const time = useCountdown(plate.auctionEndTime ?? "");
+  const time = useCountdown(toISOString(plate.auctionEndTime));
   const isUrgent = time.total > 0 && time.total < 60 * 60 * 1000;
   const countdownLabel = formatCountdown(
     time.days,
@@ -179,7 +180,7 @@ export default function AuctionCard({ plate, index = 0 }: AuctionCardProps) {
 export function AuctionCardMobile({ plate, index = 0 }: AuctionCardProps) {
   const router = useRouter();
   const delay = Math.min(index, 7) + 1;
-  const time = useCountdown(plate.auctionEndTime ?? "");
+  const time = useCountdown(toISOString(plate.auctionEndTime));
   const isUrgent = time.total > 0 && time.total < 60 * 60 * 1000;
   const countdownLabel = formatCountdown(
     time.days,

@@ -4,16 +4,16 @@ import { useRouter } from "next/navigation";
 import { BadgeCheck } from "lucide-react";
 import PlateViz from "./PlateViz";
 import { aed } from "@/lib/plates";
-import { cn } from "@/lib/utils";
+import { cn, toISOString } from "@/lib/utils";
 import CountdownTimer from "@/components/ui/CountdownTimer";
-import type { Plate } from "@/types";
+import type { FSPlate } from "@/types/firebase";
 
 interface PlateCardProps {
-  plate: Plate;
+  plate: FSPlate;
   index?: number;
 }
 
-function getEmirateAccent(type: Plate["type"]) {
+function getEmirateAccent(type: FSPlate["type"]) {
   switch (type) {
     case "gold": return "bg-[#C9A84C]";
     case "silver": return "bg-slate-400";
@@ -74,28 +74,28 @@ export default function PlateCard({ plate, index = 0 }: PlateCardProps) {
           <div className="flex items-center gap-1.5">
             <BadgeCheck
               size={14}
-              strokeWidth={plate.verified ? 0 : 1.8}
-              fill={plate.verified ? "var(--primary-container)" : "none"}
-              style={{ color: plate.verified ? "var(--primary)" : "var(--outline)" }}
+              strokeWidth={plate.isVerified ? 0 : 1.8}
+              fill={plate.isVerified ? "var(--primary-container)" : "none"}
+              style={{ color: plate.isVerified ? "var(--primary)" : "var(--outline)" }}
             />
-            {plate.verified && (
+            {plate.isVerified && (
               <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: "var(--primary)" }}>
                 Verified
               </span>
             )}
           </div>
-          {plate.days && (
+          {plate.sellerName && (
             <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: "var(--outline)" }}>
-              {plate.days}d ago
+              {plate.sellerName}
             </span>
           )}
         </div>
 
         {!isAuction && (
           <>
-            {plate.orig && (
+            {plate.origPrice && (
               <p className="text-[10px] line-through" style={{ color: "var(--outline)" }}>
-                {aed(plate.orig)}
+                {aed(plate.origPrice)}
               </p>
             )}
             <div className="flex items-center justify-between">
@@ -119,7 +119,7 @@ export default function PlateCard({ plate, index = 0 }: PlateCardProps) {
                 {aed(plate.currentBid ?? 0)}
               </span>
               {plate.auctionEndTime && (
-                <CountdownTimer endTime={plate.auctionEndTime} variant="pill" />
+                <CountdownTimer endTime={toISOString(plate.auctionEndTime)} variant="pill" />
               )}
             </div>
             <span className="text-[9px] font-semibold" style={{ color: "var(--on-surface-variant)" }}>

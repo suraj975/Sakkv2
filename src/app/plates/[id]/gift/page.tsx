@@ -1,19 +1,40 @@
 "use client";
 
 import { useParams, notFound, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import PlateViz from "@/components/plates/PlateViz";
 import Pill from "@/components/ui/Pill";
 import IBox from "@/components/ui/IBox";
 import TLine from "@/components/ui/TLine";
 import InfoBox from "@/components/ui/InfoBox";
 import PageHeader from "@/components/layout/PageHeader";
-import { getPlateById, aed } from "@/lib/plates";
+import { aed } from "@/lib/plates";
+import { getPlateById } from "@/lib/firestore";
+import type { FSPlate } from "@/types/firebase";
+import { Loader2 } from "lucide-react";
 
 export default function GiftDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const plate = getPlateById(id);
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getPlateById(id ?? "").then((p) => {
+      setPlate(p);
+      setLoading(false);
+    });
+  }, [id]);
+
+  if (loading)
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
+        <Loader2 size={24} className="animate-spin" />
+      </div>
+    );
   if (!plate) return notFound();
 
   return (
@@ -56,10 +77,10 @@ export default function GiftDetailPage() {
               className="text-[13px] font-medium"
               style={{ color: "var(--sakk-text)" }}
             >
-              {plate.seller}
+              {plate.sellerName}
             </div>
             <div className="text-[11px]" style={{ color: "var(--sakk-text3)" }}>
-              {plate.emirate} · Verified · Listed {plate.days}d ago
+              {plate.emirate} · {plate.isVerified ? "Verified" : "Listed"}
             </div>
           </div>
         </div>

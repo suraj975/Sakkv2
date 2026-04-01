@@ -1,15 +1,35 @@
 "use client";
 
 import { useParams, useRouter, notFound } from "next/navigation";
-import { Hammer, CheckCircle, ArrowLeft, Clock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Hammer, CheckCircle, ArrowLeft, Clock, Loader2 } from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
-import { getPlateById, aed, escrowFee } from "@/lib/plates";
+import { aed, escrowFee } from "@/lib/plates";
+import { getPlateById } from "@/lib/firestore";
+import type { FSPlate } from "@/types/firebase";
 
 export default function AuctionWonPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const plate = getPlateById(id);
+  const [plate, setPlate] = useState<FSPlate | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getPlateById(id ?? "").then((p) => {
+      setPlate(p);
+      setLoading(false);
+    });
+  }, [id]);
+
+  if (loading)
+    return (
+      <div
+        className="flex-1 flex items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
+        <Loader2 size={24} className="animate-spin" />
+      </div>
+    );
   if (!plate || plate.listingType !== "auction") return notFound();
 
   const winningBid = plate.currentBid ?? plate.price;
