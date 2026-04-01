@@ -19,7 +19,7 @@ import LoginModal from "@/components/auth/LoginModal";
 import { subscribeUnreadCount } from "@/lib/firestore";
 
 const NAV_ITEMS = [
-  { id: "home", href: "/", label: "Home", Icon: Home },
+  { id: "home", href: "/home", label: "Home", Icon: Home },
   { id: "search", href: "/search", label: "Search", Icon: Search },
   {
     id: "auctions",
@@ -32,7 +32,7 @@ const NAV_ITEMS = [
 ];
 
 function isActive(href: string, pathname: string): boolean {
-  if (href === "/") return pathname === "/";
+  if (href === "/home") return pathname === "/home";
   return pathname.startsWith(href);
 }
 

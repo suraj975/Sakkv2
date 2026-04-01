@@ -12,8 +12,13 @@ import {
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 
-export default function UserMenu() {
+export default function UserMenu({
+  variant = "light",
+}: {
+  variant?: "light" | "dark";
+}) {
   const { user, profile, logout } = useAuth();
+  const isDark = variant === "dark";
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -43,8 +48,12 @@ export default function UserMenu() {
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-2 px-3 py-2 rounded-xl transition-all"
         style={{
-          background: open ? "rgba(0,106,102,0.1)" : "transparent",
-          color: "var(--on-surface)",
+          background: open
+            ? isDark
+              ? "rgba(255,255,255,0.1)"
+              : "rgba(0,106,102,0.1)"
+            : "transparent",
+          color: isDark ? "white" : "var(--on-surface)",
         }}
       >
         {/* Avatar */}
@@ -72,7 +81,7 @@ export default function UserMenu() {
           className="transition-transform"
           style={{
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
-            color: "var(--outline)",
+            color: isDark ? "rgba(255,255,255,0.5)" : "var(--outline)",
           }}
         />
       </button>
