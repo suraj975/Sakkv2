@@ -12,11 +12,14 @@ import {
   Anchor,
   Tag,
   ShoppingCart,
+  Hammer,
 } from "lucide-react";
 import PlateCard from "@/components/plates/PlateCard";
-import { PLATES } from "@/lib/plates";
+import { PLATES, getAuctionPlates } from "@/lib/plates";
 
 const CHIPS = ["Car", "Bike", "Boat"];
+
+const AUCTION_PLATES = getAuctionPlates();
 
 const DESKTOP_CATS = [
   { l: "Car Plates", c: "4,823 Active", active: true, Icon: Car },
@@ -194,6 +197,52 @@ export default function HomePage() {
           </div>
           <Zap size={22} style={{ color: "var(--primary)" }} />
         </div>
+
+        {/* Live Auctions (mobile) */}
+        {AUCTION_PLATES.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-2 h-2 rounded-full animate-pulse"
+                  style={{ background: "var(--error)" }}
+                />
+                <h3
+                  className="text-base font-black"
+                  style={{ color: "var(--on-surface)" }}
+                >
+                  Live Auctions
+                </h3>
+                <span
+                  className="text-[9px] font-black px-2 py-0.5 rounded-full"
+                  style={{
+                    background: "rgba(186,26,26,0.1)",
+                    color: "var(--error)",
+                  }}
+                >
+                  {AUCTION_PLATES.length} LIVE
+                </span>
+              </div>
+              <button
+                onClick={() => router.push("/auctions")}
+                className="text-xs font-bold cursor-pointer bg-transparent border-none flex items-center gap-1"
+                style={{ color: "var(--primary)" }}
+              >
+                <Hammer size={12} /> View All
+              </button>
+            </div>
+            <div
+              className="flex gap-3 overflow-x-auto pb-1"
+              style={{ scrollbarWidth: "none" }}
+            >
+              {AUCTION_PLATES.slice(0, 4).map((p, i) => (
+                <div key={p.id} className="flex-none w-[150px]">
+                  <PlateCard plate={p} index={i} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Quick Actions Bento */}
         <div className="grid grid-cols-2 gap-3">
@@ -486,6 +535,47 @@ export default function HomePage() {
           ))}
         </section>
 
+        {/* Live Auctions (desktop) */}
+        {AUCTION_PLATES.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <span
+                  className="w-2.5 h-2.5 rounded-full animate-pulse"
+                  style={{ background: "var(--error)" }}
+                />
+                <h2
+                  className="text-2xl font-black tracking-tight"
+                  style={{ color: "var(--on-surface)" }}
+                >
+                  Live Auctions
+                </h2>
+                <span
+                  className="text-[10px] font-black px-2.5 py-1 rounded-full"
+                  style={{
+                    background: "rgba(186,26,26,0.1)",
+                    color: "var(--error)",
+                  }}
+                >
+                  {AUCTION_PLATES.length} ACTIVE
+                </span>
+              </div>
+              <button
+                onClick={() => router.push("/auctions")}
+                className="text-sm font-bold cursor-pointer bg-transparent border-none flex items-center gap-1.5"
+                style={{ color: "var(--primary)" }}
+              >
+                <Hammer size={14} /> View all auctions
+              </button>
+            </div>
+            <div className="grid grid-cols-4 gap-4">
+              {AUCTION_PLATES.map((p, i) => (
+                <PlateCard key={p.id} plate={p} index={i} />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Trending Plates */}
         <section>
           <div className="flex items-center justify-between mb-5">
@@ -536,4 +626,3 @@ export default function HomePage() {
     </div>
   );
 }
-

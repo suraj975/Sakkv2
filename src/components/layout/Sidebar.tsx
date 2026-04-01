@@ -8,14 +8,28 @@ import {
   Calculator,
   UserCircle,
   PlusCircle,
+  Hammer,
   ShieldCheck,
 } from "lucide-react";
 
 const NAV_ITEMS = [
-  { id: "home", href: "/", label: "Home", Icon: Home },
-  { id: "search", href: "/search", label: "Search", Icon: Search },
-  { id: "estimator", href: "/estimator", label: "Estimator", Icon: Calculator },
-  { id: "profile", href: "#", label: "Profile", Icon: UserCircle },
+  { id: "home", href: "/", label: "Home", Icon: Home, badge: null },
+  { id: "search", href: "/search", label: "Search", Icon: Search, badge: null },
+  {
+    id: "auctions",
+    href: "/auctions",
+    label: "Auctions",
+    Icon: Hammer,
+    badge: "4 Live",
+  },
+  {
+    id: "estimator",
+    href: "/estimator",
+    label: "Estimator",
+    Icon: Calculator,
+    badge: null,
+  },
+  { id: "profile", href: "#", label: "Profile", Icon: UserCircle, badge: null },
 ];
 
 function isActive(href: string, pathname: string): boolean {
@@ -77,7 +91,20 @@ export default function Sidebar() {
                   flexShrink: 0,
                 }}
               />
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {item.badge && (
+                <span
+                  className="text-[8px] font-black px-1.5 py-0.5 rounded-full"
+                  style={{
+                    background: active
+                      ? "rgba(0,106,102,0.15)"
+                      : "rgba(186,26,26,0.1)",
+                    color: active ? "var(--primary)" : "var(--error)",
+                  }}
+                >
+                  {item.badge}
+                </span>
+              )}
             </Link>
           );
         })}

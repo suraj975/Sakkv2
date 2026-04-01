@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, PlusCircle, Calculator, UserCircle } from "lucide-react";
+import { Home, Search, PlusCircle, Hammer, UserCircle } from "lucide-react";
 
 const NAV_ITEMS = [
   { id: "home", href: "/", label: "Home", Icon: Home, isPost: false },
@@ -15,10 +15,10 @@ const NAV_ITEMS = [
   },
   { id: "post", href: "/post", label: "", Icon: PlusCircle, isPost: true },
   {
-    id: "estimator",
-    href: "/estimator",
-    label: "Estimate",
-    Icon: Calculator,
+    id: "auctions",
+    href: "/auctions",
+    label: "Auctions",
+    Icon: Hammer,
     isPost: false,
   },
   {
