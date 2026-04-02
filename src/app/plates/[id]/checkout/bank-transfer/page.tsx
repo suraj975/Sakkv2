@@ -40,7 +40,10 @@ export default function BankTransferPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-1 items-center justify-center" style={{ color: "var(--outline)" }}>
+      <div
+        className="flex flex-1 items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
         <Loader2 size={24} className="animate-spin" />
       </div>
     );
@@ -50,12 +53,14 @@ export default function BankTransferPage() {
 
   const fee = escrowFee(plate.price);
   const total = plate.price + fee;
-  const txRef = `MDM-${String(plate.id ?? id).replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}-2401`;
+  const txRef = `MDM-${String(plate.id ?? id)
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .toUpperCase()}-2401`;
 
   function simulateTransfer() {
     setSimulating(true);
     setTimeout(() => {
-      router.push(`/plates/${plate.id ?? id}/checkout/escrow`);
+      router.push(`/plates/${id}/checkout/escrow`);
     }, 1200);
   }
 
@@ -63,7 +68,11 @@ export default function BankTransferPage() {
     <div className="flex-1 overflow-y-auto bg-[var(--surface)]">
       <header
         className="sticky top-0 z-40 flex h-14 items-center justify-between border-b px-4 lg:h-16 lg:px-8"
-        style={{ borderColor: "rgba(187,202,199,0.15)", background: "rgba(248,250,251,0.88)", backdropFilter: "blur(20px)" }}
+        style={{
+          borderColor: "rgba(187,202,199,0.15)",
+          background: "rgba(248,250,251,0.88)",
+          backdropFilter: "blur(20px)",
+        }}
       >
         <button
           onClick={() => router.back()}
@@ -72,7 +81,10 @@ export default function BankTransferPage() {
         >
           <ArrowLeft size={18} />
         </button>
-        <span className="text-sm font-black lg:text-base" style={{ color: "var(--primary)" }}>
+        <span
+          className="text-sm font-black lg:text-base"
+          style={{ color: "var(--primary)" }}
+        >
           Bank Transfer Details
         </span>
         <div className="w-10" />
@@ -80,14 +92,21 @@ export default function BankTransferPage() {
 
       <div className="mx-auto max-w-3xl space-y-5 px-4 py-6 pb-28 lg:px-8 lg:py-8">
         <div className="space-y-2">
-          <p className="text-[11px] font-black uppercase tracking-[0.18em]" style={{ color: "var(--outline)" }}>
+          <p
+            className="text-[11px] font-black uppercase tracking-[0.18em]"
+            style={{ color: "var(--outline)" }}
+          >
             Step 2 of 3
           </p>
-          <h1 className="text-2xl font-black lg:text-3xl" style={{ color: "var(--on-surface)" }}>
+          <h1
+            className="text-2xl font-black lg:text-3xl"
+            style={{ color: "var(--on-surface)" }}
+          >
             Transfer to the platform IBAN
           </h1>
           <p className="text-sm" style={{ color: "var(--on-surface-variant)" }}>
-            Send the full amount below to the Madmoon escrow account. Once your transfer is sent, continue to step 3.
+            Send the full amount below to the Madmoon escrow account. Once your
+            transfer is sent, continue to step 3.
           </p>
         </div>
 
@@ -103,18 +122,30 @@ export default function BankTransferPage() {
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[var(--surface-container-low)] px-4 py-3">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: "var(--outline)" }}>
+              <p
+                className="text-[10px] font-black uppercase tracking-[0.18em]"
+                style={{ color: "var(--outline)" }}
+              >
                 Total to transfer
               </p>
-              <p className="mt-1 text-2xl font-black" style={{ color: "var(--primary)" }}>
+              <p
+                className="mt-1 text-2xl font-black"
+                style={{ color: "var(--primary)" }}
+              >
                 {aed(total)}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: "var(--outline)" }}>
+              <p
+                className="text-[10px] font-black uppercase tracking-[0.18em]"
+                style={{ color: "var(--outline)" }}
+              >
                 Reference
               </p>
-              <p className="mt-1 text-sm font-black" style={{ color: "var(--on-surface)" }}>
+              <p
+                className="mt-1 text-sm font-black"
+                style={{ color: "var(--on-surface)" }}
+              >
                 {txRef}
               </p>
             </div>
@@ -127,10 +158,16 @@ export default function BankTransferPage() {
               <Landmark size={20} className="text-[var(--primary)]" />
             </div>
             <div>
-              <p className="text-lg font-black" style={{ color: "var(--on-surface)" }}>
+              <p
+                className="text-lg font-black"
+                style={{ color: "var(--on-surface)" }}
+              >
                 Platform receiving account
               </p>
-              <p className="text-sm" style={{ color: "var(--on-surface-variant)" }}>
+              <p
+                className="text-sm"
+                style={{ color: "var(--on-surface-variant)" }}
+              >
                 Use the exact IBAN below when sending your bank transfer.
               </p>
             </div>
@@ -148,7 +185,10 @@ export default function BankTransferPage() {
               className="flex items-center justify-between gap-3 rounded-2xl bg-[var(--surface-container-low)] px-4 py-3"
             >
               <div className="min-w-0">
-                <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: "var(--outline)" }}>
+                <p
+                  className="text-[10px] font-black uppercase tracking-[0.18em]"
+                  style={{ color: "var(--outline)" }}
+                >
                   {row.label}
                 </p>
                 <p
@@ -171,15 +211,28 @@ export default function BankTransferPage() {
 
         <div
           className="flex items-start gap-3 rounded-2xl p-4"
-          style={{ background: "rgba(0,106,102,0.06)", border: "1px solid rgba(0,106,102,0.12)" }}
+          style={{
+            background: "rgba(0,106,102,0.06)",
+            border: "1px solid rgba(0,106,102,0.12)",
+          }}
         >
-          <ShieldCheck size={18} className="mt-0.5 shrink-0 text-[var(--primary)]" />
+          <ShieldCheck
+            size={18}
+            className="mt-0.5 shrink-0 text-[var(--primary)]"
+          />
           <div>
-            <p className="text-sm font-black" style={{ color: "var(--primary)" }}>
+            <p
+              className="text-sm font-black"
+              style={{ color: "var(--primary)" }}
+            >
               Protected transfer
             </p>
-            <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--on-surface-variant)" }}>
-              Funds are held until transfer is confirmed by authorities. The seller pays any RTA charges separately.
+            <p
+              className="mt-1 text-xs leading-relaxed"
+              style={{ color: "var(--on-surface-variant)" }}
+            >
+              Funds are held until transfer is confirmed by authorities. The
+              seller pays any RTA charges separately.
             </p>
           </div>
         </div>

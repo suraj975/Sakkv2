@@ -65,6 +65,10 @@ export default function PlateDetailPage() {
     );
   if (!plate) return notFound();
 
+  // Re-bind as non-null so closures below don't need null assertions
+  const p = plate;
+  const plateId = p.id ?? id;
+
   const isAuction = plate.listingType === "auction";
   const nextBid =
     isAuction && plate.currentBid && plate.minBidIncrement
@@ -90,7 +94,7 @@ export default function PlateDetailPage() {
   );
 
   function handleBuyNow() {
-    const href = `/plates/${plate.id}/checkout`;
+    const href = `/plates/${plateId}/checkout`;
     if (user) {
       router.push(href);
       return;
@@ -455,7 +459,7 @@ export default function PlateDetailPage() {
                 <>
                   <button
                     onClick={() =>
-                      router.push(`/plates/${plate.id}/auction/bid`)
+                      router.push(`/plates/${plateId}/auction/bid`)
                     }
                     className="w-full h-14 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer border-none text-white"
                     style={{
@@ -473,7 +477,7 @@ export default function PlateDetailPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() =>
-                        router.push(`/plates/${plate.id}/auction/watching`)
+                        router.push(`/plates/${plateId}/auction/watching`)
                       }
                       className="flex-1 h-12 rounded-xl font-semibold flex items-center justify-center gap-2 cursor-pointer"
                       style={{
@@ -519,7 +523,7 @@ export default function PlateDetailPage() {
                     <ShoppingCart size={18} strokeWidth={2} /> Buy Now
                   </button>
                   <button
-                    onClick={() => router.push(`/plates/${plate.id}/gift`)}
+                    onClick={() => router.push(`/plates/${plateId}/gift`)}
                     className="w-full h-14 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer"
                     style={{
                       background: "var(--surface-container-high)",
@@ -641,7 +645,7 @@ export default function PlateDetailPage() {
                 <div className="space-y-3 mb-4">
                   <button
                     onClick={() =>
-                      router.push(`/plates/${plate.id}/auction/bid`)
+                      router.push(`/plates/${plateId}/auction/bid`)
                     }
                     className="w-full h-14 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer border-none text-white"
                     style={{
@@ -658,7 +662,7 @@ export default function PlateDetailPage() {
                   </button>
                   <button
                     onClick={() =>
-                      router.push(`/plates/${plate.id}/auction/watching`)
+                      router.push(`/plates/${plateId}/auction/watching`)
                     }
                     className="w-full h-12 rounded-xl font-semibold flex items-center justify-center gap-2 cursor-pointer"
                     style={{
@@ -779,7 +783,7 @@ export default function PlateDetailPage() {
                     by Escrow
                   </button>
                   <button
-                    onClick={() => router.push(`/plates/${plate.id}/gift`)}
+                    onClick={() => router.push(`/plates/${plateId}/gift`)}
                     className="w-full h-14 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer"
                     style={{
                       background: "var(--surface-container-high)",
