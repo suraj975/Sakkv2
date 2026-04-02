@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Hammer, User } from "lucide-react";
+import { Home, Search, Hammer, Calculator, CarFront, User } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import LoginModal from "@/components/auth/LoginModal";
 
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { id: "home", href: "/home", label: "Home", Icon: Home },
   { id: "search", href: "/search", label: "Search", Icon: Search },
   { id: "auctions", href: "/auctions", label: "Auctions", Icon: Hammer },
+  { id: "estimator", href: "/estimator", label: "Estimator", Icon: Calculator },
   {
     id: "profile",
     href: "/profile",
@@ -32,6 +33,15 @@ export default function BottomNav() {
 
   if (loading || !user) return null;
 
+  const onPlatesRoute = pathname.startsWith("/plates");
+
+  // Swap "Auctions" for "Plates" when on a plates route
+  const navItems = NAV_ITEMS.map((item) =>
+    item.id === "auctions" && onPlatesRoute
+      ? { id: "plates", href: "/search", label: "Plates", Icon: CarFront }
+      : item,
+  );
+
   return (
     <>
       {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
@@ -46,8 +56,11 @@ export default function BottomNav() {
           paddingBottom: "max(env(safe-area-inset-bottom), 0px)",
         }}
       >
-        {NAV_ITEMS.map((item) => {
-          const active = isActive(item.href, pathname);
+        {navItems.map((item) => {
+          const active =
+            item.id === "plates"
+              ? onPlatesRoute
+              : isActive(item.href, pathname);
 
           if ("isProfile" in item && item.isProfile) {
             // Profile tab: open login modal if not authed, else navigate

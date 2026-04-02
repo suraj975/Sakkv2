@@ -7,7 +7,6 @@ import {
   Home,
   Search,
   Calculator,
-  User,
   ShieldCheck,
   Gavel,
   Bell,
@@ -15,7 +14,6 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import UserMenu from "@/components/auth/UserMenu";
-import LoginModal from "@/components/auth/LoginModal";
 import { subscribeUnreadCount } from "@/lib/firestore";
 
 const NAV_ITEMS = [
@@ -39,7 +37,6 @@ function isActive(href: string, pathname: string): boolean {
 export default function Sidebar() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
-  const [loginOpen, setLoginOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
@@ -52,7 +49,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
       <aside
         className="relative hidden shrink-0 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col"
         style={{
@@ -69,7 +65,7 @@ export default function Sidebar() {
               className="text-2xl font-black"
               style={{ color: "var(--primary)" }}
             >
-              Sakk
+              Madmoon
             </h1>
             <p
               className="text-[9px] uppercase tracking-[0.15em] font-bold"
@@ -172,21 +168,7 @@ export default function Sidebar() {
           {/* Auth: show UserMenu when logged in, sign-in button when logged out */}
           {!loading && (
             <div className="mb-3">
-              {user ? (
-                <UserMenu placement="right" />
-              ) : (
-                <button
-                  onClick={() => setLoginOpen(true)}
-                  className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
-                  style={{
-                    background: "rgba(0,106,102,0.08)",
-                    color: "var(--primary)",
-                  }}
-                >
-                  <User size={16} />
-                  Sign In
-                </button>
-              )}
+              {user ? <UserMenu placement="right" /> : null}
             </div>
           )}
           <Link

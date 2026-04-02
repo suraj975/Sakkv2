@@ -190,7 +190,7 @@ export default function AuctionWonPage() {
           </p>
           {[
             { label: "Winning bid", value: aed(winningBid) },
-            { label: "Escrow Fee", value: aed(fee) },
+            { label: "Service Fee", value: aed(fee) },
           ].map((row, i) => (
             <div
               key={i}
@@ -248,7 +248,7 @@ export default function AuctionWonPage() {
           style={{ color: "var(--outline)" }}
         >
           By proceeding, you agree to complete the purchase and initiate the RTA
-          transfer process. Sakk escrow protects both parties throughout.
+          transfer process. Madmoon escrow protects both parties throughout.
         </p>
       </div>
 
@@ -447,8 +447,8 @@ export default function AuctionWonPage() {
               className="text-xs text-center leading-relaxed"
               style={{ color: "var(--outline)" }}
             >
-              Sakk escrow protects both parties. Your payment is held securely
-              until the RTA ownership transfer is complete.
+              Madmoon escrow protects both parties. Your payment is held securely
+              until transfer is confirmed by authorities.
             </p>
           </div>
         </div>

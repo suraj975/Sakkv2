@@ -9,8 +9,8 @@ interface PlateVizProps {
 }
 
 const SIZES = {
-  sm: { w: 120, h: 54, ns: 13, cs: 10, ls: 6 },
-  md: { w: 188, h: 84, ns: 20, cs: 16, ls: 7 },
+  sm: { w: 120, h: 40, ns: 11, cs: 8, ls: 5 },
+  md: { w: 188, h: 62, ns: 16, cs: 13, ls: 6 },
   lg: { w: 282, h: 126, ns: 30, cs: 22, ls: 10 },
 };
 
@@ -93,7 +93,7 @@ function renderSourceBlock(
     bottom: string;
     bottomArabic?: string;
     align?: "center" | "start";
-  }
+  },
 ) {
   return (
     <div
@@ -163,7 +163,8 @@ export default function PlateViz({
   size = "md",
 }: PlateVizProps) {
   const s = SIZES[size];
-  const plateStyle = STANDARD_EMIRATE_STYLES[emirate] ?? STANDARD_EMIRATE_STYLES.Dubai;
+  const plateStyle =
+    STANDARD_EMIRATE_STYLES[emirate] ?? STANDARD_EMIRATE_STYLES.Dubai;
   const borderWidth = size === "sm" ? 2 : 3;
   const radius = size === "lg" ? 8 : 6;
   const codeCellWidth = size === "lg" ? 56 : size === "md" ? 40 : 26;
@@ -349,13 +350,13 @@ export default function PlateViz({
         overflow: "hidden",
       }}
     >
-        <div
-          style={{
-            width: codeCellWidth,
-            background: plateStyle.cellBg,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+      <div
+        style={{
+          width: codeCellWidth,
+          background: plateStyle.cellBg,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           borderRight: "1px solid #111",
         }}
       >
@@ -364,7 +365,8 @@ export default function PlateViz({
             color: plateStyle.cellText,
             fontSize: size === "sm" ? s.cs + 4 : s.cs + 8,
             fontWeight: 800,
-            fontFamily: emirate === "Dubai" ? "Arial, sans-serif" : "Arial, sans-serif",
+            fontFamily:
+              emirate === "Dubai" ? "Arial, sans-serif" : "Arial, sans-serif",
             lineHeight: 1,
           }}
         >
@@ -411,9 +413,7 @@ export default function PlateViz({
         >
           {num}
         </span>
-        <div
-          style={{ display: "none" }}
-        />
+        <div style={{ display: "none" }} />
       </div>
     </div>
   );

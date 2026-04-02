@@ -28,17 +28,18 @@ import type { FSPlate, FSBid } from "@/types/firebase";
 import { toISOString } from "@/lib/utils";
 import CountdownTimer from "@/components/ui/CountdownTimer";
 import BidHistory from "@/components/ui/BidHistory";
-import Card from "@/components/ui/Card";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
+import AuthGateModal from "@/components/auth/AuthGateModal";
+import { useAuth } from "@/context/AuthContext";
 
 export default function PlateDetailPage() {
   const params = useParams<{ id: string }>();
   const id = params.id ?? "";
   const router = useRouter();
+  const { user } = useAuth();
   const [plate, setPlate] = useState<FSPlate | null>(null);
   const [bids, setBids] = useState<FSBid[]>([]);
   const [loading, setLoading] = useState(true);
+  const [gateHref, setGateHref] = useState<string | null>(null);
 
   useEffect(() => {
     getPlateById(id).then((p) => {
@@ -88,11 +89,27 @@ export default function PlateDetailPage() {
     Math.max(8, Math.round(((plate.price - min) / (max - min)) * 100)),
   );
 
+  function handleBuyNow() {
+    const href = `/plates/${plate.id}/checkout`;
+    if (user) {
+      router.push(href);
+      return;
+    }
+    setGateHref(href);
+  }
+
   return (
-    <div
-      className="flex-1 overflow-y-auto"
-      style={{ background: "var(--surface)" }}
-    >
+    <>
+      {gateHref && (
+        <AuthGateModal
+          destinationHref={gateHref}
+          onClose={() => setGateHref(null)}
+        />
+      )}
+      <div
+        className="flex-1 overflow-y-auto"
+        style={{ background: "var(--surface)" }}
+      >
       {/* ── Header ── */}
       <header
         className="sticky top-0 z-40 flex justify-between items-center h-16 px-4 glass-nav"
@@ -487,7 +504,7 @@ export default function PlateDetailPage() {
             ) : (
               <>
                 <button
-                  onClick={() => router.push(`/plates/${plate.id}/checkout`)}
+                  onClick={handleBuyNow}
                   className="w-full h-14 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer border-none text-white"
                   style={{
                     background:
@@ -708,20 +725,20 @@ export default function PlateDetailPage() {
                   className="font-bold mb-2"
                   style={{ color: "var(--on-surface)" }}
                 >
-                  Protected by Sakk Escrow
+                  Protected by Madmoon Escrow
                 </h3>
                 <p
                   className="text-sm leading-relaxed mb-3"
                   style={{ color: "var(--on-surface-variant)" }}
                 >
                   Your funds are held securely in a regulated escrow account
-                  until the RTA ownership transfer is successfully completed.
+                  until transfer is confirmed by authorities.
                 </p>
                 <p
                   className="text-xs font-bold mb-1"
                   style={{ color: "var(--outline)" }}
                 >
-                  Escrow fee: {aed(escrowFee(plate.price))}
+                  Service fee: {aed(escrowFee(plate.price))}
                 </p>
                 {[
                   "Instant Ownership Transfer",
@@ -744,7 +761,7 @@ export default function PlateDetailPage() {
               </div>
               <div className="space-y-3 mb-4">
                 <button
-                  onClick={() => router.push(`/plates/${plate.id}/checkout`)}
+                  onClick={handleBuyNow}
                   className="w-full h-14 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer border-none text-white"
                   style={{
                     background:
@@ -790,6 +807,7 @@ export default function PlateDetailPage() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import UserMenu from "@/components/auth/UserMenu";
 import {
   ShieldCheck,
-  BadgeCheck,
   TrendingUp,
-  Building2,
   Search,
   ChevronDown,
   ChevronRight,
@@ -22,7 +20,6 @@ import {
 import PlateViz from "@/components/plates/PlateViz";
 import { getPlates } from "@/lib/firestore";
 import { useAuth } from "@/context/AuthContext";
-import AuthGateModal from "@/components/auth/AuthGateModal";
 import type { FSPlate } from "@/types/firebase";
 
 /* ── helpers ─────────────────────────────────────────────────── */
@@ -44,31 +41,24 @@ const EMIRATES = [
 const TRUST_PILLARS = [
   {
     Icon: ShieldCheck,
-    label: "Escrow Protection",
-    body: "All payments are held in a regulated escrow account. We only release the funds to the seller after both parties confirm the transfer via the official MRU running app.",
+    label: "Secured Payment",
+    body: "Every buyer transfer lands in a protected platform escrow account before the ownership process begins.",
     color: "var(--primary)",
     bg: "rgba(0,106,102,0.08)",
   },
   {
-    Icon: BadgeCheck,
-    label: "Verified Sellers",
-    body: "Every seller undergoes a rigorous 15-point authentication process for history and ownership.",
+    Icon: TrendingUp,
+    label: "Fully Digital Transaction",
+    body: "From listing discovery to payment proof and transfer status, the entire journey stays online and trackable.",
     color: "#2563EB",
     bg: "rgba(37,99,235,0.08)",
   },
   {
-    Icon: TrendingUp,
-    label: "Curated Transfer",
-    body: "Our concierges make your RTA e-transfer in under 3 minutes — a process that normally requires a solicitor or notary to book the assets. Contact our concierge for guidance.",
+    Icon: ShieldCheck,
+    label: "Full Escrow Protection",
+    body: "Funds are held until transfer is confirmed by authorities, then released to the seller with a full audit trail.",
     color: "#D97706",
     bg: "rgba(217,119,6,0.08)",
-  },
-  {
-    Icon: Building2,
-    label: "High-Value Focus",
-    body: "Specializing in distinctive plates and special numbers; our specialists have direct listings to all major UAE auctions.",
-    color: "#7C3AED",
-    bg: "rgba(124,58,237,0.08)",
   },
 ];
 
@@ -81,33 +71,33 @@ const PROCESS_STEPS = [
   {
     n: "02",
     title: "Pay",
-    body: "Complete secure payment via card or wire to our platform escrow connection.",
+    body: "Send your transfer to the platform IBAN and upload payment confirmation.",
   },
   {
     n: "03",
-    title: "Prepare",
-    body: "No act on your part required, we go to all RTA offices on your behalf.",
+    title: "Transfer",
+    body: "Our team coordinates the authority-side transfer and keeps both parties updated.",
   },
   {
     n: "04",
     title: "Verify",
-    body: "Ownership is confirmed at the licensing authority.",
+    body: "Ownership is confirmed by the relevant licensing authority.",
   },
   {
     n: "05",
     title: "Receive",
-    body: "Funds are released to the seller, ownership is transferred.",
+    body: "Once transfer is confirmed, funds are released and the digital title is complete.",
   },
 ];
 
 const FAQS = [
   {
     q: "How does the escrow system work?",
-    a: "Once payment is confirmed, the funds are held in Sakk's secure escrow account. We only release the funds to the seller after both parties confirm the transfer via the official MRU running app.",
+    a: "Once payment is confirmed, the funds are held in Madmoon escrow until transfer is confirmed by authorities. Only then are funds released to the seller.",
   },
   {
     q: "Are there any hidden transfer fees?",
-    a: "We are transparent about all our prices; our AED 750 RTA government transfer fees are clearly itemized during checkout so there are no surprises prior to a purchase.",
+    a: "No hidden charges. The buyer sees the plate price and service fee, while the seller settles any RTA transfer charges separately.",
   },
   {
     q: "Can I buy a plate if I don't live in the UAE?",
@@ -169,7 +159,6 @@ export default function LandingPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [plates, setPlates] = useState<FSPlate[]>([]);
-  const [gateHref, setGateHref] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchNum, setSearchNum] = useState("");
   const [searchEmirate, setSearchEmirate] = useState("All Emirates");
@@ -178,10 +167,8 @@ export default function LandingPage() {
     getPlates({ limitCount: 4 }).then(setPlates);
   }, []);
 
-  /** Navigate to internal href — shows auth gate if not signed in */
   function navigate(href: string) {
-    if (user) router.push(href);
-    else setGateHref(href);
+    router.push(href);
   }
 
   function handleCTA() {
@@ -195,13 +182,6 @@ export default function LandingPage() {
 
   return (
     <>
-      {gateHref && (
-        <AuthGateModal
-          destinationHref={gateHref}
-          onClose={() => setGateHref(null)}
-        />
-      )}
-
       {/* ── Desktop nav ───────────────────────────────────────── */}
       <header
         className="hidden lg:flex sticky top-0 z-50 items-center justify-between px-10 h-16"
@@ -216,7 +196,7 @@ export default function LandingPage() {
             className="text-[22px] font-black"
             style={{ color: "var(--primary-container)" }}
           >
-            Sakk
+            Madmoon
           </span>
           <span className="text-[22px] font-black text-white/80">UAE</span>
         </div>
@@ -263,13 +243,13 @@ export default function LandingPage() {
             className="text-[9px] font-black tracking-[0.2em] uppercase"
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
-            Sakk Digital Marketplace
+            Madmoon Digital Marketplace
           </p>
           <p
             className="text-base font-black"
             style={{ color: "var(--primary-container)" }}
           >
-            Sakk UAE
+            Madmoon UAE
           </p>
         </div>
         <button
@@ -312,21 +292,19 @@ export default function LandingPage() {
                 {item.label}
               </button>
             ))}
-            {!user && (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleCTA();
-                }}
-                className="mt-6 w-full py-4 rounded-2xl text-base font-black border-none cursor-pointer"
-                style={{
-                  background: "var(--primary-container)",
-                  color: "var(--teal-darker)",
-                }}
-              >
-                Continue with Google
-              </button>
-            )}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleCTA();
+              }}
+              className="mt-6 w-full py-4 rounded-2xl text-base font-black border-none cursor-pointer"
+              style={{
+                background: "var(--primary-container)",
+                color: "var(--teal-darker)",
+              }}
+            >
+              Browse Marketplace
+            </button>
           </div>
         </div>
       )}
@@ -361,29 +339,28 @@ export default function LandingPage() {
               }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary-container)]" />
-              Featuring 12,000+ Plates
+              Browse verified UAE listings
             </div>
 
             {/* Desktop headline */}
             <h1 className="hidden lg:block text-5xl xl:text-6xl font-black leading-[0.92] tracking-tighter text-white">
-              Buy, Sell, Gift,
+              Secured Payment.
               <br />
-              and Auction{" "}
+              Fully Digital{" "}
               <span style={{ color: "var(--primary-container)" }}>
-                UAE
+                Transaction.
                 <br />
-                Plates
-              </span>{" "}
-              — Securely
+                Full Escrow Protection.
+              </span>
             </h1>
 
             {/* Mobile headline */}
             <h1 className="lg:hidden text-4xl font-black leading-[0.95] tracking-tighter text-white">
-              Own the Legacy
+              Secured Payment.
               <br />
-              of the{" "}
+              Fully Digital{" "}
               <span style={{ color: "var(--primary-container)" }}>
-                Emirates.
+                Transfer.
               </span>
             </h1>
 
@@ -392,52 +369,17 @@ export default function LandingPage() {
               style={{ color: "rgba(255,255,255,0.72)" }}
             >
               <span className="hidden lg:inline">
-                The premium exchange for the region&apos;s most prestigious digital
-                assets, fully-protected by end-to-end escrow and verified
-                transfer protocols.
+                Browse premium UAE plates with protected payments,
+                authority-confirmed transfers, and a fully digital buyer
+                journey.
               </span>
               <span className="lg:hidden">
-                The premier gateway to investing in rare UAE heritage number
-                plates as digital assets. Secure, fast, and institutional-grade
-                security.
+                Browse rare UAE plates with protected payments and full escrow
+                protection from start to finish.
               </span>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-              {!user && (
-                <button
-                  onClick={handleCTA}
-                  className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-sm font-black border-none cursor-pointer w-full sm:w-auto justify-center"
-                  style={{ background: "white", color: "var(--teal-darker)" }}
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="18"
-                    height="18"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
-                      <path
-                        fill="#4285F4"
-                        d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"
-                      />
-                      <path
-                        fill="#34A853"
-                        d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"
-                      />
-                      <path
-                        fill="#FBBC05"
-                        d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"
-                      />
-                      <path
-                        fill="#EA4335"
-                        d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"
-                      />
-                    </g>
-                  </svg>
-                  {"Continue with Google"}
-                </button>
-              )}
               <button
                 onClick={() => navigate("/search")}
                 className="px-6 py-3.5 rounded-2xl text-sm font-bold border cursor-pointer w-full sm:w-auto"
@@ -453,7 +395,7 @@ export default function LandingPage() {
 
             {/* Trust row */}
             <div className="hidden lg:flex items-center gap-5 pt-2">
-              {["RTA Verified", "Escrow Protected", "2.4K+ Listings"].map(
+              {["Secured Payment", "Fully Digital", "Authority Confirmed"].map(
                 (t) => (
                   <div
                     key={t}
@@ -494,19 +436,6 @@ export default function LandingPage() {
                   size="md"
                 />
               </div>
-              {/* Price badge */}
-              <div
-                className="absolute -right-4 top-4 rounded-xl px-3 py-2 text-xs font-black shadow-lg"
-                style={{ background: "white", color: "var(--teal-darker)" }}
-              >
-                AED 2.8M
-                <span
-                  className="block text-[9px] font-bold"
-                  style={{ color: "var(--tertiary)" }}
-                >
-                  ↑ High Value
-                </span>
-              </div>
             </div>
           </div>
         </div>
@@ -533,32 +462,8 @@ export default function LandingPage() {
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black border-none cursor-pointer"
               style={{ background: "var(--primary)", color: "white" }}
             >
-              <svg
-                viewBox="0 0 24 24"
-                width="14"
-                height="14"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
-                  <path
-                    fill="white"
-                    d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"
-                  />
-                  <path
-                    fill="white"
-                    d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"
-                  />
-                  <path
-                    fill="white"
-                    d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"
-                  />
-                  <path
-                    fill="white"
-                    d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"
-                  />
-                </g>
-              </svg>
-              Sign in with Google Account
+              <Search size={14} />
+              Browse Marketplace
             </button>
           </div>
         </div>
@@ -578,7 +483,7 @@ export default function LandingPage() {
               className="text-3xl lg:text-4xl font-black tracking-tight"
               style={{ color: "var(--on-surface)" }}
             >
-              <span className="hidden lg:inline">Why Trust Sakk?</span>
+              <span className="hidden lg:inline">Why Trust Madmoon?</span>
               <span className="lg:hidden">Why the Exchange?</span>
             </h2>
             <p
@@ -1067,32 +972,8 @@ export default function LandingPage() {
             className="flex items-center gap-2.5 px-6 py-4 rounded-2xl text-sm font-black border-none cursor-pointer mx-auto"
             style={{ background: "white", color: "var(--teal-darker)" }}
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
-                <path
-                  fill="#4285F4"
-                  d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"
-                />
-              </g>
-            </svg>
-            Continue with Google
+            <Search size={18} />
+            Browse Marketplace
           </button>
         </section>
 
@@ -1112,7 +993,7 @@ export default function LandingPage() {
                     className="text-xl font-black"
                     style={{ color: "var(--primary-container)" }}
                   >
-                    Sakk
+                    Madmoon
                   </span>
                   <span className="text-xl font-black text-white/70">UAE</span>
                 </div>
@@ -1183,7 +1064,7 @@ export default function LandingPage() {
                 className="text-[11px]"
                 style={{ color: "rgba(255,255,255,0.35)" }}
               >
-                © 2026 Sakk. The trusted digital marketplace for UAE plate
+                © 2026 Madmoon. The trusted digital marketplace for UAE plate
                 investments.
               </p>
               <div className="flex items-center gap-5">

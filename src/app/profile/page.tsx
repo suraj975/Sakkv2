@@ -1,6 +1,16 @@
 "use client";
 
-import { Bell, ChevronRight, CreditCard, LogOut, ShieldCheck, Star, UserRound, Wallet } from "lucide-react";
+import {
+  Bell,
+  ChevronRight,
+  CreditCard,
+  Globe2,
+  LogOut,
+  ShieldCheck,
+  Star,
+  UserRound,
+  Wallet,
+} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 function stat(value: string, label: string) {
@@ -86,8 +96,35 @@ export default function ProfilePage() {
               <div>
                 <p className="text-[18px] font-black text-[var(--on-surface)]">Account Overview</p>
                 <p className="text-sm text-[var(--on-surface-variant)]">
-                  Keep your Sakk identity and transaction preferences in one place.
+                  Keep your Madmoon identity and transaction preferences in one place.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[26px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+            <div className="flex items-start gap-3">
+              <div
+                className="mt-1 flex h-12 w-12 items-center justify-center rounded-full"
+                style={{ background: "rgba(0,106,102,0.08)" }}
+              >
+                <Globe2 className="text-[var(--primary)]" size={20} />
+              </div>
+              <div className="flex-1">
+                <p className="text-[18px] font-black text-[var(--on-surface)]">Regional Expansion</p>
+                <p className="mt-1 text-sm text-[var(--on-surface-variant)]">
+                  Saudi Arabia, Qatar, and Oman account support is coming soon.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {["Saudi Arabia", "Qatar", "Oman"].map((region) => (
+                    <span
+                      key={region}
+                      className="rounded-full bg-[rgba(0,106,102,0.08)] px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-[var(--primary)]"
+                    >
+                      {region} · Coming Soon
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

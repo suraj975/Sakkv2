@@ -562,7 +562,7 @@ export default function SearchPage() {
                 style={{ color: "var(--primary)" }}
               />
               <span className="text-xs font-bold">
-                Smart search: try &quot;Dubai 786&quot; or &quot;4 digits&quot;
+                Smart search: try &quot;A 1234&quot; or &quot;Dubai 786&quot;
               </span>
             </div>
             <Button

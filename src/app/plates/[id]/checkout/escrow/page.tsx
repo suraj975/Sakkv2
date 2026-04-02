@@ -7,13 +7,11 @@ import {
   ArrowLeft,
   Bell,
   Copy,
-  MessageSquare,
   Receipt,
   ShieldCheck,
   AlertCircle,
   Loader2,
 } from "lucide-react";
-import { aed } from "@/lib/plates";
 import { getPlateById } from "@/lib/firestore";
 import type { FSPlate } from "@/types/firebase";
 import BottomNav from "@/components/layout/BottomNav";
@@ -64,7 +62,7 @@ export default function EscrowPage() {
 
   if (!plate) return notFound();
 
-  const txRef = `SKK-2024-50124`;
+  const txRef = `MDM-${String(plate.id ?? id).replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}-2401`;
 
   return (
     <div
@@ -123,8 +121,8 @@ export default function EscrowPage() {
               className="text-[12px] leading-relaxed"
               style={{ color: "var(--on-surface-variant)" }}
             >
-              Your payment is safe and protected until you confirm the asset
-              transfer.
+              Your payment is safe and protected until transfer is confirmed by
+              authorities.
             </div>
           </div>
         </div>
@@ -252,17 +250,6 @@ export default function EscrowPage() {
         </div>
 
         {/* Action buttons */}
-        <button
-          className="w-full border-none rounded-2xl py-4 text-[15px] font-bold text-white cursor-pointer mb-3 flex items-center justify-center gap-2"
-          style={{
-            background:
-              "linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%)",
-            boxShadow: "0 4px 16px rgba(0,106,102,0.35)",
-          }}
-        >
-          <MessageSquare size={18} />
-          Message Seller
-        </button>
         <button
           className="w-full rounded-2xl py-4 text-[15px] font-semibold cursor-pointer border-none flex items-center justify-center gap-2"
           style={{

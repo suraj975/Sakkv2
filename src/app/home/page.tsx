@@ -20,7 +20,6 @@ import {
 import PlateCard from "@/components/plates/PlateCard";
 import PostListingModal from "@/components/PostListingModal";
 import { getPlates, getAuctionPlates } from "@/lib/firestore";
-import { cn } from "@/lib/utils";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -298,7 +297,7 @@ export default function HomePage() {
             className="text-xl font-black"
             style={{ color: "var(--on-surface)" }}
           >
-            Sakk
+            Madmoon
           </span>
           <div className="flex items-center gap-2">
             <button
@@ -318,15 +317,23 @@ export default function HomePage() {
 
         {/* Desktop Header */}
         <header
-          className="hidden lg:flex sticky top-0 z-40 glass-nav justify-between items-center px-8 h-16"
+          className="hidden lg:flex sticky top-0 z-40 glass-nav justify-between items-center px-8 h-[72px]"
           style={{ borderBottom: "1px solid rgba(187,202,199,0.15)" }}
         >
-          <h1
-            className="text-xl font-black tracking-tight"
-            style={{ color: "var(--on-surface)" }}
-          >
-            Marketplace
-          </h1>
+          <div>
+            <h1
+              className="text-xl font-black tracking-tight leading-tight"
+              style={{ color: "var(--on-surface)" }}
+            >
+              Marketplace
+            </h1>
+            <p
+              className="text-[11px] font-semibold"
+              style={{ color: "var(--outline)" }}
+            >
+              Browse UAE number plates available for transfer
+            </p>
+          </div>
           <div className="flex items-center gap-2">
             <button
               className="w-10 h-10 flex items-center justify-center rounded-full transition-colors"
@@ -346,7 +353,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl overflow-x-hidden px-3 py-5 space-y-7 pb-28 sm:px-4 sm:space-y-8 lg:px-8 lg:py-10 lg:space-y-14 lg:pb-16">
           {/* Hero */}
           <section
-            className="relative h-[280px] overflow-hidden rounded-[24px] lg:h-[380px] lg:rounded-[32px]"
+            className="relative overflow-hidden rounded-[24px] lg:rounded-[32px]"
             style={{
               background:
                 "linear-gradient(135deg, var(--teal-darker) 0%, var(--primary) 60%, #00796b 100%)",
@@ -362,7 +369,7 @@ export default function HomePage() {
                 mixBlendMode: "overlay",
               }}
             />
-            <div className="relative flex h-full items-center px-5 sm:px-6 lg:px-12">
+            <div className="relative flex min-h-[280px] items-center px-5 py-8 sm:px-6 lg:min-h-[380px] lg:px-12 lg:py-14">
               <div className="max-w-lg space-y-4 sm:space-y-5">
                 <Badge
                   size="md"
@@ -371,14 +378,26 @@ export default function HomePage() {
                   UAE PLATE MARKETPLACE
                 </Badge>
                 <h1 className="text-3xl font-black leading-[0.95] tracking-tight text-white sm:text-4xl lg:text-6xl">
-                  Safe Plate <br />
-                  Transfers
+                  Secured Payment. <br />
+                  Fully Digital Transfer.
                 </h1>
+                <div className="flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/80 sm:text-xs">
+                  {[
+                    "Secured Payment",
+                    "Fully Digital Transaction",
+                    "Full Escrow Protection",
+                  ].map((pill) => (
+                    <span
+                      key={pill}
+                      className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5"
+                    >
+                      {pill}
+                    </span>
+                  ))}
+                </div>
                 <p className="text-sm font-semibold text-white/80 sm:text-base lg:text-lg">
-                  Secured by Sakk ·{" "}
-                  <span className="text-white/50 font-normal">
-                    The Middle East&apos;s Premier Asset Exchange
-                  </span>
+                  Browse verified listings and complete authority-confirmed
+                  transfers with protected funds held in escrow.
                 </p>
                 <Button
                   onClick={() => router.push("/search")}
@@ -391,69 +410,8 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Category Grid */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
-            {CATS.map((cat, i) => (
-              <Card
-                key={i}
-                padding="md"
-                className={cn(
-                  "cursor-pointer transition-all border-2 group relative overflow-hidden",
-                  i === 0
-                    ? "border-[var(--primary)] bg-[var(--teal-light)]"
-                    : "hover:border-[var(--outline-variant)]",
-                )}
-                style={
-                  i !== 0 ? { borderColor: "rgba(187,202,199,0.2)" } : undefined
-                }
-                onClick={
-                  !cat.available
-                    ? () => setComingSoon({ label: cat.label, Icon: cat.Icon })
-                    : undefined
-                }
-              >
-                {/* Coming Soon overlay badge */}
-                {!cat.available && (
-                  <span
-                    className="absolute top-2.5 right-2.5 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
-                    style={{
-                      background: "rgba(6,61,58,0.08)",
-                      color: "var(--teal-darker)",
-                      border: "1px solid rgba(6,61,58,0.12)",
-                    }}
-                  >
-                    Soon
-                  </span>
-                )}
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p
-                      className="text-base font-black"
-                      style={{ color: "var(--on-surface)" }}
-                    >
-                      {cat.label}
-                    </p>
-                    <p
-                      className="text-[10px] font-bold uppercase tracking-widest"
-                      style={{ color: "var(--outline)" }}
-                    >
-                      {cat.available ? cat.count : "Coming Soon"}
-                    </p>
-                  </div>
-                  <cat.Icon
-                    size={26}
-                    style={{
-                      color: i === 0 ? "var(--primary)" : "var(--outline)",
-                    }}
-                    className="transition-colors group-hover:text-[var(--primary)]"
-                  />
-                </div>
-              </Card>
-            ))}
-          </div>
-
           {/* Quick Features */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+          <div className="grid grid-cols-3 gap-3 md:gap-5">
             {QUICK.map((feat, i) => (
               <Card
                 key={i}
@@ -462,7 +420,7 @@ export default function HomePage() {
                 className="cursor-pointer group hover:border-[var(--outline-variant)] transition-all"
                 style={{ borderColor: "rgba(187,202,199,0.12)" }}
               >
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col items-start gap-3 md:flex-row md:items-center md:gap-4">
                   <div
                     className="p-3 rounded-xl"
                     style={{ background: "var(--teal-light)" }}
@@ -471,13 +429,13 @@ export default function HomePage() {
                   </div>
                   <div className="space-y-0.5">
                     <p
-                      className="text-sm font-black"
+                      className="text-xs font-black md:text-sm"
                       style={{ color: "var(--on-surface)" }}
                     >
                       {feat.label}
                     </p>
                     <p
-                      className="text-[10px] font-bold uppercase tracking-widest"
+                      className="text-[9px] font-bold uppercase tracking-widest md:text-[10px]"
                       style={{ color: "var(--outline)" }}
                     >
                       {feat.sub}

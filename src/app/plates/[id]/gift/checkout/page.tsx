@@ -113,7 +113,7 @@ function GiftCheckoutInner() {
                 <span className="font-bold text-[var(--on-surface)]">{aed(plate.price)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span>Escrow Fee · {priceTier(plate.price)}</span>
+                <span>Service Fee · {priceTier(plate.price)}</span>
                 <span className="font-bold text-[var(--on-surface)]">{aed(fee)}</span>
               </div>
             </div>
@@ -131,7 +131,7 @@ function GiftCheckoutInner() {
             <div className="flex items-start gap-3">
               <ShieldCheck size={18} className="mt-1 shrink-0 text-[var(--primary)]" />
               <p className="text-[var(--on-surface-variant)]">
-                Funds stay in Sakk escrow until the recipient accepts the gift and the transfer is confirmed.
+                Funds stay in Madmoon escrow until the recipient accepts the gift and the transfer is confirmed.
               </p>
             </div>
           </div>

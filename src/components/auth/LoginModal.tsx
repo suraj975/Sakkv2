@@ -93,7 +93,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
               className="text-lg font-black"
               style={{ color: "var(--on-surface)" }}
             >
-              Welcome to Sakk
+              Welcome to Madmoon
             </h2>
             <p
               className="text-xs mt-0.5"

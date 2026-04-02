@@ -4,16 +4,12 @@ import { usePathname } from "next/navigation";
 import Sidebar from "./Sidebar";
 import BottomNav from "./BottomNav";
 import { useAuth } from "@/context/AuthContext";
-import AuthGateModal from "@/components/auth/AuthGateModal";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, loading } = useAuth();
   const isLanding = pathname === "/";
   const showBottomNav = !loading && !!user;
-
-  // Show gate on all non-landing routes for unauthenticated users
-  const showGate = !isLanding && !loading && !user;
 
   if (isLanding) {
     return (
@@ -30,22 +26,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex" style={{ background: "var(--sakk-bg)" }}>
-      {showGate && <AuthGateModal destinationHref={pathname} />}
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col min-h-screen">
         <div className="flex min-w-0 flex-1 flex-col w-full">
-          <main
-            className="flex min-w-0 flex-1 flex-col overflow-hidden transition-[filter] duration-300"
-            style={
-              showGate
-                ? {
-                    filter: "blur(6px)",
-                    pointerEvents: "none",
-                    userSelect: "none",
-                  }
-                : undefined
-            }
-          >
+          <main className="flex min-w-0 flex-1 flex-col overflow-hidden transition-[filter] duration-300">
             {children}
           </main>
           {showBottomNav && <div className="h-24 lg:hidden" aria-hidden="true" />}

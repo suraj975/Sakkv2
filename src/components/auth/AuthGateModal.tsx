@@ -231,7 +231,7 @@ export default function AuthGateModal({ destinationHref, onClose }: Props) {
                 className="text-2xl font-black"
                 style={{ color: "var(--primary-container)" }}
               >
-                Sakk
+                Madmoon
               </span>
               <span className="text-2xl font-black text-white/80">UAE</span>
             </div>
@@ -326,7 +326,7 @@ export default function AuthGateModal({ destinationHref, onClose }: Props) {
                 className="text-xl font-black"
                 style={{ color: "var(--primary)" }}
               >
-                Sakk
+                Madmoon
               </span>
               <span
                 className="text-xl font-black"

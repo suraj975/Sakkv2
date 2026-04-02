@@ -171,7 +171,7 @@ export default function GiftDetailPage() {
           </button>
 
           <p className="pt-4 text-center text-[11px] font-black uppercase tracking-[0.22em] text-[var(--outline)]">
-            Transaction secured by Sakk Escrow
+            Transaction secured by Madmoon Escrow
           </p>
         </div>
       </div>

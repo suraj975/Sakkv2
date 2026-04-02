@@ -97,7 +97,7 @@ function GiftRevealInner() {
               </div>
             </div>
             <p className="mt-5 text-[15px] leading-7 text-[var(--on-surface-variant)]">
-              Enter your Traffic Code File number so Sakk can complete the legal ownership transfer.
+              Enter your Traffic Code File number so Madmoon can complete the legal ownership transfer.
             </p>
           </div>
 
@@ -130,7 +130,7 @@ function GiftRevealInner() {
             <div className="flex items-start gap-3">
               <ShieldCheck size={18} className="mt-1 shrink-0 text-[var(--primary)]" />
               <p className="text-[var(--on-surface-variant)]">
-                Sakk escrow protects both sides until the transfer is approved and completed.
+                Madmoon escrow protects both sides until the transfer is approved and completed.
               </p>
             </div>
           </div>

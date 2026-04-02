@@ -35,7 +35,7 @@ export default function AuctionsPage() {
           className="text-xl font-black"
           style={{ color: "var(--on-surface)" }}
         >
-          Sakk UAE
+          Madmoon UAE
         </span>
         <div className="flex items-center gap-2">
           <button
@@ -317,7 +317,7 @@ export default function AuctionsPage() {
               />
               <div className="relative z-10">
                 <p className="text-[10px] font-black uppercase tracking-[2px] text-white opacity-60 mb-3">
-                  Sakk Exclusive
+                  Madmoon Exclusive
                 </p>
                 <h3 className="text-2xl font-black text-white leading-tight">
                   Elite Collection:

@@ -17,7 +17,6 @@ import type { FSPlate } from "@/types/firebase";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
-import { cn } from "@/lib/utils";
 
 const PAYMENT_METHODS = [
   {
@@ -55,12 +54,12 @@ export default function CheckoutPage() {
   if (!plate) return notFound();
 
   const fee = escrowFee(plate.price);
-  const total = plate.price + fee + 120;
+  const total = plate.price + fee;
 
   const handlePay = () => {
     setIsProcessing(true);
     setTimeout(
-      () => router.push(`/plates/${plate.id ?? id}/checkout/escrow`),
+      () => router.push(`/plates/${plate.id ?? id}/checkout/bank-transfer`),
       2000,
     );
   };
@@ -113,7 +112,7 @@ export default function CheckoutPage() {
               className="text-sm font-medium mt-1"
               style={{ color: "var(--on-surface-variant)" }}
             >
-              Complete your secure transaction through Sakk Escrow.
+              Complete your secure transaction through Madmoon escrow.
             </p>
           </div>
 
@@ -159,8 +158,7 @@ export default function CheckoutPage() {
             </h3>
             {[
               { label: "Plate Price", value: aed(plate.price) },
-              { label: "Escrow Fee", value: aed(fee) },
-              { label: "RTA Transfer", value: "AED 120" },
+              { label: "Service Fee", value: aed(fee) },
             ].map((row) => (
               <div
                 key={row.label}
@@ -219,7 +217,7 @@ export default function CheckoutPage() {
                 className="text-[10px] font-medium"
                 style={{ color: "var(--on-surface-variant)" }}
               >
-                Funds held securely until RTA transfer is confirmed.
+                Funds are held until transfer is confirmed by authorities.
               </p>
             </div>
           </div>
@@ -311,7 +309,7 @@ export default function CheckoutPage() {
             className="text-center text-[10px] font-medium"
             style={{ color: "var(--outline)" }}
           >
-            By proceeding you agree to Sakk's Terms of Service and Escrow
+            By proceeding you agree to Madmoon&apos;s Terms of Service and Escrow
             Agreement.
           </p>
         </div>
