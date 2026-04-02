@@ -411,31 +411,31 @@ export default function HomePage() {
           </section>
 
           {/* Quick Features */}
-          <div className="grid grid-cols-3 gap-3 md:gap-5">
+          <div className="grid grid-cols-3 gap-2 md:gap-5">
             {QUICK.map((feat, i) => (
               <Card
                 key={i}
-                padding="md"
+                padding="none"
                 onClick={() => router.push(feat.href)}
-                className="cursor-pointer group hover:border-[var(--outline-variant)] transition-all"
+                className="cursor-pointer group hover:border-[var(--outline-variant)] transition-all p-3 md:p-6"
                 style={{ borderColor: "rgba(187,202,199,0.12)" }}
               >
-                <div className="flex flex-col items-start gap-3 md:flex-row md:items-center md:gap-4">
+                <div className="flex flex-col items-center gap-2 text-center md:flex-row md:items-center md:text-left md:gap-4">
                   <div
-                    className="p-3 rounded-xl"
+                    className="p-2.5 md:p-3 rounded-xl shrink-0"
                     style={{ background: "var(--teal-light)" }}
                   >
-                    <feat.Icon size={18} style={{ color: "var(--primary)" }} />
+                    <feat.Icon size={16} className="md:w-[18px] md:h-[18px]" style={{ color: "var(--primary)" }} />
                   </div>
-                  <div className="space-y-0.5">
+                  <div className="space-y-0.5 min-w-0">
                     <p
-                      className="text-xs font-black md:text-sm"
+                      className="text-[11px] font-black md:text-sm leading-tight"
                       style={{ color: "var(--on-surface)" }}
                     >
                       {feat.label}
                     </p>
                     <p
-                      className="text-[9px] font-bold uppercase tracking-widest md:text-[10px]"
+                      className="hidden md:block text-[10px] font-bold uppercase tracking-widest"
                       style={{ color: "var(--outline)" }}
                     >
                       {feat.sub}
