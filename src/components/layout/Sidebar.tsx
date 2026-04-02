@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import UserMenu from "@/components/auth/UserMenu";
 import { subscribeUnreadCount } from "@/lib/firestore";
+import Logo from "@/components/ui/Logo";
 
 const NAV_ITEMS = [
   { id: "home", href: "/home", label: "Home", Icon: Home },
@@ -60,19 +61,8 @@ export default function Sidebar() {
         }}
       >
         <div className="px-4 pt-8">
-          <div className="mb-10 px-2 flex flex-col gap-1">
-            <h1
-              className="text-2xl font-black"
-              style={{ color: "var(--primary)" }}
-            >
-              Madmoon
-            </h1>
-            <p
-              className="text-[9px] uppercase tracking-[0.15em] font-bold"
-              style={{ color: "var(--outline)" }}
-            >
-              UAE PLATE MARKETPLACE
-            </p>
+          <div className="mb-10 px-2">
+            <Logo size="sm" showTagline />
           </div>
         </div>
 

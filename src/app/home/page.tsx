@@ -23,6 +23,7 @@ import { getPlates, getAuctionPlates } from "@/lib/firestore";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import Logo from "@/components/ui/Logo";
 import type { FSPlate } from "@/types/firebase";
 
 const TABS = ["Car Plates", "Bike Plates", "Boat Numbers"];
@@ -293,12 +294,7 @@ export default function HomePage() {
           className="lg:hidden sticky top-0 z-40 glass-nav flex justify-between items-center px-4 h-14"
           style={{ borderBottom: "1px solid rgba(187,202,199,0.15)" }}
         >
-          <span
-            className="text-xl font-black"
-            style={{ color: "var(--on-surface)" }}
-          >
-            Madmoon
-          </span>
+          <Logo size="sm" />
           <div className="flex items-center gap-2">
             <button
               className="w-9 h-9 flex items-center justify-center rounded-full"

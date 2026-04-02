@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import UserMenu from "@/components/auth/UserMenu";
 import {
@@ -18,6 +18,7 @@ import {
   Play,
 } from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
+import Logo from "@/components/ui/Logo";
 import { getPlates } from "@/lib/firestore";
 import { useAuth } from "@/context/AuthContext";
 import type { FSPlate } from "@/types/firebase";
@@ -37,6 +38,109 @@ const EMIRATES = [
   "Fujairah",
   "UAQ",
 ];
+
+const EMIRATE_DOTS: Record<string, string> = {
+  "All Emirates": "#94A3B8",
+  Dubai: "#C9A84C",
+  "Abu Dhabi": "#B22234",
+  Sharjah: "#1A5C1A",
+  Ajman: "#42526E",
+  RAK: "#3B6E78",
+  Fujairah: "#6F8183",
+  UAQ: "#7E8A8C",
+};
+
+function EmirateSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-2.5 rounded-xl px-4 py-3.5 text-sm font-bold whitespace-nowrap border-none cursor-pointer"
+        style={{
+          background: "white",
+          color: "var(--on-surface)",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          minWidth: 160,
+        }}
+      >
+        <span
+          className="w-2.5 h-2.5 rounded-full shrink-0"
+          style={{ background: EMIRATE_DOTS[value] ?? "#94A3B8" }}
+        />
+        <span className="flex-1 text-left">{value}</span>
+        <ChevronDown
+          size={14}
+          style={{
+            color: "var(--outline)",
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.15s",
+          }}
+        />
+      </button>
+
+      {open && (
+        <div
+          className="absolute left-0 top-full z-50 mt-2 overflow-hidden rounded-[20px] py-1.5"
+          style={{
+            background: "var(--surface-container-lowest)",
+            border: "1px solid rgba(187,202,199,0.2)",
+            boxShadow: "0 12px 32px rgba(25,28,29,0.14)",
+            minWidth: "100%",
+          }}
+        >
+          {EMIRATES.map((em) => {
+            const isActive = em === value;
+            return (
+              <button
+                key={em}
+                type="button"
+                onClick={() => {
+                  onChange(em);
+                  setOpen(false);
+                }}
+                className="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors border-none cursor-pointer"
+                style={{
+                  background: isActive ? "rgba(0,106,102,0.08)" : "transparent",
+                  color: isActive ? "var(--primary)" : "var(--on-surface)",
+                }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className="w-2.5 h-2.5 rounded-full shrink-0"
+                    style={{ background: EMIRATE_DOTS[em] ?? "#94A3B8" }}
+                  />
+                  <span className="text-sm font-bold">{em}</span>
+                </div>
+                {isActive && (
+                  <Check size={14} style={{ color: "var(--primary)" }} />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const TRUST_PILLARS = [
   {
@@ -192,13 +296,7 @@ export default function LandingPage() {
         }}
       >
         <div className="flex items-center gap-1.5">
-          <span
-            className="text-[22px] font-black"
-            style={{ color: "var(--primary-container)" }}
-          >
-            Madmoon
-          </span>
-          <span className="text-[22px] font-black text-white/80">UAE</span>
+          <Logo size="sm" variant="dark" />
         </div>
         <nav className="flex items-center gap-8">
           {[
@@ -239,18 +337,7 @@ export default function LandingPage() {
         }}
       >
         <div>
-          <p
-            className="text-[9px] font-black tracking-[0.2em] uppercase"
-            style={{ color: "rgba(255,255,255,0.5)" }}
-          >
-            Madmoon Digital Marketplace
-          </p>
-          <p
-            className="text-base font-black"
-            style={{ color: "var(--primary-container)" }}
-          >
-            Madmoon UAE
-          </p>
+          <Logo size="sm" variant="dark" />
         </div>
         <button
           onClick={() => setMobileMenuOpen((v) => !v)}
@@ -490,8 +577,8 @@ export default function LandingPage() {
               className="mt-3 text-sm lg:text-base max-w-lg mx-auto"
               style={{ color: "var(--on-surface-variant)" }}
             >
-              We provide institutional-grade transparency for the world&apos;s most
-              unique alternative asset class.
+              We provide institutional-grade transparency for the world&apos;s
+              most unique alternative asset class.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -669,20 +756,10 @@ export default function LandingPage() {
                   boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
                 }}
               />
-              <select
+              <EmirateSelect
                 value={searchEmirate}
-                onChange={(e) => setSearchEmirate(e.target.value)}
-                className="rounded-xl px-4 py-3.5 text-sm border-none outline-none cursor-pointer"
-                style={{
-                  background: "white",
-                  color: "var(--on-surface)",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                }}
-              >
-                {EMIRATES.map((em) => (
-                  <option key={em}>{em}</option>
-                ))}
-              </select>
+                onChange={setSearchEmirate}
+              />
               <button
                 type="submit"
                 className="flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-black border-none cursor-pointer"
@@ -756,8 +833,11 @@ export default function LandingPage() {
               >
                 {i < PROCESS_STEPS.length - 1 && (
                   <div
-                    className="absolute top-6 left-[60%] right-0 h-0.5"
-                    style={{ background: "var(--surface-container-high)" }}
+                    className="absolute top-6 left-1/2 right-0 h-0.5"
+                    style={{
+                      background: "var(--surface-container-high)",
+                      marginLeft: "24px",
+                    }}
                   />
                 )}
                 <div
@@ -782,17 +862,26 @@ export default function LandingPage() {
             ))}
           </div>
 
-          {/* Mobile: vertical numbered list */}
-          <div className="lg:hidden space-y-6">
-            {PROCESS_STEPS.slice(0, 3).map((step) => (
-              <div key={step.n} className="flex items-start gap-4">
+          {/* Mobile: vertical numbered list — all 5 steps */}
+          <div className="lg:hidden space-y-5">
+            {PROCESS_STEPS.map((step, i) => (
+              <div key={step.n} className="flex items-start gap-4 relative">
+                {i < PROCESS_STEPS.length - 1 && (
+                  <div
+                    className="absolute left-5 top-10 bottom-0 w-0.5"
+                    style={{
+                      background: "var(--surface-container-high)",
+                      height: "calc(100% + 20px - 40px)",
+                    }}
+                  />
+                )}
                 <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-black shrink-0"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-black shrink-0 relative z-10"
                   style={{ background: "var(--primary)", color: "white" }}
                 >
                   {step.n}
                 </div>
-                <div>
+                <div className="pt-1.5">
                   <p
                     className="font-black text-sm mb-0.5"
                     style={{ color: "var(--on-surface)" }}
@@ -834,8 +923,8 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <p className="text-2xl font-black text-white leading-snug">
-                  Exclusive monthly events for the UAE&apos;s rarest single-digit
-                  numbers.
+                  Exclusive monthly events for the UAE&apos;s rarest
+                  single-digit numbers.
                 </p>
               </div>
               <button
