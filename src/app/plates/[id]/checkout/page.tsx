@@ -7,8 +7,6 @@ import {
   ArrowLeft,
   Lock,
   Building2,
-  CreditCard,
-  Smartphone,
   ShieldCheck,
   Check,
   Loader2,
@@ -27,18 +25,6 @@ const PAYMENT_METHODS = [
     label: "Bank Transfer",
     sub: "Instant via UAE Central Bank",
     Icon: Building2,
-  },
-  {
-    id: "card",
-    label: "Credit Card",
-    sub: "Visa, Mastercard, Amex",
-    Icon: CreditCard,
-  },
-  {
-    id: "apple",
-    label: "Apple Pay",
-    sub: "Secure one-tap payment",
-    Icon: Smartphone,
   },
 ];
 

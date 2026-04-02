@@ -7,6 +7,7 @@ import {
   HelpCircle,
   ShieldCheck,
   Zap,
+  Search,
   CarFront,
   Bike,
   Anchor,
@@ -34,13 +35,13 @@ const CATS = [
     Icon: CarFront,
     available: true,
   },
-  { label: "Bike Plates", count: "891 Active", Icon: Bike, available: false },
-  {
-    label: "Boat Numbers",
-    count: "234 Active",
-    Icon: Anchor,
-    available: false,
-  },
+  //   { label: "Bike Plates", count: "891 Active", Icon: Bike, available: false },
+  //   {
+  //     label: "Boat Numbers",
+  //     count: "234 Active",
+  //     Icon: Anchor,
+  //     available: false,
+  //   },
 ];
 
 /* ── Coming Soon Modal ───────────────────────────────────────── */
@@ -233,6 +234,7 @@ export default function HomePage() {
   const [plates, setPlates] = useState<FSPlate[]>([]);
   const [auctionPlates, setAuctionPlates] = useState<FSPlate[]>([]);
   const [loading, setLoading] = useState(true);
+  const [trendingQuery, setTrendingQuery] = useState("");
   const [comingSoon, setComingSoon] = useState<{
     label: string;
     Icon: React.ElementType;
@@ -245,7 +247,7 @@ export default function HomePage() {
           getPlates({ limitCount: 12 }),
           getAuctionPlates(),
         ]);
-        setPlates(all);
+        setPlates(all.filter((plate) => plate.listingType !== "auction"));
         setAuctionPlates(auctions);
       } catch (err) {
         console.error("Failed to load plates:", err);
@@ -256,6 +258,25 @@ export default function HomePage() {
     load();
   }, []);
 
+  function handleTabClick(index: number) {
+    const category = CATS[index];
+    if (!category.available) {
+      setComingSoon({ label: category.label, Icon: category.Icon });
+      return;
+    }
+    setActiveTab(index);
+  }
+
+  const filteredTrending = plates.filter((plate) => {
+    const query = trendingQuery.trim().toLowerCase();
+    if (!query) return true;
+    return (
+      plate.num.toLowerCase().includes(query) ||
+      plate.code.toLowerCase().includes(query) ||
+      plate.emirate.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <>
       {comingSoon && (
@@ -265,7 +286,7 @@ export default function HomePage() {
           onClose={() => setComingSoon(null)}
         />
       )}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-x-hidden overflow-y-auto">
         {/* Mobile Header */}
         <nav
           className="lg:hidden sticky top-0 z-40 glass-nav flex justify-between items-center px-4 h-14"
@@ -320,10 +341,10 @@ export default function HomePage() {
           </div>
         </header>
 
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-10 space-y-10 lg:space-y-14 pb-28 lg:pb-16">
+        <div className="mx-auto max-w-7xl overflow-x-hidden px-3 py-5 space-y-7 pb-28 sm:px-4 sm:space-y-8 lg:px-8 lg:py-10 lg:space-y-14 lg:pb-16">
           {/* Hero */}
           <section
-            className="relative h-[320px] lg:h-[380px] rounded-[24px] lg:rounded-[32px] overflow-hidden"
+            className="relative h-[280px] overflow-hidden rounded-[24px] lg:h-[380px] lg:rounded-[32px]"
             style={{
               background:
                 "linear-gradient(135deg, var(--teal-darker) 0%, var(--primary) 60%, #00796b 100%)",
@@ -339,27 +360,27 @@ export default function HomePage() {
                 mixBlendMode: "overlay",
               }}
             />
-            <div className="relative h-full flex items-center px-8 lg:px-12">
-              <div className="space-y-5 max-w-lg">
+            <div className="relative flex h-full items-center px-5 sm:px-6 lg:px-12">
+              <div className="max-w-lg space-y-4 sm:space-y-5">
                 <Badge
                   size="md"
-                  className="!bg-white/10 !text-white !border-white/20 !px-4 !py-1.5 rounded-full"
+                  className="rounded-full !border-white/20 !bg-white/10 !px-3 !py-1 !text-[10px] !text-white sm:!px-4 sm:!py-1.5"
                 >
                   UAE PLATE MARKETPLACE
                 </Badge>
-                <h1 className="text-4xl lg:text-6xl font-black text-white tracking-tight leading-[0.95]">
+                <h1 className="text-3xl font-black leading-[0.95] tracking-tight text-white sm:text-4xl lg:text-6xl">
                   Safe Plate <br />
                   Transfers
                 </h1>
-                <p className="text-white/80 text-base lg:text-lg font-semibold">
+                <p className="text-sm font-semibold text-white/80 sm:text-base lg:text-lg">
                   Secured by Sakk ·{" "}
                   <span className="text-white/50 font-normal">
-                    The Middle East's Premier Asset Exchange
+                    The Middle East&apos;s Premier Asset Exchange
                   </span>
                 </p>
                 <Button
                   onClick={() => router.push("/search")}
-                  className="!bg-white/10 !text-white border border-white/20 hover:!bg-white/20 !rounded-xl"
+                  className="!rounded-xl border border-white/20 !bg-white/10 !text-white hover:!bg-white/20"
                   size="md"
                 >
                   Browse Listings
@@ -369,11 +390,11 @@ export default function HomePage() {
           </section>
 
           {/* Category Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
             {CATS.map((cat, i) => (
               <Card
                 key={i}
-                padding="lg"
+                padding="md"
                 className={cn(
                   "cursor-pointer transition-all border-2 group relative overflow-hidden",
                   i === 0
@@ -429,54 +450,8 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Live Auctions (mobile) */}
-          {auctionPlates.length > 0 && (
-            <div className="lg:hidden">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <span
-                    className="w-2 h-2 rounded-full animate-pulse"
-                    style={{ background: "var(--error)" }}
-                  />
-                  <h3
-                    className="text-base font-black"
-                    style={{ color: "var(--on-surface)" }}
-                  >
-                    Live Auctions
-                  </h3>
-                  <span
-                    className="text-[9px] font-black px-2 py-0.5 rounded-full"
-                    style={{
-                      background: "rgba(186,26,26,0.1)",
-                      color: "var(--error)",
-                    }}
-                  >
-                    {auctionPlates.length} LIVE
-                  </span>
-                </div>
-                <button
-                  onClick={() => router.push("/auctions")}
-                  className="text-xs font-bold cursor-pointer bg-transparent border-none flex items-center gap-1"
-                  style={{ color: "var(--primary)" }}
-                >
-                  <Hammer size={12} /> View All
-                </button>
-              </div>
-              <div
-                className="flex gap-3 overflow-x-auto pb-1"
-                style={{ scrollbarWidth: "none" }}
-              >
-                {auctionPlates.slice(0, 4).map((p, i) => (
-                  <div key={p.id} className="flex-none w-[150px]">
-                    <PlateCard plate={p} index={i} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Quick Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
             {QUICK.map((feat, i) => (
               <Card
                 key={i}
@@ -511,45 +486,181 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Stats */}
-          <div
-            className="py-10 grid grid-cols-3 gap-8 text-center"
-            style={{
-              borderTop: "1px solid var(--surface-container)",
-              borderBottom: "1px solid var(--surface-container)",
-            }}
-          >
-            {[
-              { value: "80K+", label: "TRANSFERS / YEAR" },
-              { value: "100%", label: "ESCROW SAFE" },
-              { value: "GCC", label: "READY" },
-            ].map((stat, i) => (
-              <div key={i} className="space-y-2 relative">
-                {i !== 0 && (
+          {/* Trending Plates */}
+          <section className="space-y-6">
+            <div className="space-y-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div className="min-w-0 space-y-4">
+                  <h2
+                    className="text-2xl sm:text-3xl font-black tracking-tight"
+                    style={{ color: "var(--on-surface)" }}
+                  >
+                    Trending Plates
+                  </h2>
                   <div
-                    className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-10"
-                    style={{ background: "var(--surface-container)" }}
-                  />
-                )}
-                <p
-                  className="text-4xl lg:text-5xl font-black tracking-tighter"
-                  style={{ color: "var(--on-surface)" }}
+                    className="flex items-center gap-4 overflow-x-auto pb-1 lg:gap-8"
+                    style={{
+                      borderBottom: "1px solid var(--surface-container)",
+                    }}
+                  >
+                    {TABS.map((tab, i) => (
+                      <button
+                        key={tab}
+                        onClick={() => handleTabClick(i)}
+                        className="relative shrink-0 pb-3 text-[10px] font-black uppercase tracking-widest transition-all"
+                        style={{
+                          color:
+                            activeTab === i
+                              ? "var(--on-surface)"
+                              : "var(--outline)",
+                        }}
+                      >
+                        {tab}
+                        {activeTab === i && (
+                          <span
+                            className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full"
+                            style={{ background: "var(--primary)" }}
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="self-start font-black uppercase tracking-widest hover:!bg-transparent sm:self-auto"
+                  style={{ color: "var(--primary)" }}
+                  onClick={() => router.push("/search")}
                 >
-                  {stat.value}
-                </p>
-                <p
-                  className="text-[9px] font-black uppercase tracking-[0.2em]"
+                  View all
+                </Button>
+              </div>
+
+              <div className="px-1">
+                <div className="w-full pb-4 lg:max-w-[420px]">
+                  <div
+                    className="relative overflow-hidden rounded-2xl"
+                    style={{
+                      background: "var(--surface-container-low)",
+                      border: "1px solid rgba(187,202,199,0.18)",
+                      boxShadow: "0 6px 20px rgba(25,28,29,0.05)",
+                    }}
+                  >
+                    <Search
+                      size={17}
+                      className="absolute left-4 top-1/2 -translate-y-1/2"
+                      style={{ color: "var(--outline)" }}
+                    />
+                    <input
+                      type="text"
+                      value={trendingQuery}
+                      onChange={(e) => setTrendingQuery(e.target.value)}
+                      placeholder="Search plates"
+                      className="w-full bg-transparent py-3.5 pl-11 pr-4 text-sm font-bold outline-none placeholder:font-semibold"
+                      style={{ color: "var(--on-surface)" }}
+                    />
+                  </div>
+                </div>
+                <h2
+                  className="text-sm font-bold"
                   style={{ color: "var(--outline)" }}
                 >
-                  {stat.label}
-                </p>
+                  Showing{" "}
+                  <span style={{ color: "var(--on-surface)" }}>
+                    {filteredTrending.length} results
+                  </span>
+                </h2>
               </div>
-            ))}
-          </div>
+            </div>
+
+            {loading ? (
+              <div
+                className="col-span-4 py-16 text-center text-sm"
+                style={{ color: "var(--outline)" }}
+              >
+                Loading plates...
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 overflow-hidden sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 [&>*]:min-w-0">
+                {filteredTrending.map((plate, i) => (
+                  <div key={plate.id} className="min-w-0">
+                    <PlateCard
+                      plate={plate}
+                      index={i}
+                      forceVerified
+                      hideSellerName
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Live Auctions (mobile) */}
+          {auctionPlates.length > 0 && (
+            <section className="space-y-2.5 lg:hidden">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-2">
+                  <span
+                    className="w-2 h-2 rounded-full animate-pulse"
+                    style={{ background: "var(--error)" }}
+                  />
+                  <h3
+                    className="text-lg font-black"
+                    style={{ color: "var(--on-surface)" }}
+                  >
+                    Live Auctions
+                  </h3>
+                  <span
+                    className="text-[9px] font-black px-2 py-0.5 rounded-full"
+                    style={{
+                      background: "rgba(186,26,26,0.1)",
+                      color: "var(--error)",
+                    }}
+                  >
+                    {auctionPlates.length} LIVE
+                  </span>
+                </div>
+                <button
+                  onClick={() => router.push("/auctions")}
+                  className="shrink-0 text-xs font-bold cursor-pointer bg-transparent border-none flex items-center gap-1"
+                  style={{ color: "var(--primary)" }}
+                >
+                  <Hammer size={12} /> View All
+                </button>
+              </div>
+              <div
+                className="-mx-3 overflow-x-auto px-3 pb-2 sm:mx-0 sm:px-0"
+                style={{
+                  scrollbarWidth: "none",
+                  WebkitOverflowScrolling: "touch",
+                  touchAction: "pan-x",
+                }}
+              >
+                <div className="flex min-w-max snap-x snap-mandatory gap-3 pr-3 sm:pr-0">
+                  {auctionPlates.slice(0, 4).map((p, i) => (
+                    <div
+                      key={p.id}
+                      className="w-[82vw] max-w-[312px] min-w-[82vw] flex-none snap-center sm:w-[280px] sm:min-w-[280px]"
+                    >
+                      <PlateCard plate={p} index={i} hideSellerName />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <p
+                className="px-1 text-[10px] font-bold uppercase tracking-[0.18em]"
+                style={{ color: "var(--outline)" }}
+              >
+                Swipe to explore live lots
+              </p>
+            </section>
+          )}
 
           {/* Live Auctions (desktop) */}
           {auctionPlates.length > 0 && (
-            <section>
+            <section className="hidden lg:block">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
                   <span
@@ -582,91 +693,63 @@ export default function HomePage() {
               </div>
               <div className="grid grid-cols-4 gap-4">
                 {auctionPlates.map((p, i) => (
-                  <PlateCard key={p.id} plate={p} index={i} />
+                  <PlateCard key={p.id} plate={p} index={i} hideSellerName />
                 ))}
               </div>
             </section>
           )}
 
-          {/* Trending Plates */}
-          <section className="space-y-7">
-            <div className="flex items-end justify-between">
-              <div className="space-y-4">
-                <h2
-                  className="text-3xl font-black tracking-tight"
+          {/* Stats */}
+          <div
+            className="grid grid-cols-3 gap-3 py-8 text-center sm:gap-8 sm:py-10"
+            style={{
+              borderTop: "1px solid var(--surface-container)",
+              borderBottom: "1px solid var(--surface-container)",
+            }}
+          >
+            {[
+              { value: "80K+", label: "TRANSFERS / YEAR" },
+              { value: "100%", label: "ESCROW SAFE" },
+              { value: "GCC", label: "READY" },
+            ].map((stat, i) => (
+              <div key={i} className="space-y-2 relative">
+                {i !== 0 && (
+                  <div
+                    className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-10"
+                    style={{ background: "var(--surface-container)" }}
+                  />
+                )}
+                <p
+                  className="text-2xl font-black tracking-tighter sm:text-4xl lg:text-5xl"
                   style={{ color: "var(--on-surface)" }}
                 >
-                  Trending Plates
-                </h2>
-                <div
-                  className="flex items-center gap-6 lg:gap-8"
-                  style={{ borderBottom: "1px solid var(--surface-container)" }}
+                  {stat.value}
+                </p>
+                <p
+                  className="text-[8px] font-black uppercase tracking-[0.16em] sm:text-[9px] sm:tracking-[0.2em]"
+                  style={{ color: "var(--outline)" }}
                 >
-                  {TABS.map((tab, i) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(i)}
-                      className="pb-3 text-[10px] font-black uppercase tracking-widest transition-all relative"
-                      style={{
-                        color:
-                          activeTab === i
-                            ? "var(--on-surface)"
-                            : "var(--outline)",
-                      }}
-                    >
-                      {tab}
-                      {activeTab === i && (
-                        <span
-                          className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full"
-                          style={{ background: "var(--primary)" }}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
+                  {stat.label}
+                </p>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="font-black uppercase tracking-widest hover:!bg-transparent"
-                style={{ color: "var(--primary)" }}
-                onClick={() => router.push("/search")}
-              >
-                View all
-              </Button>
-            </div>
-
-            {loading ? (
-              <div
-                className="col-span-4 py-16 text-center text-sm"
-                style={{ color: "var(--outline)" }}
-              >
-                Loading plates...
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-                {plates.map((plate, i) => (
-                  <PlateCard key={plate.id} plate={plate} index={i} />
-                ))}
-              </div>
-            )}
-          </section>
+            ))}
+          </div>
 
           {/* Post Plate CTA Banner */}
           <section
-            className="rounded-[24px] p-8 lg:p-10 flex flex-col lg:flex-row items-center justify-between gap-6"
+            className="flex flex-col items-start justify-between gap-5 rounded-[24px] p-6 lg:flex-row lg:items-center lg:gap-6 lg:p-10"
             style={{ background: "var(--teal-darker)" }}
           >
-            <div className="text-center lg:text-left space-y-2">
-              <h3 className="text-2xl font-black text-white">
+            <div className="space-y-2 text-left">
+              <h3 className="text-xl font-black text-white sm:text-2xl">
                 Have a plate to sell?
               </h3>
-              <p className="text-white/60 font-medium">
+              <p className="text-sm font-medium text-white/60 sm:text-base">
                 List it in under 2 minutes. Reach thousands of verified buyers.
               </p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-white/60 text-xs font-bold">
+            <div className="flex w-full flex-col items-start gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+              <div className="flex items-center gap-2 text-xs font-bold text-white/60">
                 <ShieldCheck
                   size={16}
                   className="text-[var(--primary-container)]"
@@ -675,7 +758,7 @@ export default function HomePage() {
               </div>
               <Button
                 onClick={() => setIsPostOpen(true)}
-                className="!bg-[var(--primary-container)] !text-[var(--teal-darker)] font-black hover:brightness-110 whitespace-nowrap"
+                className="w-full whitespace-nowrap font-black hover:brightness-110 !bg-[var(--primary-container)] !text-[var(--teal-darker)] sm:w-auto"
                 size="lg"
               >
                 Post a Plate

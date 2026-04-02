@@ -11,7 +11,6 @@ import {
   Search,
   ChevronDown,
   ChevronRight,
-  Star,
   Gavel,
   Gift,
   ArrowRight,
@@ -393,7 +392,7 @@ export default function LandingPage() {
               style={{ color: "rgba(255,255,255,0.72)" }}
             >
               <span className="hidden lg:inline">
-                The premium exchange for the region's most prestigious digital
+                The premium exchange for the region&apos;s most prestigious digital
                 assets, fully-protected by end-to-end escrow and verified
                 transfer protocols.
               </span>
@@ -586,7 +585,7 @@ export default function LandingPage() {
               className="mt-3 text-sm lg:text-base max-w-lg mx-auto"
               style={{ color: "var(--on-surface-variant)" }}
             >
-              We provide institutional-grade transparency for the world's most
+              We provide institutional-grade transparency for the world&apos;s most
               unique alternative asset class.
             </p>
           </div>
@@ -627,8 +626,8 @@ export default function LandingPage() {
 
         {/* ── Trending Listings ───────────────────────────────── */}
         <section className="max-w-7xl mx-auto px-6 lg:px-10 pb-14 lg:pb-20">
-          <div className="flex items-center justify-between mb-7">
-            <div>
+          <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
               <h2
                 className="text-2xl lg:text-3xl font-black tracking-tight"
                 style={{ color: "var(--on-surface)" }}
@@ -641,7 +640,7 @@ export default function LandingPage() {
             </div>
             <button
               onClick={() => navigate("/search")}
-              className="flex items-center gap-1.5 text-sm font-bold border-none bg-transparent cursor-pointer"
+              className="flex items-center gap-1.5 self-start text-sm font-bold border-none bg-transparent cursor-pointer sm:self-auto"
               style={{ color: "var(--primary)" }}
             >
               View Marketplace <ChevronRight size={16} />
@@ -649,7 +648,7 @@ export default function LandingPage() {
           </div>
 
           {plates.length > 0 ? (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
               {plates.map((p) => (
                 <div
                   key={p.id}
@@ -719,7 +718,7 @@ export default function LandingPage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
@@ -834,7 +833,7 @@ export default function LandingPage() {
               style={{ color: "var(--on-surface-variant)" }}
             >
               <span className="hidden lg:inline">
-                We've streamlined the plate transfer process, eliminating
+                We&apos;ve streamlined the plate transfer process, eliminating
                 paperwork and uncertainty.
               </span>
               <span className="lg:hidden">
@@ -930,7 +929,7 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <p className="text-2xl font-black text-white leading-snug">
-                  Exclusive monthly events for the UAE's rarest single-digit
+                  Exclusive monthly events for the UAE&apos;s rarest single-digit
                   numbers.
                 </p>
               </div>

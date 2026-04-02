@@ -1,20 +1,12 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
-import {
-  useParams,
-  notFound,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { ArrowLeft, Gift, Loader2, ShieldCheck } from "lucide-react";
+import { notFound, useParams, useRouter, useSearchParams } from "next/navigation";
 import PlateViz from "@/components/plates/PlateViz";
-import IBox from "@/components/ui/IBox";
-import InfoBox from "@/components/ui/InfoBox";
-import PageHeader from "@/components/layout/PageHeader";
-import { aed, escrowFee, priceTier } from "@/lib/plates";
 import { getPlateById } from "@/lib/firestore";
+import { aed, escrowFee, priceTier } from "@/lib/plates";
 import type { FSPlate } from "@/types/firebase";
-import { Loader2 } from "lucide-react";
 
 function GiftCheckoutInner() {
   const { id } = useParams<{ id: string }>();
@@ -30,20 +22,18 @@ function GiftCheckoutInner() {
     });
   }, [id]);
 
-  if (loading)
+  if (loading) {
     return (
-      <div
-        className="flex-1 flex items-center justify-center"
-        style={{ color: "var(--outline)" }}
-      >
-        <Loader2 size={24} className="animate-spin" />
+      <div className="flex flex-1 items-center justify-center" style={{ color: "var(--outline)" }}>
+        <Loader2 size={26} className="animate-spin" />
       </div>
     );
+  }
+
   if (!plate) return notFound();
 
-  const recipientName = searchParams.get("name") || "";
+  const recipientName = searchParams.get("name") || "Recipient";
   const message = searchParams.get("msg") || "";
-
   const fee = escrowFee(plate.price);
   const total = plate.price + fee;
 
@@ -58,162 +48,103 @@ function GiftCheckoutInner() {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto">
-      <PageHeader title="Gift Checkout" backHref={`/plates/${id}/gift/setup`} />
+    <div className="flex-1 overflow-y-auto bg-[var(--surface)]">
+      <div className="sticky top-0 z-40 flex h-14 items-center gap-3 bg-white px-4 shadow-[0_1px_0_rgba(187,202,199,0.18)]">
+        <button
+          onClick={() => router.push(`/plates/${id}/gift/setup?${searchParams.toString()}`)}
+          className="flex h-9 w-9 items-center justify-center rounded-xl border-none bg-transparent text-[var(--primary)]"
+        >
+          <ArrowLeft size={24} />
+        </button>
+        <span className="text-base font-black text-[var(--on-surface)]">Gift Checkout</span>
+      </div>
 
-      <div className="p-4 lg:px-6 lg:grid lg:grid-cols-2 lg:gap-6 lg:items-start">
-        <div>
-          {/* Recipient */}
-          <div
-            className="rounded-xl p-3.5 mb-3.5 flex gap-2.5 items-center"
-            style={{
-              background: "var(--teal-light)",
-              border: "1px solid var(--teal-border)",
-            }}
-          >
-            <IBox sym="★" sz={36} />
-            <div>
-              <div
-                className="text-[11px] font-medium mb-0.5"
-                style={{ color: "var(--teal)" }}
-              >
-                Gifting to
-              </div>
-              <div
-                className="text-sm font-semibold"
-                style={{ color: "var(--teal-dark)" }}
-              >
-                {recipientName}
-              </div>
-              {message && (
-                <div
-                  className="text-[11px] italic mt-0.5"
-                  style={{ color: "var(--teal-dark)", opacity: 0.8 }}
-                >
-                  &ldquo;{message}&rdquo;
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Plate summary */}
-          <div
-            className="rounded-xl p-3 mb-3.5 flex gap-3 items-center"
-            style={{
-              background: "var(--sakk-card)",
-              border: "1px solid var(--sakk-border)",
-            }}
-          >
+      <div className="mx-auto max-w-md px-4 py-5 pb-8">
+        <div
+          className="rounded-[28px] px-5 py-6"
+          style={{ background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)" }}
+        >
+          <div className="flex justify-center">
             <PlateViz
               code={plate.code}
               num={plate.num}
               emirate={plate.emirate}
               type={plate.type}
-              size="sm"
+              size="md"
             />
-            <div>
-              <div
-                className="text-[13px] font-semibold"
-                style={{ color: "var(--sakk-text)" }}
-              >
-                {plate.emirate} · {plate.code} {plate.num}
+          </div>
+          <p className="mt-4 text-center text-[12px] font-bold uppercase tracking-[0.18em] text-white/60">
+            Sending to {recipientName}
+          </p>
+        </div>
+
+        <div className="mt-5 space-y-4">
+          <div className="rounded-[24px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+            <p className="text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">Recipient</p>
+            <p className="mt-2 text-[22px] font-black text-[var(--on-surface)]">{recipientName}</p>
+            {message && <p className="mt-3 text-[15px] italic text-[var(--on-surface-variant)]">&ldquo;{message}&rdquo;</p>}
+          </div>
+
+          <div className="rounded-[24px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+            <div className="flex items-center gap-4">
+              <div className="scale-[0.92] origin-left">
+                <PlateViz
+                  code={plate.code}
+                  num={plate.num}
+                  emirate={plate.emirate}
+                  type={plate.type}
+                  size="sm"
+                />
               </div>
-              <div
-                className="text-[11px] mt-0.5"
-                style={{ color: "var(--sakk-text3)" }}
-              >
-                Sold by {plate.sellerName}
+              <div>
+                <p className="text-[18px] font-black text-[var(--on-surface)]">
+                  {plate.emirate} {plate.code} {plate.num}
+                </p>
+                <p className="mt-1 text-sm text-[var(--on-surface-variant)]">Sold by {plate.sellerName}</p>
               </div>
             </div>
           </div>
 
-          {/* Breakdown */}
+          <div className="rounded-[24px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+            <p className="text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">Payment Breakdown</p>
+            <div className="mt-4 space-y-3 text-[15px] text-[var(--on-surface-variant)]">
+              <div className="flex items-center justify-between">
+                <span>Plate Price</span>
+                <span className="font-bold text-[var(--on-surface)]">{aed(plate.price)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Escrow Fee · {priceTier(plate.price)}</span>
+                <span className="font-bold text-[var(--on-surface)]">{aed(fee)}</span>
+              </div>
+            </div>
+            <div className="my-4 h-px bg-[rgba(187,202,199,0.2)]" />
+            <div className="flex items-center justify-between">
+              <span className="text-[18px] font-black text-[var(--on-surface)]">Total</span>
+              <span className="text-[26px] font-black text-[var(--primary)]">{aed(total)}</span>
+            </div>
+          </div>
+
           <div
-            className="rounded-xl p-3.5 mb-3.5"
-            style={{
-              background: "var(--sakk-card)",
-              border: "1px solid var(--sakk-border)",
-            }}
+            className="rounded-[22px] px-4 py-4 text-[14px] leading-7"
+            style={{ background: "#F3FBFB", border: "1px solid rgba(12,191,184,0.16)" }}
           >
-            <div
-              className="text-[13px] font-semibold mb-3 pb-2.5"
-              style={{
-                color: "var(--sakk-text)",
-                borderBottom: "1px solid var(--sakk-border)",
-              }}
-            >
-              Payment Breakdown
-            </div>
-            <div className="flex justify-between mb-2.5">
-              <span
-                className="text-[13px]"
-                style={{ color: "var(--sakk-text2)" }}
-              >
-                Plate Price
-              </span>
-              <span
-                className="text-[13px]"
-                style={{ color: "var(--sakk-text)" }}
-              >
-                {aed(plate.price)}
-              </span>
-            </div>
-            <div className="flex justify-between mb-2.5">
-              <span
-                className="text-[13px]"
-                style={{ color: "var(--sakk-text3)" }}
-              >
-                Escrow Fee — {priceTier(plate.price)}
-              </span>
-              <span
-                className="text-[13px]"
-                style={{ color: "var(--sakk-text3)" }}
-              >
-                {aed(fee)}
-              </span>
-            </div>
-            <div
-              className="flex justify-between items-center pt-2.5"
-              style={{ borderTop: "1px solid var(--sakk-border)" }}
-            >
-              <span
-                className="text-[15px] font-semibold"
-                style={{ color: "var(--sakk-text)" }}
-              >
-                Total
-              </span>
-              <span
-                className="text-[17px] font-bold"
-                style={{ color: "var(--teal)" }}
-              >
-                {aed(total)}
-              </span>
+            <div className="flex items-start gap-3">
+              <ShieldCheck size={18} className="mt-1 shrink-0 text-[var(--primary)]" />
+              <p className="text-[var(--on-surface-variant)]">
+                Funds stay in Sakk escrow until the recipient accepts the gift and the transfer is confirmed.
+              </p>
             </div>
           </div>
         </div>
 
-        <div>
-          <InfoBox
-            sym="◈"
-            title="Protected by Sakk Escrow"
-            body="Funds held in Sakk escrow until recipient accepts and transfer is confirmed."
-          />
-
-          <button
-            onClick={handlePay}
-            className="w-full border-none rounded-xl py-3.5 text-sm font-semibold text-white cursor-pointer mb-2.5"
-            style={{ background: "var(--teal)" }}
-          >
-            Pay &amp; Send Gift
-          </button>
-          <div
-            className="text-[11px] text-center mb-4"
-            style={{ color: "var(--sakk-text3)" }}
-          >
-            Funds held in Sakk escrow until recipient accepts and transfer is
-            confirmed
-          </div>
-        </div>
+        <button
+          onClick={handlePay}
+          className="mt-5 flex h-16 w-full items-center justify-center gap-3 rounded-[16px] border-none text-[18px] font-black text-white shadow-[0_12px_30px_rgba(0,106,102,0.22)]"
+          style={{ background: "linear-gradient(90deg, #0E7F79 0%, #1CC6C3 100%)" }}
+        >
+          <Gift size={20} />
+          Pay &amp; Send Gift
+        </button>
       </div>
     </div>
   );

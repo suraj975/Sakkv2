@@ -10,6 +10,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, loading } = useAuth();
   const isLanding = pathname === "/";
+  const showBottomNav = !loading && !!user;
 
   // Show gate on all non-landing routes for unauthenticated users
   const showGate = !isLanding && !loading && !user;
@@ -21,6 +22,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         style={{ background: "var(--sakk-bg)" }}
       >
         <main className="flex-1 flex flex-col">{children}</main>
+        {showBottomNav && <div className="h-24 lg:hidden" aria-hidden="true" />}
         <BottomNav />
       </div>
     );
@@ -30,10 +32,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex" style={{ background: "var(--sakk-bg)" }}>
       {showGate && <AuthGateModal destinationHref={pathname} />}
       <Sidebar />
-      <div className="flex-1 flex flex-col min-h-screen">
-        <div className="flex-1 flex flex-col w-full">
+      <div className="flex min-w-0 flex-1 flex-col min-h-screen">
+        <div className="flex min-w-0 flex-1 flex-col w-full">
           <main
-            className="flex-1 flex flex-col overflow-hidden transition-[filter] duration-300"
+            className="flex min-w-0 flex-1 flex-col overflow-hidden transition-[filter] duration-300"
             style={
               showGate
                 ? {
@@ -46,6 +48,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           >
             {children}
           </main>
+          {showBottomNav && <div className="h-24 lg:hidden" aria-hidden="true" />}
           <BottomNav />
         </div>
       </div>

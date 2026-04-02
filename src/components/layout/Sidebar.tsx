@@ -44,7 +44,6 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (!user) {
-      setUnreadCount(0);
       return;
     }
     const unsub = subscribeUnreadCount(user.uid, setUnreadCount);
@@ -55,7 +54,7 @@ export default function Sidebar() {
     <>
       {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
       <aside
-        className="hidden lg:flex flex-col shrink-0 min-h-screen sticky top-0 py-8 px-4"
+        className="relative hidden shrink-0 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col"
         style={{
           width: "200px",
           minWidth: "200px",
@@ -64,22 +63,24 @@ export default function Sidebar() {
           borderRight: "1px solid var(--surface-container)",
         }}
       >
-        <div className="mb-10 px-2 flex flex-col gap-1">
-          <h1
-            className="text-2xl font-black"
-            style={{ color: "var(--primary)" }}
-          >
-            Sakk
-          </h1>
-          <p
-            className="text-[9px] uppercase tracking-[0.15em] font-bold"
-            style={{ color: "var(--outline)" }}
-          >
-            UAE PLATE MARKETPLACE
-          </p>
+        <div className="px-4 pt-8">
+          <div className="mb-10 px-2 flex flex-col gap-1">
+            <h1
+              className="text-2xl font-black"
+              style={{ color: "var(--primary)" }}
+            >
+              Sakk
+            </h1>
+            <p
+              className="text-[9px] uppercase tracking-[0.15em] font-bold"
+              style={{ color: "var(--outline)" }}
+            >
+              UAE PLATE MARKETPLACE
+            </p>
+          </div>
         </div>
 
-        <nav className="flex-1 space-y-1">
+        <nav className="flex-1 space-y-1 overflow-y-auto px-4 pb-[220px]">
           {NAV_ITEMS.map((item) => {
             const active = isActive(item.href, pathname);
             return (
@@ -164,12 +165,15 @@ export default function Sidebar() {
           )}
         </nav>
 
-        <div className="mt-auto space-y-3">
+        <div
+          className="absolute bottom-0 left-0 right-0 space-y-3 bg-[var(--surface-container-low)] px-4 pb-8 pt-4"
+          style={{ borderTop: "1px solid var(--surface-container)" }}
+        >
           {/* Auth: show UserMenu when logged in, sign-in button when logged out */}
           {!loading && (
             <div className="mb-3">
               {user ? (
-                <UserMenu />
+                <UserMenu placement="right" />
               ) : (
                 <button
                   onClick={() => setLoginOpen(true)}

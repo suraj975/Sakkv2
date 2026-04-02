@@ -1,29 +1,15 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Gift, Loader2, ShieldCheck } from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
-import { HelpCircle, FileText, CheckCircle2, ShieldCheck } from "lucide-react";
 import { getPlateById } from "@/lib/firestore";
 import type { FSPlate } from "@/types/firebase";
 
 function aed(n: number) {
   return "AED " + n.toLocaleString();
 }
-
-const inp = (focused: boolean) => ({
-  width: "100%",
-  background: "var(--surface-container-low)",
-  border: `2px solid ${focused ? "var(--primary)" : "transparent"}`,
-  borderRadius: 12,
-  padding: "13px 14px",
-  fontSize: 14,
-  color: "var(--on-surface)",
-  boxSizing: "border-box" as const,
-  outline: "none",
-  fontFamily: "inherit",
-});
 
 function GiftRevealInner() {
   const searchParams = useSearchParams();
@@ -44,266 +30,125 @@ function GiftRevealInner() {
     });
   }, [plateId]);
 
-  if (loadingPlate)
+  if (loadingPlate) {
     return (
-      <div
-        className="flex-1 flex items-center justify-center"
-        style={{ background: "var(--surface)" }}
-      >
-        <Loader2
-          size={28}
-          className="animate-spin"
-          style={{ color: "var(--outline)" }}
-        />
+      <div className="flex flex-1 items-center justify-center" style={{ background: "var(--surface)" }}>
+        <Loader2 size={28} className="animate-spin text-[var(--outline)]" />
       </div>
     );
+  }
 
-  if (!plate)
-    return (
-      <div
-        className="p-8 text-center"
-        style={{ color: "var(--on-surface-variant)" }}
-      >
-        Gift not found.
-      </div>
-    );
+  if (!plate) {
+    return <div className="p-8 text-center text-[var(--on-surface-variant)]">Gift not found.</div>;
+  }
 
-  const tcfValid = tcf.length >= 6;
+  const tcfValid = tcf.trim().length >= 6;
 
   return (
-    <div
-      className="flex-1 overflow-y-auto"
-      style={{ background: "var(--surface)" }}
-    >
-      {/* App header */}
-      <div
-        className="flex items-center justify-between px-4 py-3"
-        style={{
-          background: "rgba(6,61,58,0.95)",
-          backdropFilter: "blur(20px)",
-        }}
-      >
-        <span
-          className="text-[18px] font-black"
-          style={{ color: "var(--primary-container)" }}
-        >
-          Sakk
-        </span>
-        <button
-          className="w-9 h-9 flex items-center justify-center rounded-full border-none cursor-pointer"
-          style={{ background: "rgba(255,255,255,0.1)" }}
-        >
-          <HelpCircle size={18} color="rgba(255,255,255,0.7)" />
-        </button>
+    <div className="flex-1 overflow-y-auto bg-[var(--surface)]">
+      <div className="sticky top-0 z-40 flex h-14 items-center justify-between bg-white px-4 shadow-[0_1px_0_rgba(187,202,199,0.18)]">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => router.back()}
+            className="flex h-9 w-9 items-center justify-center rounded-xl border-none bg-transparent text-[var(--primary)]"
+          >
+            <ArrowLeft size={24} />
+          </button>
+          <span className="text-[18px] font-black tracking-[0.18em] text-[var(--primary)]">SAKK</span>
+        </div>
+        <div className="rounded-full bg-[var(--teal-light)] px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[var(--primary)]">
+          Gift
+        </div>
       </div>
 
-      {/* Dark teal hero */}
-      <div
-        className="px-5 py-10 text-center"
-        style={{ background: "var(--teal-dark)" }}
+      <section
+        className="px-6 pb-10 pt-8"
+        style={{ background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)" }}
       >
-        <div
-          className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 mb-5"
-          style={{ border: "1.5px solid rgba(12,191,184,0.5)" }}
-        >
-          <span
-            className="text-[11px] font-bold tracking-[1.5px]"
-            style={{ color: "var(--primary-container)" }}
-          >
-            YOU RECEIVED A GIFT
-          </span>
-        </div>
-
-        <div
-          className="text-[13px] mb-1"
-          style={{ color: "rgba(255,255,255,0.65)" }}
-        >
-          From
-        </div>
-        <div className="text-[22px] font-black text-white mb-6">{from}</div>
-
-        <div className="flex justify-center mb-5">
-          <PlateViz
-            code={plate.code}
-            num={plate.num}
-            emirate={plate.emirate}
-            type={plate.type}
-            size="lg"
-          />
-        </div>
-
-        {gMsg && (
-          <div
-            className="text-[14px] italic"
-            style={{ color: "rgba(255,255,255,0.75)" }}
-          >
-            &ldquo;{gMsg}&rdquo;
-          </div>
-        )}
-      </div>
-
-      {/* Content cards */}
-      <div className="px-4 py-5 lg:max-w-xl lg:mx-auto">
-        {/* Plate value card */}
-        <div
-          className="rounded-2xl p-5 mb-3"
-          style={{
-            background: "var(--surface-container-lowest)",
-            boxShadow: "0 4px 18px rgba(25,28,29,0.08)",
-          }}
-        >
-          <div className="flex items-start justify-between mb-2">
-            <div>
-              <div
-                className="text-[12px] mb-1"
-                style={{ color: "var(--on-surface-variant)" }}
-              >
-                Plate Value
-              </div>
-              <div
-                className="text-[28px] font-black"
-                style={{ color: "var(--on-surface)" }}
-              >
-                {aed(plate.price)}{" "}
-                <span
-                  className="text-[14px] font-bold"
-                  style={{ color: "var(--tertiary)" }}
-                >
-                  ↗ +2.4%
-                </span>
-              </div>
-            </div>
-            <span
-              className="text-[10px] font-bold px-2.5 py-1 rounded-full mt-1"
-              style={{
-                background: "rgba(0,106,102,0.1)",
-                color: "var(--primary)",
-              }}
-            >
-              {plate.emirate.toUpperCase()} · CODE {plate.code}
-            </span>
-          </div>
-          <p
-            className="text-[12px] leading-relaxed"
-            style={{ color: "var(--on-surface-variant)" }}
-          >
-            This digital asset is secured via Sakk Escrow and is ready for
-            immediate transfer to your traffic file.
-          </p>
-        </div>
-        {/* TCF input card */}
-        <div
-          className="rounded-2xl p-5 mb-5"
-          style={{
-            background: "var(--surface-container-lowest)",
-            boxShadow: "0 4px 18px rgba(25,28,29,0.08)",
-          }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <FileText size={18} style={{ color: "var(--primary)" }} />
-            <span
-              className="text-[15px] font-bold"
-              style={{ color: "var(--on-surface)" }}
-            >
-              Enter your TCF Number
-            </span>
-          </div>
-          <p
-            className="text-[12px] leading-relaxed mb-4"
-            style={{ color: "var(--on-surface-variant)" }}
-          >
-            To accept this gift, please provide your Traffic Code Number (TCF).
-            This allows us to initiate the legal ownership transfer via the RTA
-            portal.
-          </p>
-
-          <div className="relative">
-            <input
-              value={tcf}
-              onChange={(e) => setTcf(e.target.value)}
-              placeholder="7729103"
-              className="w-full rounded-xl px-4 py-3 text-[14px]"
-              style={{
-                ...inp(tcfValid || tcf.length > 0),
-                paddingRight: tcfValid ? 48 : 16,
-              }}
+        <div className="mx-auto max-w-md text-center">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">You received a gift</p>
+          <h1 className="mt-3 text-[28px] font-black text-white">{from}</h1>
+          <div className="mt-6 flex justify-center">
+            <PlateViz
+              code={plate.code}
+              num={plate.num}
+              emirate={plate.emirate}
+              type={plate.type}
+              size="lg"
             />
-            {tcfValid && (
-              <div
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center"
-                style={{ background: "var(--primary)" }}
-              >
-                <CheckCircle2 size={14} color="white" />
-              </div>
-            )}
           </div>
-
-          {tcfValid && (
-            <div
-              className="text-[11px] mt-1.5 font-semibold"
-              style={{ color: "var(--primary)" }}
-            >
-              ✓ VALID
-            </div>
-          )}
-
-          <p
-            className="text-[11px] mt-3"
-            style={{ color: "var(--on-surface-variant)", opacity: 0.7 }}
-          >
-            You can find your TCF on your vehicle registration card or MOI app.
-          </p>
+          {gMsg && <p className="mt-5 text-[15px] italic leading-7 text-white/70">&ldquo;{gMsg}&rdquo;</p>}
         </div>
+      </section>
 
-        {/* Accept button */}
-        <button
-          onClick={() => router.push(`/plates/${plate.id}/checkout/complete`)}
-          disabled={!tcfValid}
-          className="w-full border-none rounded-2xl py-4 text-[16px] font-bold text-white mb-3"
-          style={{
-            background: tcfValid
-              ? "linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%)"
-              : "var(--surface-container)",
-            color: tcfValid ? "white" : "var(--on-surface-variant)",
-            cursor: tcfValid ? "pointer" : "not-allowed",
-            boxShadow: tcfValid ? "0 4px 16px rgba(0,106,102,0.35)" : "none",
-          }}
-        >
-          Accept Gift &amp; Start Transfer
-        </button>
-
-        {/* Decline */}
-        <button
-          className="w-full border-none bg-transparent py-2 text-[14px] font-semibold cursor-pointer"
-          style={{ color: "var(--primary)" }}
-        >
-          Decline Gift
-        </button>
-      </div>
-
-      {/* Footer bar */}
-      <div
-        className="px-5 py-4 flex items-center gap-3 mt-4"
-        style={{ borderTop: "1px solid var(--surface-container)" }}
-      >
-        <ShieldCheck
-          size={20}
-          style={{ color: "var(--primary)", flexShrink: 0 }}
-        />
-        <div>
-          <div
-            className="text-[13px] font-semibold"
-            style={{ color: "var(--on-surface)" }}
-          >
-            100% Escrow Safe
+      <div className="-mt-7 px-4 pb-8">
+        <div className="mx-auto max-w-md space-y-5">
+          <div className="rounded-[26px] bg-white p-6 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm text-[var(--on-surface-variant)]">Plate Value</p>
+                <p className="mt-2 text-[30px] font-black leading-none text-[var(--primary)]">{aed(plate.price)}</p>
+              </div>
+              <div
+                className="mt-4 rounded-full px-4 py-2 text-sm font-black"
+                style={{ background: "#E8F6EE", color: "#1B7D3C" }}
+              >
+                ↗ +2.4%
+              </div>
+            </div>
+            <p className="mt-5 text-[15px] leading-7 text-[var(--on-surface-variant)]">
+              Enter your Traffic Code File number so Sakk can complete the legal ownership transfer.
+            </p>
           </div>
-          <div
-            className="text-[11px]"
-            style={{ color: "var(--on-surface-variant)" }}
-          >
-            Funds and assets are held in secure escrow until transfer is
-            verified by RTA.
+
+          <div className="rounded-[26px] bg-white p-6 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+            <label className="text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">
+              Traffic Code Number
+            </label>
+            <div className="relative mt-3">
+              <input
+                value={tcf}
+                onChange={(e) => setTcf(e.target.value)}
+                placeholder="7729103"
+                className="w-full rounded-[18px] border-none bg-[var(--surface-container-low)] px-4 py-4 pr-12 text-[16px] text-[var(--on-surface)] outline-none placeholder:text-[var(--outline)]"
+              />
+              {tcfValid && (
+                <div className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--primary)]">
+                  <CheckCircle2 size={14} className="text-white" />
+                </div>
+              )}
+            </div>
+            <p className="mt-3 text-[14px] leading-7 text-[var(--on-surface-variant)]">
+              You can find your TCF on your registration documents or the MOI app.
+            </p>
           </div>
+
+          <div
+            className="rounded-[22px] px-4 py-4 text-[14px] leading-7"
+            style={{ background: "#F3FBFB", border: "1px solid rgba(12,191,184,0.16)" }}
+          >
+            <div className="flex items-start gap-3">
+              <ShieldCheck size={18} className="mt-1 shrink-0 text-[var(--primary)]" />
+              <p className="text-[var(--on-surface-variant)]">
+                Sakk escrow protects both sides until the transfer is approved and completed.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => router.push(`/plates/${plate.id}/checkout/complete`)}
+            disabled={!tcfValid}
+            className="flex h-16 w-full items-center justify-center gap-3 rounded-[16px] border-none text-[18px] font-black text-white"
+            style={{
+              background: tcfValid
+                ? "linear-gradient(90deg, #0E7F79 0%, #1CC6C3 100%)"
+                : "linear-gradient(90deg, #A9D7D5 0%, #CBE9E7 100%)",
+              cursor: tcfValid ? "pointer" : "not-allowed",
+            }}
+          >
+            <Gift size={20} />
+            Accept Gift &amp; Start Transfer
+          </button>
         </div>
       </div>
     </div>
