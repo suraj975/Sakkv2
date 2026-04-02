@@ -60,7 +60,7 @@ export default function CheckoutPage() {
   const handlePay = () => {
     setIsProcessing(true);
     setTimeout(
-      () => router.push(`/plates/${plate.id ?? id}/checkout/complete`),
+      () => router.push(`/plates/${plate.id ?? id}/checkout/escrow`),
       2000,
     );
   };

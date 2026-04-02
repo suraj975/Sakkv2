@@ -274,18 +274,16 @@ export default function EscrowPage() {
           View Receipt
         </button>
 
-        {process.env.NODE_ENV === "development" && (
-          <button
-            onClick={() => router.push(`/plates/${id}/checkout/complete`)}
-            className="w-full rounded-2xl py-3 text-[13px] cursor-pointer mt-3 border-none"
-            style={{
-              background: "var(--surface-container)",
-              color: "var(--on-surface-variant)",
-            }}
-          >
-            Simulate: Transfer Confirmed →
-          </button>
-        )}
+        <button
+          onClick={() => router.push(`/plates/${id}/checkout/complete`)}
+          className="w-full rounded-2xl py-3 text-[13px] cursor-pointer mt-3 border-none"
+          style={{
+            background: "var(--surface-container)",
+            color: "var(--on-surface-variant)",
+          }}
+        >
+          Simulate: Transfer Confirmed →
+        </button>
       </div>
 
       <BottomNav />
