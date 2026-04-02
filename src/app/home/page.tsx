@@ -425,7 +425,11 @@ export default function HomePage() {
                     className="p-2.5 md:p-3 rounded-xl shrink-0"
                     style={{ background: "var(--teal-light)" }}
                   >
-                    <feat.Icon size={16} className="md:w-[18px] md:h-[18px]" style={{ color: "var(--primary)" }} />
+                    <feat.Icon
+                      size={16}
+                      className="md:w-[18px] md:h-[18px]"
+                      style={{ color: "var(--primary)" }}
+                    />
                   </div>
                   <div className="space-y-0.5 min-w-0">
                     <p
