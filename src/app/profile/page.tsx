@@ -1,0 +1,129 @@
+"use client";
+
+import { Bell, ChevronRight, CreditCard, LogOut, ShieldCheck, Star, UserRound, Wallet } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+
+function stat(value: string, label: string) {
+  return { value, label };
+}
+
+export default function ProfilePage() {
+  const { user, profile, logout } = useAuth();
+
+  const displayName = profile?.displayName ?? user?.displayName ?? "My Account";
+  const email = profile?.email ?? user?.email ?? "No email connected";
+  const initials = displayName
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("") || "SA";
+
+  const stats = [
+    stat(String(profile?.totalSales ?? 0), "Sales"),
+    stat(String(profile?.totalPurchases ?? 0), "Purchases"),
+    stat(`${profile?.rating?.toFixed(1) ?? "0.0"}`, "Rating"),
+  ];
+
+  const menu = [
+    { label: "Verification Status", value: profile?.isVerified ? "Verified" : "Pending", Icon: ShieldCheck },
+    { label: "Wallet Balance", value: `AED ${(profile?.walletBalance ?? 0).toLocaleString()}`, Icon: Wallet },
+    { label: "Reviews", value: `${profile?.reviewCount ?? 0} total`, Icon: Star },
+    { label: "Notifications", value: "Manage alerts", Icon: Bell },
+    { label: "Payment Methods", value: "Saved cards", Icon: CreditCard },
+  ];
+
+  return (
+    <div className="flex-1 overflow-y-auto bg-[var(--surface)]">
+      <section
+        className="px-4 pb-10 pt-8"
+        style={{ background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)" }}
+      >
+        <div className="mx-auto max-w-md">
+          <p className="text-[12px] font-black uppercase tracking-[0.18em] text-white/55">Profile</p>
+          <div className="mt-5 flex items-center gap-4">
+            <div
+              className="flex h-20 w-20 items-center justify-center rounded-full text-2xl font-black text-white"
+              style={{ background: "linear-gradient(135deg, #0E7F79 0%, #1CC6C3 100%)" }}
+            >
+              {initials}
+            </div>
+            <div>
+              <h1 className="text-[30px] font-black leading-none text-white">{displayName}</h1>
+              <p className="mt-2 text-sm text-white/70">{email}</p>
+              <div className="mt-3 inline-flex rounded-full bg-white/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[var(--primary-container)]">
+                {profile?.isTrustedSeller ? "Trusted Seller" : "Member"}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="-mt-7 px-4 pb-8">
+        <div className="mx-auto max-w-md space-y-5">
+          <div className="grid grid-cols-3 gap-3">
+            {stats.map((item) => (
+              <div
+                key={item.label}
+                className="rounded-[22px] bg-white px-3 py-4 text-center shadow-[0_10px_36px_rgba(25,28,29,0.08)]"
+              >
+                <p className="text-[22px] font-black text-[var(--primary)]">{item.value}</p>
+                <p className="mt-1 text-[11px] font-black uppercase tracking-[0.14em] text-[var(--outline)]">
+                  {item.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-[26px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+            <div className="flex items-center gap-3">
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-full"
+                style={{ background: "rgba(0,106,102,0.1)" }}
+              >
+                <UserRound className="text-[var(--primary)]" size={20} />
+              </div>
+              <div>
+                <p className="text-[18px] font-black text-[var(--on-surface)]">Account Overview</p>
+                <p className="text-sm text-[var(--on-surface-variant)]">
+                  Keep your Sakk identity and transaction preferences in one place.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[26px] bg-white p-3 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+            {menu.map(({ label, value, Icon }) => (
+              <div
+                key={label}
+                className="flex items-center justify-between rounded-[18px] px-3 py-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="flex h-11 w-11 items-center justify-center rounded-full"
+                    style={{ background: "rgba(0,106,102,0.08)" }}
+                  >
+                    <Icon size={18} className="text-[var(--primary)]" />
+                  </div>
+                  <div>
+                    <p className="text-[15px] font-black text-[var(--on-surface)]">{label}</p>
+                    <p className="text-sm text-[var(--on-surface-variant)]">{value}</p>
+                  </div>
+                </div>
+                <ChevronRight size={18} className="text-[var(--outline)]" />
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => void logout()}
+            className="flex h-16 w-full items-center justify-center gap-3 rounded-[16px] border-none bg-[#EEF0F1] text-[18px] font-black text-[var(--primary)]"
+          >
+            <LogOut size={20} />
+            Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

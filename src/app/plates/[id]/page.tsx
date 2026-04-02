@@ -90,7 +90,10 @@ export default function PlateDetailPage() {
   );
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div
+      className="flex-1 overflow-y-auto"
+      style={{ background: "var(--surface)" }}
+    >
       {/* ── Header ── */}
       <header
         className="sticky top-0 z-40 flex justify-between items-center h-16 px-4 glass-nav"
@@ -202,7 +205,7 @@ export default function PlateDetailPage() {
           {isAuction ? (
             <div className="px-5 py-5 lg:px-0 -mt-5 lg:mt-0 relative z-10">
               <div
-                className="rounded-2xl p-5 lg:rounded-none lg:p-0"
+                className="rounded-2xl p-5"
                 style={{
                   background: "var(--surface-container-lowest)",
                   boxShadow: "0 4px 18px rgba(25,28,29,0.1)",
@@ -291,7 +294,7 @@ export default function PlateDetailPage() {
             /* ── FIXED: Price card ── */
             <div className="px-5 py-5 lg:px-0 -mt-5 lg:mt-0 relative z-10">
               <div
-                className="rounded-2xl p-5 lg:rounded-none lg:p-0"
+                className="rounded-2xl p-5"
                 style={{
                   background: "var(--surface-container-lowest)",
                   boxShadow: "0 4px 18px rgba(25,28,29,0.1)",

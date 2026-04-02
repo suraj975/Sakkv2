@@ -1,49 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams, notFound, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { notFound, useParams, useRouter } from "next/navigation";
+import { ArrowLeft, CalendarDays, Gift, Loader2, MessageSquare, User2 } from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
-import PageHeader from "@/components/layout/PageHeader";
 import { getPlateById } from "@/lib/firestore";
 import type { FSPlate } from "@/types/firebase";
-import { Loader2 } from "lucide-react";
 
-const inp = {
-  width: "100%",
-  background: "var(--sakk-card)",
-  border: "1px solid var(--sakk-border)",
-  borderRadius: 10,
-  padding: "11px",
-  fontSize: 13,
-  color: "var(--sakk-text)",
-  boxSizing: "border-box" as const,
-  outline: "none",
-  fontFamily: "inherit",
-};
-
-const FIELDS = [
-  {
-    key: "name",
-    label: "Recipient's Full Name",
-    ph: "e.g. Fatima Al Rashid",
-    area: false,
-    req: true,
-  },
-  {
-    key: "msg",
-    label: "Personal Message",
-    ph: "e.g. Happy Birthday!",
-    area: true,
-    req: false,
-  },
-  {
-    key: "date",
-    label: "Scheduled Delivery Date (optional)",
-    ph: "e.g. 15 March 2025",
-    area: false,
-    req: false,
-  },
-] as const;
+const fieldClass =
+  "w-full rounded-[18px] border-none bg-[var(--surface-container-low)] px-4 py-4 text-[15px] text-[var(--on-surface)] outline-none placeholder:text-[var(--outline)]";
 
 export default function GiftSetupPage() {
   const { id } = useParams<{ id: string }>();
@@ -61,23 +26,15 @@ export default function GiftSetupPage() {
     });
   }, [id]);
 
-  if (loadingPlate)
+  if (loadingPlate) {
     return (
-      <div
-        className="flex-1 flex items-center justify-center"
-        style={{ color: "var(--outline)" }}
-      >
-        <Loader2 size={24} className="animate-spin" />
+      <div className="flex flex-1 items-center justify-center" style={{ color: "var(--outline)" }}>
+        <Loader2 size={26} className="animate-spin" />
       </div>
     );
-  if (!plate) return notFound();
+  }
 
-  const values: Record<string, string> = { name, msg, date };
-  const setters: Record<string, (v: string) => void> = {
-    name: setName,
-    msg: setMsg,
-    date: setDate,
-  };
+  if (!plate) return notFound();
 
   const handleContinue = () => {
     const params = new URLSearchParams({ name, msg, date });
@@ -85,12 +42,23 @@ export default function GiftSetupPage() {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto">
-      <PageHeader title="Gift Details" backHref={`/plates/${id}/gift`} />
+    <div className="flex-1 overflow-y-auto bg-[var(--surface)]">
+      <div className="sticky top-0 z-40 flex h-14 items-center gap-3 bg-white px-4 shadow-[0_1px_0_rgba(187,202,199,0.18)]">
+        <button
+          onClick={() => router.push(`/plates/${id}/gift`)}
+          className="flex h-9 w-9 items-center justify-center rounded-xl border-none bg-transparent text-[var(--primary)]"
+        >
+          <ArrowLeft size={24} />
+        </button>
+        <span className="text-base font-black text-[var(--on-surface)]">Gift Details</span>
+      </div>
 
-      <div className="p-4 lg:px-6">
-        <div className="max-w-[600px] mx-auto">
-          <div className="flex justify-center mb-4">
+      <div className="mx-auto max-w-md px-4 py-5 pb-8">
+        <div
+          className="rounded-[28px] px-5 py-6"
+          style={{ background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)" }}
+        >
+          <div className="flex justify-center">
             <PlateViz
               code={plate.code}
               num={plate.num}
@@ -99,77 +67,78 @@ export default function GiftSetupPage() {
               size="md"
             />
           </div>
+          <p className="mt-4 text-center text-[12px] font-bold uppercase tracking-[0.18em] text-white/60">
+            {plate.emirate} {plate.code} {plate.num}
+          </p>
+        </div>
 
-          <div
-            className="rounded-2xl px-4 pt-3 pb-1 mb-4"
-            style={{
-              background: "var(--sakk-card)",
-              border: "1px solid var(--sakk-border)",
-            }}
-          >
-            {FIELDS.map((f) => (
-              <div key={f.key} className="mb-3.5">
-                <div
-                  className="text-xs font-medium mb-1.5"
-                  style={{ color: "var(--sakk-text2)" }}
-                >
-                  {f.label}
-                  {f.req && <span style={{ color: "var(--teal)" }}> *</span>}
-                </div>
-                {f.area ? (
-                  <div className="relative">
-                    <textarea
-                      value={values[f.key]}
-                      onChange={(e) => setters[f.key](e.target.value)}
-                      placeholder={f.ph}
-                      rows={3}
-                      maxLength={140}
-                      style={{ ...inp, resize: "none" }}
-                    />
-                    <span
-                      className="absolute bottom-2 right-3 text-[10px]"
-                      style={{ color: "var(--sakk-text3)" }}
-                    >
-                      {values[f.key].length}/140
-                    </span>
-                  </div>
-                ) : (
-                  <input
-                    value={values[f.key]}
-                    onChange={(e) => setters[f.key](e.target.value)}
-                    placeholder={f.ph}
-                    style={inp}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="mt-5 rounded-[26px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
+          <div className="space-y-4">
+            <div>
+              <label className="mb-2 flex items-center gap-2 text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">
+                <User2 size={15} />
+                Recipient&apos;s Full Name
+              </label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Fatima Al Rashid"
+                className={fieldClass}
+              />
+            </div>
 
-          <button
-            onClick={handleContinue}
-            disabled={!name}
-            className="w-full border-none rounded-xl py-3.5 text-sm font-semibold text-white cursor-pointer mb-3"
-            style={{
-              background: name ? "var(--teal)" : "#C0E8E6",
-              cursor: name ? "pointer" : "not-allowed",
-            }}
-          >
-            Continue to Payment →
-          </button>
+            <div>
+              <label className="mb-2 flex items-center gap-2 text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">
+                <MessageSquare size={15} />
+                Personal Message
+              </label>
+              <textarea
+                value={msg}
+                onChange={(e) => setMsg(e.target.value)}
+                placeholder="Add a short message for the reveal"
+                rows={5}
+                maxLength={140}
+                className={`${fieldClass} resize-none`}
+              />
+              <p className="mt-2 text-right text-[11px] font-semibold text-[var(--outline)]">{msg.length}/140</p>
+            </div>
 
-          <div
-            className="rounded-xl px-3 py-2.5 mb-4 text-[11px] leading-relaxed"
-            style={{
-              background: "#FFFBEB",
-              border: "1px solid #FCD34D",
-              borderLeft: "4px solid #D97706",
-              color: "#78450A",
-            }}
-          >
-            The recipient will need to provide their TCF (Traffic Code File)
-            number to complete the transfer. We&apos;ll guide them step by step.
+            <div>
+              <label className="mb-2 flex items-center gap-2 text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">
+                <CalendarDays size={15} />
+                Scheduled Delivery Date
+              </label>
+              <input
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                placeholder="Optional"
+                className={fieldClass}
+              />
+            </div>
           </div>
         </div>
+
+        <div
+          className="mt-5 rounded-[22px] px-4 py-4 text-[14px] leading-7"
+          style={{ background: "#F3FBFB", border: "1px solid rgba(12,191,184,0.16)", color: "var(--on-surface-variant)" }}
+        >
+          The recipient will receive a private reveal link and will need their TCF number to complete the transfer.
+        </div>
+
+        <button
+          onClick={handleContinue}
+          disabled={!name.trim()}
+          className="mt-5 flex h-16 w-full items-center justify-center gap-3 rounded-[16px] border-none text-[18px] font-black text-white"
+          style={{
+            background: name.trim()
+              ? "linear-gradient(90deg, #0E7F79 0%, #1CC6C3 100%)"
+              : "linear-gradient(90deg, #A9D7D5 0%, #CBE9E7 100%)",
+            cursor: name.trim() ? "pointer" : "not-allowed",
+          }}
+        >
+          <Gift size={20} />
+          Continue to Payment
+        </button>
       </div>
     </div>
   );

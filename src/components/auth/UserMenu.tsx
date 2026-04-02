@@ -14,11 +14,15 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function UserMenu({
   variant = "light",
+  placement = "bottom",
 }: {
   variant?: "light" | "dark";
+  placement?: "bottom" | "top" | "right";
 }) {
   const { user, profile, logout } = useAuth();
   const isDark = variant === "dark";
+  const opensUp = placement === "top";
+  const opensRight = placement === "right";
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +92,13 @@ export default function UserMenu({
 
       {open && (
         <div
-          className="absolute right-0 top-full mt-2 w-56 rounded-2xl overflow-hidden z-50"
+          className={`absolute z-50 w-56 overflow-hidden rounded-2xl ${
+            opensRight
+              ? "left-full bottom-0 ml-3"
+              : opensUp
+                ? "right-0 bottom-full mb-2"
+                : "right-0 top-full mt-2"
+          }`}
           style={{
             background: "var(--surface-container-low)",
             boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
