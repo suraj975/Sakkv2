@@ -9,7 +9,6 @@ import {
   Heart,
   MapPin,
   BadgeCheck,
-  UserCircle,
   ShoppingCart,
   Gift,
   TrendingUp,
@@ -429,59 +428,6 @@ export default function PlateDetailPage() {
               </div>
             </div>
           )}
-
-          {/* Seller */}
-          <div className="px-5 pb-5 lg:px-0 lg:pb-6">
-            <div
-              className="rounded-2xl p-4 flex items-center justify-between"
-              style={{
-                background: "var(--surface-container-lowest)",
-                border: "1px solid rgba(187,202,199,0.12)",
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center"
-                  style={{ background: "var(--surface-container-high)" }}
-                >
-                  <UserCircle
-                    size={28}
-                    strokeWidth={1.3}
-                    style={{ color: "var(--primary)" }}
-                  />
-                </div>
-                <div>
-                  <p
-                    className="font-bold"
-                    style={{ color: "var(--on-surface)" }}
-                  >
-                    {plate.sellerName}
-                  </p>
-                  <div
-                    className="flex items-center gap-1 text-xs"
-                    style={{ color: "var(--on-surface-variant)" }}
-                  >
-                    <BadgeCheck
-                      size={11}
-                      strokeWidth={2}
-                      style={{ color: "var(--tertiary)" }}
-                    />
-                    <span>
-                      {plate.sellerIsVerified
-                        ? "Verified Broker"
-                        : "Direct Seller"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <button
-                className="text-sm font-bold cursor-pointer bg-transparent border-none"
-                style={{ color: "var(--primary)" }}
-              >
-                View Profile
-              </button>
-            </div>
-          </div>
 
           {/* Mobile CTAs */}
           <div className="lg:hidden px-5 pb-6 space-y-3">

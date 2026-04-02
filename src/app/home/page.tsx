@@ -35,13 +35,6 @@ const CATS = [
     Icon: CarFront,
     available: true,
   },
-  //   { label: "Bike Plates", count: "891 Active", Icon: Bike, available: false },
-  //   {
-  //     label: "Boat Numbers",
-  //     count: "234 Active",
-  //     Icon: Anchor,
-  //     available: false,
-  //   },
 ];
 
 /* ── Coming Soon Modal ───────────────────────────────────────── */
@@ -259,7 +252,16 @@ export default function HomePage() {
   }, []);
 
   function handleTabClick(index: number) {
-    const category = CATS[index];
+    const tab = TABS[index];
+    const category = CATS.find((item) => item.label === tab);
+    if (!category) {
+      if (tab === "Bike Plates") {
+        setComingSoon({ label: tab, Icon: Bike });
+      } else if (tab === "Boat Numbers") {
+        setComingSoon({ label: tab, Icon: Anchor });
+      }
+      return;
+    }
     if (!category.available) {
       setComingSoon({ label: category.label, Icon: category.Icon });
       return;
