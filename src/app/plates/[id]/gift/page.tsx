@@ -23,7 +23,10 @@ export default function GiftDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-1 items-center justify-center" style={{ color: "var(--outline)" }}>
+      <div
+        className="flex flex-1 items-center justify-center"
+        style={{ color: "var(--outline)" }}
+      >
         <Loader2 size={26} className="animate-spin" />
       </div>
     );
@@ -44,12 +47,15 @@ export default function GiftDetailPage() {
             <ArrowLeft size={24} />
           </button>
           <span className="text-[18px] font-black tracking-[0.18em] text-[var(--primary)]">
-            SAKK
+            MADMOON
           </span>
         </div>
         <div
           className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border"
-          style={{ borderColor: "rgba(0,106,102,0.15)", background: "var(--teal-light)" }}
+          style={{
+            borderColor: "rgba(0,106,102,0.15)",
+            background: "var(--teal-light)",
+          }}
         >
           <span className="text-xs font-black text-[var(--primary)]">
             {sellerName.slice(0, 2).toUpperCase()}
@@ -59,7 +65,9 @@ export default function GiftDetailPage() {
 
       <section
         className="px-6 pb-10 pt-8"
-        style={{ background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)" }}
+        style={{
+          background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)",
+        }}
       >
         <div className="mx-auto max-w-md">
           <div className="mb-5 flex justify-center">
@@ -91,7 +99,9 @@ export default function GiftDetailPage() {
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-[var(--on-surface-variant)]">Current Value</p>
+                <p className="text-sm text-[var(--on-surface-variant)]">
+                  Current Value
+                </p>
                 <p className="mt-2 text-[30px] font-black leading-none text-[var(--primary)]">
                   {aed(plate.price)}
                 </p>
@@ -110,16 +120,23 @@ export default function GiftDetailPage() {
               <div className="flex items-center gap-4">
                 <div
                   className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full"
-                  style={{ background: "linear-gradient(135deg, #0B7A76 0%, #064845 100%)" }}
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #0B7A76 0%, #064845 100%)",
+                  }}
                 >
                   <span className="text-lg font-black text-white">
                     {sellerName.slice(0, 2).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <p className="text-[18px] font-black text-[var(--on-surface)]">{sellerName}</p>
+                  <p className="text-[18px] font-black text-[var(--on-surface)]">
+                    {sellerName}
+                  </p>
                   <p className="text-sm text-[var(--on-surface-variant)]">
-                    {plate.isVerified ? "Verified Premier Seller" : "Trusted Seller"}
+                    {plate.isVerified
+                      ? "Verified Premier Seller"
+                      : "Trusted Seller"}
                   </p>
                 </div>
               </div>
@@ -140,15 +157,21 @@ export default function GiftDetailPage() {
             <div className="flex items-start gap-4">
               <div
                 className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
-                style={{ background: "linear-gradient(135deg, #14C7C2 0%, #0B9A96 100%)" }}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #14C7C2 0%, #0B9A96 100%)",
+                }}
               >
                 <Sparkles size={22} className="text-white" />
               </div>
               <div>
-                <h2 className="text-[18px] font-black text-[var(--on-surface)]">The Digital Reveal</h2>
+                <h2 className="text-[18px] font-black text-[var(--on-surface)]">
+                  The Digital Reveal
+                </h2>
                 <p className="mt-2 text-[15px] leading-8 text-[var(--on-surface-variant)]">
-                  A unique gifting experience. Upon purchase, the recipient receives a curated
-                  digital invitation to &quot;reveal&quot; their new asset in a cinematic virtual gallery.
+                  A unique gifting experience. Upon purchase, the recipient
+                  receives a curated digital invitation to &quot;reveal&quot;
+                  their new asset in a cinematic virtual gallery.
                 </p>
               </div>
             </div>
@@ -157,7 +180,9 @@ export default function GiftDetailPage() {
           <button
             onClick={() => router.push(`/plates/${id}/gift/setup`)}
             className="flex h-[72px] w-full items-center justify-center gap-3 rounded-[16px] border-none text-[18px] font-black text-white shadow-[0_12px_30px_rgba(0,106,102,0.22)]"
-            style={{ background: "linear-gradient(90deg, #0E7F79 0%, #1CC6C3 100%)" }}
+            style={{
+              background: "linear-gradient(90deg, #0E7F79 0%, #1CC6C3 100%)",
+            }}
           >
             <Gift size={22} />
             Gift this Plate

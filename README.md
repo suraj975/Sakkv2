@@ -1,43 +1,140 @@
 # Sakk — UAE Plate Marketplace
 
-A full-stack Next.js marketplace for buying, selling, and gifting UAE vehicle license plates. Built with Material Design 3 tokens, glassmorphism navigation, and a full escrow-protected checkout flow.
-
----
-
 ## Screenshots
 
-| Home                                            | Plate Detail                                            | Checkout                                                | Estimator                                             |
-| ----------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------- |
-| Mobile-first hero, flash deals, trending plates | Dark gradient hero, market analysis slider, seller card | Financial summary, payment method selection, escrow CTA | AI-driven valuation, market metrics, comparable sales |
+### Mobile
+
+|             Home              |                 Plate Detail                  |                  Checkout                   |
+| :---------------------------: | :-------------------------------------------: | :-----------------------------------------: |
+| ![Home](screenshots/home.png) | ![Plate Detail](screenshots/plate-detail.png) | ![Checkout](screenshots/plate-checkout.png) |
+
+|                Estimator                |              Search               |              Gift Flow              |
+| :-------------------------------------: | :-------------------------------: | :---------------------------------: |
+| ![Estimator](screenshots/estimator.png) | ![Search](screenshots/search.png) | ![Gift](screenshots/plate-gift.png) |
+
+### Desktop
+
+|                     Home                      |                         Plate Detail                          |                          Checkout                           |
+| :-------------------------------------------: | :-----------------------------------------------------------: | :---------------------------------------------------------: |
+| ![Home Desktop](screenshots/desktop/home.png) | ![Plate Detail Desktop](screenshots/desktop/plate-detail.png) | ![Checkout Desktop](screenshots/desktop/plate-checkout.png) |
+
+|                        Estimator                        |                      Search                       |                      Gift Flow                      |
+| :-----------------------------------------------------: | :-----------------------------------------------: | :-------------------------------------------------: |
+| ![Estimator Desktop](screenshots/desktop/estimator.png) | ![Search Desktop](screenshots/desktop/search.png) | ![Gift Desktop](screenshots/desktop/plate-gift.png) |
 
 ---
 
-## Features
+**Sakk** is a premium digital marketplace for buying, selling, auctioning, and gifting UAE vehicle license plates. It serves collectors, investors, and everyday drivers across all seven emirates, providing a trusted, end-to-end platform with built-in escrow protection and real-time auctions.
 
-- **Marketplace** — Browse and search UAE number plates across all emirates
-- **Plate Detail** — Market analysis, seller info, escrow protection info
-- **Checkout** — Multi-step: payment selection → escrow hold → transfer → confirmed
-- **Gift Flow** — Gift a plate to someone with TCF number–based ownership transfer
-- **Estimator** — Instant AI-driven plate valuation with market metrics and comparable sales
-- **Gift Reveal** — Recipient-facing reveal page with TCF acceptance flow
-- **Responsive** — Mobile-first with a full desktop layout (sidebar + multi-column grids)
+---
+
+## What is Sakk?
+
+UAE number plates are a unique asset class — rare combinations can sell for millions of dirhams. Today, this market is fragmented across social media, word-of-mouth, and unprotected private deals. Sakk brings transparency, trust, and a seamless digital experience to this market.
+
+**Core value propositions:**
+
+- **Buyers** get verified listings, market price data, and escrow-protected payments.
+- **Sellers** get reach, a credible sales channel, and instant AI-powered valuations.
+- **Gifters** can transfer plate ownership to a recipient via a smooth digital gift flow.
+
+---
+
+## Key Features
+
+| Feature             | Description                                                                                                                |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **Marketplace**     | Browse and search plates across all emirates with filters by emirate, type, price range, and character/number combinations |
+| **Live Auctions**   | Real-time bidding with countdown timers, auto-bid support, outbid notifications, and lot-based auction sessions            |
+| **Plate Estimator** | AI-powered instant valuation with comparable sales and market trend data — no registration required                        |
+| **Escrow Checkout** | Multi-step secure checkout: payment selection → escrow hold → ownership transfer → confirmed                               |
+| **Gift Flow**       | Send a plate as a gift; recipient receives a branded reveal page and accepts via TCF number                                |
+| **Seller Profiles** | Verified seller badges, ratings, and transaction history to build buyer confidence                                         |
+| **Notifications**   | Real-time alerts for outbid events, auction wins, price drops, and watchlist activity                                      |
+
+---
+
+## User Journeys
+
+### Buyer — Fixed Price
+
+`Search / Browse → Plate Detail → Add to Watchlist or Buy → Checkout → Escrow Hold → Ownership Transfer Confirmed`
+
+### Buyer — Auction
+
+`Live Auctions feed → Place Bid → Watch (Outbid / Winning) → Win → Proceed to Checkout → Escrow → Transfer`
+
+### Seller
+
+`Post Listing (fixed price or auction) → Set price/reserve → Manage active listings → Receive payment post-transfer`
+
+### Gifter
+
+`Select plate → Gift Setup → Gift Checkout → Recipient gets Reveal page → Accept via TCF number`
+
+---
+
+## Product Screens
+
+| Screen        | Purpose                                                 |
+| ------------- | ------------------------------------------------------- |
+| Home          | Hero, flash deals, live auctions strip, trending plates |
+| Auctions      | Full auction listings with live/upcoming/ended states   |
+| Plate Detail  | Market analysis, seller card, escrow info, bid/buy CTA  |
+| Bid Page      | Enter bid amount, binding bid confirmation              |
+| Watching      | Live countdown, bid history, outbid state               |
+| Auction Won   | Win confirmation, proceed to payment                    |
+| Checkout      | Payment method selection, financial summary             |
+| Escrow        | Timeline tracker for ownership transfer steps           |
+| Estimator     | Instant plate valuation with comparable sales           |
+| Gift Flow     | Gift setup, checkout, and recipient reveal page         |
+| Profile       | User listings, purchase history, watchlist              |
+| Notifications | Activity feed for bids, price changes, wins             |
+
+---
+
+## Trust & Safety
+
+- **Escrow protection** on all transactions — funds held until ownership transfer is confirmed
+- **Verified seller badges** — identity-verified sellers are visually distinguished
+- **Plate ownership verification** — each listing can carry a verification status
+- **TCF-based gift transfers** — recipient must confirm via their Traffic File Card number
 
 ---
 
 ## Tech Stack
 
-| Layer     | Choice                                         |
-| --------- | ---------------------------------------------- |
-| Framework | Next.js 16.2.2 (App Router)                    |
-| UI        | React 19.2.4                                   |
-| Styling   | Tailwind CSS v4 + Material Design 3 CSS tokens |
-| Icons     | Lucide React                                   |
-| Language  | TypeScript 5                                   |
-| Linting   | ESLint (eslint-config-next)                    |
+| Layer          | Choice                                     |
+| -------------- | ------------------------------------------ |
+| Framework      | Next.js 16 (App Router, SSR/SSG)           |
+| Frontend       | React 19, TypeScript 5                     |
+| Styling        | Tailwind CSS v4 + Material Design 3 tokens |
+| Backend / Auth | Firebase (Firestore, Auth, Storage)        |
+| Icons          | Lucide React                               |
+| Deployment     | Vercel-ready                               |
 
 ---
 
-## Getting Started
+## Current Status
+
+The application is a **functional prototype** with:
+
+- All UI screens built and navigable (mobile + desktop)
+- Firebase backend schema designed (users, plates, bids, watchlists, transactions, gifts)
+- Auth flow (email/password + Google Sign-In) implemented
+- Auction feature screens live (bid, watching, won)
+- Escrow checkout flow end-to-end
+
+**Next milestones:**
+
+- Live real-time bid synchronisation via Firestore listeners
+- Push notifications for auction events
+- Seller listing management dashboard
+- Payment gateway integration
+
+---
+
+## Getting Started (Development)
 
 ```bash
 npm install
@@ -46,128 +143,8 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### Other commands
-
 ```bash
 npm run build    # production build
 npm run start    # serve production build
 npm run lint     # run ESLint
-```
-
----
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── globals.css                  # MD3 CSS tokens + Tailwind @theme
-│   ├── layout.tsx                   # Root layout with AppShell
-│   ├── page.tsx                     # Home / Marketplace
-│   ├── search/page.tsx              # Search & filter
-│   ├── estimator/page.tsx           # Plate value estimator
-│   ├── gift/reveal/page.tsx         # Gift recipient reveal page
-│   └── plates/[id]/
-│       ├── page.tsx                 # Plate detail
-│       ├── checkout/
-│       │   ├── page.tsx             # Payment & checkout
-│       │   ├── escrow/page.tsx      # Escrow status & timeline
-│       │   └── complete/page.tsx    # Transfer confirmed
-│       └── gift/
-│           ├── page.tsx             # Gift a plate
-│           ├── setup/page.tsx       # Gift setup
-│           └── checkout/page.tsx    # Gift checkout
-├── components/
-│   ├── layout/
-│   │   ├── AppShell.tsx             # Mobile/desktop shell switcher
-│   │   ├── BottomNav.tsx            # Mobile bottom tab bar
-│   │   ├── Sidebar.tsx              # Desktop left sidebar
-│   │   └── PageHeader.tsx           # Back-button sub-page header
-│   ├── plates/
-│   │   ├── PlateViz.tsx             # Pixel-accurate licence plate visual
-│   │   └── PlateCard.tsx            # Grid listing card
-│   └── ui/
-│       ├── Hero.tsx, Logo.tsx, Pill.tsx, TLine.tsx
-│       ├── IBox.tsx, InfoBox.tsx
-└── lib/
-│   └── plates.ts                    # Plate data, aed(), escrowFee(), priceTier()
-└── types/
-    └── index.ts                     # Plate, PlateType, PlateSize
-```
-
----
-
-## Routes
-
-| Route                            | Page                                             |
-| -------------------------------- | ------------------------------------------------ |
-| `/`                              | Home / Marketplace                               |
-| `/search`                        | Search & filter plates                           |
-| `/plates/[id]`                   | Plate detail                                     |
-| `/plates/[id]/checkout`          | Checkout                                         |
-| `/plates/[id]/checkout/escrow`   | Escrow status                                    |
-| `/plates/[id]/checkout/complete` | Transfer confirmed                               |
-| `/plates/[id]/gift`              | Gift a plate                                     |
-| `/plates/[id]/gift/setup`        | Gift setup                                       |
-| `/plates/[id]/gift/checkout`     | Gift checkout                                    |
-| `/gift/reveal`                   | Gift reveal (recipient) — `?plateId=&from=&msg=` |
-| `/estimator`                     | Plate value estimator                            |
-
----
-
-## Design System
-
-Tokens are defined as CSS custom properties in `src/app/globals.css` and mapped into Tailwind via `@theme inline`.
-
-### Key tokens
-
-| Token                        | Value     | Usage                                      |
-| ---------------------------- | --------- | ------------------------------------------ |
-| `--primary`                  | `#006A66` | Dark teal — buttons, active states, prices |
-| `--primary-container`        | `#0CBFB8` | Light teal — gradient endpoint, chips      |
-| `--tertiary`                 | `#006E2D` | Green — positive indicators                |
-| `--surface`                  | `#F8FAFB` | Page background                            |
-| `--surface-container-lowest` | `#FFFFFF` | Card backgrounds                           |
-| `--surface-container-low`    | `#F2F4F5` | Input backgrounds                          |
-| `--on-surface`               | `#191C1D` | Primary text                               |
-| `--on-surface-variant`       | `#3C4948` | Secondary text                             |
-| `--teal-dark`                | `#063D3A` | Hero / dark header backgrounds             |
-
-### Design rules
-
-- **No 1px borders** — use tonal background shifts (e.g. `surface-container-low` vs `surface-container-lowest`) or `outline` for selected states
-- **Cards** — `surface-container-lowest` background + `0 4px 18px rgba(25,28,29,0.08)` ambient shadow, `rounded-2xl`
-- **Primary buttons** — `linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%)`
-- **Glass headers** — `rgba(248,250,251,0.85)` + `backdrop-filter: blur(20px)`
-- **Chips / pills** — `rounded-full`
-
-### Utility classes
-
-| Class               | Effect                       |
-| ------------------- | ---------------------------- |
-| `.ambient-shadow`   | Subtle card shadow           |
-| `.plate-viz-shadow` | Shadow for plate visuals     |
-| `.glass-nav`        | Glassmorphism navigation bar |
-| `.btn-gradient`     | Teal gradient button         |
-
----
-
-## Responsive Layout
-
-- **Mobile (`< lg`)** — Single column, `BottomNav`, sticky CTAs at bottom
-- **Desktop (`lg+`)** — `Sidebar` (200px) + content area, multi-column grids, no `BottomNav`
-
-The `AppShell` component handles the mobile phone-frame wrapper on desktop for demo purposes.
-
----
-
-## Data
-
-Plate data lives in `src/lib/plates.ts` as a static array. Utility functions:
-
-```ts
-aed(price: number): string          // → "AED 89,000"
-escrowFee(price: number): number    // tiered fee (1–3%)
-priceTier(price: number): string    // → "Standard" | "Premium" | "Elite"
-getPlateById(id: string): Plate     // lookup by string id
 ```

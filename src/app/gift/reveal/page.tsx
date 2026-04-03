@@ -2,7 +2,13 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, CheckCircle2, Gift, Loader2, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Gift,
+  Loader2,
+  ShieldCheck,
+} from "lucide-react";
 import PlateViz from "@/components/plates/PlateViz";
 import { getPlateById } from "@/lib/firestore";
 import type { FSPlate } from "@/types/firebase";
@@ -32,14 +38,21 @@ function GiftRevealInner() {
 
   if (loadingPlate) {
     return (
-      <div className="flex flex-1 items-center justify-center" style={{ background: "var(--surface)" }}>
+      <div
+        className="flex flex-1 items-center justify-center"
+        style={{ background: "var(--surface)" }}
+      >
         <Loader2 size={28} className="animate-spin text-[var(--outline)]" />
       </div>
     );
   }
 
   if (!plate) {
-    return <div className="p-8 text-center text-[var(--on-surface-variant)]">Gift not found.</div>;
+    return (
+      <div className="p-8 text-center text-[var(--on-surface-variant)]">
+        Gift not found.
+      </div>
+    );
   }
 
   const tcfValid = tcf.trim().length >= 6;
@@ -54,7 +67,9 @@ function GiftRevealInner() {
           >
             <ArrowLeft size={24} />
           </button>
-          <span className="text-[18px] font-black tracking-[0.18em] text-[var(--primary)]">SAKK</span>
+          <span className="text-[18px] font-black tracking-[0.18em] text-[var(--primary)]">
+            MADMOON
+          </span>
         </div>
         <div className="rounded-full bg-[var(--teal-light)] px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[var(--primary)]">
           Gift
@@ -63,10 +78,14 @@ function GiftRevealInner() {
 
       <section
         className="px-6 pb-10 pt-8"
-        style={{ background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)" }}
+        style={{
+          background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)",
+        }}
       >
         <div className="mx-auto max-w-md text-center">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">You received a gift</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+            You received a gift
+          </p>
           <h1 className="mt-3 text-[28px] font-black text-white">{from}</h1>
           <div className="mt-6 flex justify-center">
             <PlateViz
@@ -77,7 +96,11 @@ function GiftRevealInner() {
               size="lg"
             />
           </div>
-          {gMsg && <p className="mt-5 text-[15px] italic leading-7 text-white/70">&ldquo;{gMsg}&rdquo;</p>}
+          {gMsg && (
+            <p className="mt-5 text-[15px] italic leading-7 text-white/70">
+              &ldquo;{gMsg}&rdquo;
+            </p>
+          )}
         </div>
       </section>
 
@@ -86,8 +109,12 @@ function GiftRevealInner() {
           <div className="rounded-[26px] bg-white p-6 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-[var(--on-surface-variant)]">Plate Value</p>
-                <p className="mt-2 text-[30px] font-black leading-none text-[var(--primary)]">{aed(plate.price)}</p>
+                <p className="text-sm text-[var(--on-surface-variant)]">
+                  Plate Value
+                </p>
+                <p className="mt-2 text-[30px] font-black leading-none text-[var(--primary)]">
+                  {aed(plate.price)}
+                </p>
               </div>
               <div
                 className="mt-4 rounded-full px-4 py-2 text-sm font-black"
@@ -97,7 +124,8 @@ function GiftRevealInner() {
               </div>
             </div>
             <p className="mt-5 text-[15px] leading-7 text-[var(--on-surface-variant)]">
-              Enter your Traffic Code File number so Madmoon can complete the legal ownership transfer.
+              Enter your Traffic Code File number so Madmoon can complete the
+              legal ownership transfer.
             </p>
           </div>
 
@@ -119,18 +147,26 @@ function GiftRevealInner() {
               )}
             </div>
             <p className="mt-3 text-[14px] leading-7 text-[var(--on-surface-variant)]">
-              You can find your TCF on your registration documents or the MOI app.
+              You can find your TCF on your registration documents or the MOI
+              app.
             </p>
           </div>
 
           <div
             className="rounded-[22px] px-4 py-4 text-[14px] leading-7"
-            style={{ background: "#F3FBFB", border: "1px solid rgba(12,191,184,0.16)" }}
+            style={{
+              background: "#F3FBFB",
+              border: "1px solid rgba(12,191,184,0.16)",
+            }}
           >
             <div className="flex items-start gap-3">
-              <ShieldCheck size={18} className="mt-1 shrink-0 text-[var(--primary)]" />
+              <ShieldCheck
+                size={18}
+                className="mt-1 shrink-0 text-[var(--primary)]"
+              />
               <p className="text-[var(--on-surface-variant)]">
-                Madmoon escrow protects both sides until the transfer is approved and completed.
+                Madmoon escrow protects both sides until the transfer is
+                approved and completed.
               </p>
             </div>
           </div>
