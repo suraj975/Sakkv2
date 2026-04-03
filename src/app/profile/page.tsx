@@ -6,6 +6,7 @@ import {
   CreditCard,
   Globe2,
   LogOut,
+  MessageSquare,
   Moon,
   ShieldCheck,
   Star,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/context/AuthContext";
+import { useChatbotFlag } from "@/lib/chatbot/useChatbotFlag";
 
 function stat(value: string, label: string) {
   return { value, label };
@@ -24,6 +26,7 @@ export default function ProfilePage() {
   const { user, profile, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
+  const { enabled: chatbotEnabled, toggle: toggleChatbot } = useChatbotFlag();
 
   const displayName = profile?.displayName ?? user?.displayName ?? "My Account";
   const email = profile?.email ?? user?.email ?? "No email connected";
@@ -262,6 +265,61 @@ export default function ProfilePage() {
                   style={{
                     background: isDark ? "white" : "var(--outline)",
                     left: isDark ? "calc(100% - 1.25rem - 4px)" : "4px",
+                  }}
+                />
+              </button>
+            </div>
+          </div>
+
+          {/* Sakk Assistant toggle */}
+          <div
+            className="rounded-[26px] p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]"
+            style={{ background: "var(--surface-container-lowest)" }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-11 w-11 items-center justify-center rounded-full"
+                  style={{
+                    background: chatbotEnabled
+                      ? "rgba(12,191,184,0.15)"
+                      : "rgba(0,106,102,0.08)",
+                  }}
+                >
+                  <MessageSquare
+                    size={18}
+                    style={{ color: "var(--primary)" }}
+                  />
+                </div>
+                <div>
+                  <p
+                    className="text-[15px] font-black"
+                    style={{ color: "var(--on-surface)" }}
+                  >
+                    صك
+                  </p>
+                  <p
+                    className="text-sm"
+                    style={{ color: "var(--on-surface-variant)" }}
+                  >
+                    {chatbotEnabled ? "AI chat enabled" : "AI chat disabled"}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={toggleChatbot}
+                className="relative h-7 w-12 rounded-full transition-all duration-300 border-none cursor-pointer"
+                style={{
+                  background: chatbotEnabled
+                    ? "var(--primary)"
+                    : "var(--surface-container-high)",
+                }}
+              >
+                <span
+                  className="absolute top-1 h-5 w-5 rounded-full transition-all duration-300"
+                  style={{
+                    background: chatbotEnabled ? "white" : "var(--outline)",
+                    left: chatbotEnabled ? "calc(100% - 1.25rem - 4px)" : "4px",
                   }}
                 />
               </button>

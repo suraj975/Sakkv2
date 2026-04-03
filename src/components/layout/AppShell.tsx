@@ -4,10 +4,13 @@ import { usePathname } from "next/navigation";
 import Sidebar from "./Sidebar";
 import BottomNav from "./BottomNav";
 import { useAuth } from "@/context/AuthContext";
+import ChatWidget from "@/components/chatbot/ChatWidget";
+import { useChatbotFlag } from "@/lib/chatbot/useChatbotFlag";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { user, loading } = useAuth();
+  useAuth();
+  const { enabled: chatbotEnabled } = useChatbotFlag();
   const isLanding = pathname === "/";
 
   if (isLanding) {
@@ -33,6 +36,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <BottomNav />
         </div>
       </div>
+      {chatbotEnabled && <ChatWidget />}
     </div>
   );
 }
