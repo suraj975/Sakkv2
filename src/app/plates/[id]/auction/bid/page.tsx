@@ -16,6 +16,8 @@ import { getPlateById, placeBid, subscribeBids } from "@/lib/firestore";
 import { useAuth } from "@/context/AuthContext";
 import { toISOString } from "@/lib/utils";
 import CountdownTimer from "@/components/ui/CountdownTimer";
+import LoginModal from "@/components/auth/LoginModal";
+import AuthGateModal from "@/components/auth/AuthGateModal";
 import type { FSPlate, FSBid } from "@/types/firebase";
 
 export default function AuctionBidPage() {
@@ -29,6 +31,7 @@ export default function AuctionBidPage() {
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bidAmount, setBidAmount] = useState(0);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   // Load plate
   useEffect(() => {
@@ -61,7 +64,7 @@ export default function AuctionBidPage() {
 
   const handleConfirm = async () => {
     if (!user || !plate?.id) {
-      setError("You must be signed in to place a bid.");
+      setLoginOpen(true);
       return;
     }
     setPlacing(true);
@@ -101,6 +104,12 @@ export default function AuctionBidPage() {
 
   return (
     <div className="flex-1 overflow-y-auto">
+      {loginOpen && (
+        <AuthGateModal
+          destinationHref={`/plates/${id}/auction/bid`}
+          onClose={() => setLoginOpen(false)}
+        />
+      )}
       {/* ── Mobile Header ── */}
       <header
         className="lg:hidden sticky top-0 z-40 flex items-center h-14 px-4 glass-nav"

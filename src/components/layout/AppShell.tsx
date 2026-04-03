@@ -9,7 +9,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, loading } = useAuth();
   const isLanding = pathname === "/";
-  const showBottomNav = !loading && !!user;
 
   if (isLanding) {
     return (
@@ -18,8 +17,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         style={{ background: "var(--sakk-bg)" }}
       >
         <main className="flex-1 flex flex-col">{children}</main>
-        {showBottomNav && <div className="h-24 lg:hidden" aria-hidden="true" />}
-        <BottomNav />
       </div>
     );
   }
@@ -32,7 +29,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <main className="flex min-w-0 flex-1 flex-col overflow-hidden transition-[filter] duration-300">
             {children}
           </main>
-          {showBottomNav && <div className="h-24 lg:hidden" aria-hidden="true" />}
+          <div className="h-24 lg:hidden" aria-hidden="true" />
           <BottomNav />
         </div>
       </div>

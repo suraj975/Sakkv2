@@ -35,7 +35,7 @@ export default function AuctionsPage() {
           className="text-xl font-black"
           style={{ color: "var(--on-surface)" }}
         >
-          Madmoon UAE
+          Auctions
         </span>
         <div className="flex items-center gap-2">
           <button

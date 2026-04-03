@@ -53,16 +53,16 @@ export default function Sidebar() {
       <aside
         className="relative hidden shrink-0 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col"
         style={{
-          width: "200px",
-          minWidth: "200px",
-          maxWidth: "200px",
-          background: "var(--surface-container-low)",
-          borderRight: "1px solid var(--surface-container)",
+          width: "240px",
+          minWidth: "240px",
+          maxWidth: "240px",
+          background: "var(--teal-darker)",
+          borderRight: "1px solid rgba(12,191,184,0.12)",
         }}
       >
         <div className="px-4 pt-8">
           <div className="mb-10 px-2">
-            <Logo size="sm" showTagline />
+            <Logo size="sm" showTagline variant="dark" />
           </div>
         </div>
 
@@ -78,10 +78,10 @@ export default function Sidebar() {
                   active ? "sidebar-item-active" : "",
                 )}
                 style={{
-                  background: active ? "rgba(0,106,102,0.1)" : "transparent",
+                  background: active ? "rgba(12,191,184,0.18)" : "transparent",
                   color: active
-                    ? "var(--primary)"
-                    : "var(--on-surface-variant)",
+                    ? "var(--primary-container)"
+                    : "rgba(229,249,248,0.55)",
                   textDecoration: "none",
                 }}
               >
@@ -89,7 +89,9 @@ export default function Sidebar() {
                   size={22}
                   strokeWidth={active ? 2.5 : 1.8}
                   style={{
-                    color: active ? "var(--primary)" : "var(--outline)",
+                    color: active
+                      ? "var(--primary-container)"
+                      : "rgba(229,249,248,0.45)",
                   }}
                 />
                 <span className="flex-1">{item.label}</span>
@@ -97,8 +99,8 @@ export default function Sidebar() {
                   <span
                     className="text-[9px] font-black px-2 py-0.5 rounded-full whitespace-nowrap shrink-0"
                     style={{
-                      background: "rgba(0,106,102,0.1)",
-                      color: "var(--primary)",
+                      background: "rgba(12,191,184,0.18)",
+                      color: "var(--primary-container)",
                     }}
                   >
                     {item.badge}
@@ -119,12 +121,12 @@ export default function Sidebar() {
               style={{
                 background:
                   pathname === "/notifications"
-                    ? "rgba(0,106,102,0.1)"
+                    ? "rgba(12,191,184,0.18)"
                     : "transparent",
                 color:
                   pathname === "/notifications"
-                    ? "var(--primary)"
-                    : "var(--on-surface-variant)",
+                    ? "var(--primary-container)"
+                    : "rgba(229,249,248,0.55)",
                 textDecoration: "none",
               }}
             >
@@ -134,8 +136,8 @@ export default function Sidebar() {
                 style={{
                   color:
                     pathname === "/notifications"
-                      ? "var(--primary)"
-                      : "var(--outline)",
+                      ? "var(--primary-container)"
+                      : "rgba(229,249,248,0.45)",
                 }}
               />
               <span className="flex-1">Notifications</span>
@@ -152,8 +154,8 @@ export default function Sidebar() {
         </nav>
 
         <div
-          className="absolute bottom-0 left-0 right-0 space-y-3 bg-[var(--surface-container-low)] px-4 pb-8 pt-4"
-          style={{ borderTop: "1px solid var(--surface-container)" }}
+          className="absolute bottom-0 left-0 right-0 space-y-3 bg-[var(--teal-darker)] px-4 pb-8 pt-4"
+          style={{ borderTop: "1px solid rgba(12,191,184,0.12)" }}
         >
           {/* Auth: show UserMenu when logged in, sign-in button when logged out */}
           {!loading && (
@@ -174,12 +176,17 @@ export default function Sidebar() {
           </Link>
           <div
             className="p-3 rounded-xl flex items-center gap-2.5"
-            style={{ background: "rgba(0,106,102,0.06)" }}
+            style={{
+              background: "rgba(12,191,184,0.06)",
+            }}
           >
-            <ShieldCheck size={16} style={{ color: "var(--primary)" }} />
+            <ShieldCheck
+              size={16}
+              style={{ color: "var(--primary-container)" }}
+            />
             <span
               className="text-[10px] font-bold uppercase tracking-wider"
-              style={{ color: "var(--primary)" }}
+              style={{ color: "var(--primary-container)" }}
             >
               100% Escrow Safe
             </span>

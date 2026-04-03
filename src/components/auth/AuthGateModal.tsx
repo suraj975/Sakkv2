@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import PlateViz from "@/components/plates/PlateViz";
+import Logo from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 
 type Tab = "login" | "register";
@@ -152,7 +153,8 @@ export default function AuthGateModal({ destinationHref, onClose }: Props) {
   const clearError = () => setError(null);
 
   function onSuccess() {
-    router.push(destinationHref);
+    if (onClose) onClose();
+    router.push("/home");
   }
 
   const handleEmailAuth = async (e: React.FormEvent) => {
@@ -194,7 +196,7 @@ export default function AuthGateModal({ destinationHref, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
+      className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4"
       style={{ background: "rgba(6,20,19,0.7)", backdropFilter: "blur(12px)" }}
       onClick={(e) => {
         if (e.target === e.currentTarget && onClose) onClose();
@@ -226,14 +228,8 @@ export default function AuthGateModal({ destinationHref, onClose }: Props) {
 
           {/* Brand */}
           <div className="relative">
-            <div className="flex items-center gap-1.5 mb-10">
-              <span
-                className="text-2xl font-black"
-                style={{ color: "var(--primary-container)" }}
-              >
-                Madmoon
-              </span>
-              <span className="text-2xl font-black text-white/80">UAE</span>
+            <div className="mb-10">
+              <Logo size="md" variant="dark" />
             </div>
 
             {/* Destination label */}
@@ -321,19 +317,8 @@ export default function AuthGateModal({ destinationHref, onClose }: Props) {
 
           {/* Mobile brand + dest pill */}
           <div className="lg:hidden mb-6 text-center">
-            <div className="flex items-center justify-center gap-1.5 mb-1">
-              <span
-                className="text-xl font-black"
-                style={{ color: "var(--primary)" }}
-              >
-                Madmoon
-              </span>
-              <span
-                className="text-xl font-black"
-                style={{ color: "var(--on-surface)" }}
-              >
-                UAE
-              </span>
+            <div className="flex items-center justify-center mb-1">
+              <Logo size="sm" />
             </div>
             {/* Destination badge */}
             <div

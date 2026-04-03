@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, Hammer, Calculator, CarFront, User } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import LoginModal from "@/components/auth/LoginModal";
+import AuthGateModal from "@/components/auth/AuthGateModal";
 
 const NAV_ITEMS = [
   { id: "home", href: "/home", label: "Home", Icon: Home },
@@ -28,10 +28,8 @@ function isActive(href: string, pathname: string): boolean {
 
 export default function BottomNav() {
   const pathname = usePathname();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
-
-  if (loading || !user) return null;
 
   const onPlatesRoute = pathname.startsWith("/plates");
 
@@ -44,15 +42,18 @@ export default function BottomNav() {
 
   return (
     <>
-      {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
+      {loginOpen && (
+        <AuthGateModal
+          destinationHref="/profile"
+          onClose={() => setLoginOpen(false)}
+        />
+      )}
       <nav
         className="fixed bottom-0 inset-x-0 z-50 mx-auto flex h-20 max-w-screen-md items-center rounded-t-[32px] px-2 lg:hidden"
         style={{
-          background: "rgba(255,255,255,0.96)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderTop: "1px solid rgba(187,202,199,0.15)",
-          boxShadow: "0 -4px 18px rgba(0,0,0,0.07)",
+          background: "var(--teal-darker)",
+          borderTop: "1px solid rgba(12,191,184,0.15)",
+          boxShadow: "0 -4px 24px rgba(6,61,58,0.35)",
           paddingBottom: "max(env(safe-area-inset-bottom), 0px)",
         }}
       >
@@ -69,16 +70,21 @@ export default function BottomNav() {
                 <button
                   key={item.id}
                   onClick={() => setLoginOpen(true)}
-                  className="flex-1 flex flex-col items-center justify-center gap-1 pb-1 transition-colors bg-transparent border-none cursor-pointer"
+                  className="flex-1 flex flex-col items-center justify-center gap-1 pb-1 transition-all bg-transparent border-none cursor-pointer"
                 >
-                  <item.Icon
-                    size={22}
-                    strokeWidth={1.6}
-                    style={{ color: "#94A3B8" }}
-                  />
+                  <div
+                    className="flex items-center justify-center w-12 h-7 rounded-full"
+                    style={{ background: "transparent" }}
+                  >
+                    <item.Icon
+                      size={22}
+                      strokeWidth={1.6}
+                      style={{ color: "rgba(229,249,248,0.45)" }}
+                    />
+                  </div>
                   <span
                     className="text-[9px] font-semibold uppercase tracking-wider"
-                    style={{ color: "#94A3B8" }}
+                    style={{ color: "rgba(229,249,248,0.45)" }}
                   >
                     {item.label}
                   </span>
@@ -91,16 +97,31 @@ export default function BottomNav() {
             <Link
               key={item.id}
               href={item.href}
-              className="flex-1 flex flex-col items-center justify-center gap-1 pb-1 transition-colors"
+              className="flex-1 flex flex-col items-center justify-center gap-1 pb-1 transition-all"
             >
-              <item.Icon
-                size={22}
-                strokeWidth={active ? 2.2 : 1.6}
-                style={{ color: active ? "var(--primary)" : "#94A3B8" }}
-              />
+              <div
+                className="flex items-center justify-center w-12 h-7 rounded-full transition-all"
+                style={{
+                  background: active ? "rgba(12,191,184,0.18)" : "transparent",
+                }}
+              >
+                <item.Icon
+                  size={active ? 22 : 20}
+                  strokeWidth={active ? 2.4 : 1.6}
+                  style={{
+                    color: active
+                      ? "var(--primary-container)"
+                      : "rgba(229,249,248,0.45)",
+                  }}
+                />
+              </div>
               <span
-                className="text-[9px] font-semibold uppercase tracking-wider"
-                style={{ color: active ? "var(--primary)" : "#94A3B8" }}
+                className="text-[9px] font-semibold uppercase tracking-wider transition-all"
+                style={{
+                  color: active
+                    ? "var(--primary-container)"
+                    : "rgba(229,249,248,0.45)",
+                }}
               >
                 {item.label}
               </span>
