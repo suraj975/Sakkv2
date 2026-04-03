@@ -83,6 +83,10 @@ export default function Sidebar() {
                     ? "var(--primary-container)"
                     : "rgba(229,249,248,0.55)",
                   textDecoration: "none",
+                  borderLeft: active
+                    ? "3px solid var(--primary-container)"
+                    : "3px solid transparent",
+                  paddingLeft: active ? "13px" : "16px",
                 }}
               >
                 <item.Icon
@@ -128,6 +132,11 @@ export default function Sidebar() {
                     ? "var(--primary-container)"
                     : "rgba(229,249,248,0.55)",
                 textDecoration: "none",
+                borderLeft:
+                  pathname === "/notifications"
+                    ? "3px solid var(--primary-container)"
+                    : "3px solid transparent",
+                paddingLeft: pathname === "/notifications" ? "13px" : "16px",
               }}
             >
               <Bell
@@ -160,7 +169,7 @@ export default function Sidebar() {
           {/* Auth: show UserMenu when logged in, sign-in button when logged out */}
           {!loading && (
             <div className="mb-3">
-              {user ? <UserMenu placement="right" /> : null}
+              {user ? <UserMenu placement="right" variant="dark" /> : null}
             </div>
           )}
           <Link

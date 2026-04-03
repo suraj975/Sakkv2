@@ -79,7 +79,7 @@ export default function PlateCard({
       </div>
 
       {/* Footer */}
-      <div className="px-3 py-3 sm:px-4 sm:py-3.5">
+      <div className="px-3 py-3 sm:px-4 sm:py-3.5" style={{ background: "var(--surface-container-low)" }}>
         {!isAuction && (
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">

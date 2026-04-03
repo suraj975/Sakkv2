@@ -54,10 +54,10 @@ export default function UserMenu({
         style={{
           background: open
             ? isDark
-              ? "rgba(255,255,255,0.1)"
+              ? "rgba(12,191,184,0.15)"
               : "rgba(0,106,102,0.1)"
             : "transparent",
-          color: isDark ? "white" : "var(--on-surface)",
+          color: isDark ? "rgba(229,249,248,0.9)" : "var(--on-surface)",
         }}
       >
         {/* Avatar */}
@@ -92,7 +92,7 @@ export default function UserMenu({
 
       {open && (
         <div
-          className={`absolute z-50 w-56 overflow-hidden rounded-2xl ${
+          className={`absolute z-[200] w-56 overflow-hidden rounded-2xl ${
             opensRight
               ? "left-full bottom-0 ml-3"
               : opensUp
@@ -101,7 +101,7 @@ export default function UserMenu({
           }`}
           style={{
             background: "var(--surface-container-low)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.28)",
             border: "1px solid var(--surface-container)",
           }}
         >
