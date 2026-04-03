@@ -33,7 +33,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="h-full" suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+        >
           <AuthProvider>
             <AppShell>{children}</AppShell>
           </AuthProvider>
