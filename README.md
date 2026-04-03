@@ -1,29 +1,5 @@
 # Sakk — UAE Plate Marketplace
 
-## Screenshots
-
-### Mobile
-
-|             Home              |                 Plate Detail                  |                  Checkout                   |
-| :---------------------------: | :-------------------------------------------: | :-----------------------------------------: |
-| ![Home](screenshots/home.png) | ![Plate Detail](screenshots/plate-detail.png) | ![Checkout](screenshots/plate-checkout.png) |
-
-|                Estimator                |              Search               |              Gift Flow              |
-| :-------------------------------------: | :-------------------------------: | :---------------------------------: |
-| ![Estimator](screenshots/estimator.png) | ![Search](screenshots/search.png) | ![Gift](screenshots/plate-gift.png) |
-
-### Desktop
-
-|                     Home                      |                         Plate Detail                          |                          Checkout                           |
-| :-------------------------------------------: | :-----------------------------------------------------------: | :---------------------------------------------------------: |
-| ![Home Desktop](screenshots/desktop/home.png) | ![Plate Detail Desktop](screenshots/desktop/plate-detail.png) | ![Checkout Desktop](screenshots/desktop/plate-checkout.png) |
-
-|                        Estimator                        |                      Search                       |                      Gift Flow                      |
-| :-----------------------------------------------------: | :-----------------------------------------------: | :-------------------------------------------------: |
-| ![Estimator Desktop](screenshots/desktop/estimator.png) | ![Search Desktop](screenshots/desktop/search.png) | ![Gift Desktop](screenshots/desktop/plate-gift.png) |
-
----
-
 **Sakk** is a premium digital marketplace for buying, selling, auctioning, and gifting UAE vehicle license plates. It serves collectors, investors, and everyday drivers across all seven emirates, providing a trusted, end-to-end platform with built-in escrow protection and real-time auctions.
 
 ---
