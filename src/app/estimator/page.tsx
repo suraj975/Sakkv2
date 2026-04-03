@@ -180,11 +180,12 @@ function EmiratePicker({
 
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-end bg-black/35 md:hidden"
+          className="fixed inset-0 z-[60] flex items-end bg-black/35 md:hidden"
           onClick={() => setMobileOpen(false)}
         >
           <div
-            className="w-full rounded-t-[32px] bg-white px-5 pb-6 pt-3 shadow-[0_-18px_48px_rgba(25,28,29,0.18)]"
+            className="w-full rounded-t-[32px] bg-white px-5 pt-3 shadow-[0_-18px_48px_rgba(25,28,29,0.18)]"
+            style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 5.5rem)" }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mx-auto h-1.5 w-14 rounded-full bg-[rgba(187,202,199,0.55)]" />
