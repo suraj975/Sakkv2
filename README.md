@@ -1,6 +1,7 @@
 # Madmoon — UAE Plate Marketplace
 
-![Madmoon — UAE Plate Marketplace](./screenshots/desktop/home.png)
+<img width="1728" height="964" alt="image" src="https://github.com/user-attachments/assets/c0119f96-c00a-471b-a717-9b54539e7ad9" />
+
 
 **Madmoon** is a premium digital marketplace for buying, selling, auctioning, and gifting UAE vehicle license plates. It serves collectors, investors, and everyday drivers across all seven emirates, providing a trusted, end-to-end platform with built-in escrow protection and real-time auctions.
 
