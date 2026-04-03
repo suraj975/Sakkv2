@@ -1,10 +1,12 @@
-# Sakk — UAE Plate Marketplace
+# Madmoon — UAE Plate Marketplace
 
-**Sakk** is a premium digital marketplace for buying, selling, auctioning, and gifting UAE vehicle license plates. It serves collectors, investors, and everyday drivers across all seven emirates, providing a trusted, end-to-end platform with built-in escrow protection and real-time auctions.
+![Madmoon — UAE Plate Marketplace](./screenshots/desktop/home.png)
+
+**Madmoon** is a premium digital marketplace for buying, selling, auctioning, and gifting UAE vehicle license plates. It serves collectors, investors, and everyday drivers across all seven emirates, providing a trusted, end-to-end platform with built-in escrow protection and real-time auctions.
 
 ---
 
-## What is Sakk?
+## What is Madmoon?
 
 UAE number plates are a unique asset class — rare combinations can sell for millions of dirhams. Today, this market is fragmented across social media, word-of-mouth, and unprotected private deals. Sakk brings transparency, trust, and a seamless digital experience to this market.
 
@@ -12,7 +14,7 @@ UAE number plates are a unique asset class — rare combinations can sell for mi
 
 - **Buyers** get verified listings, market price data, and escrow-protected payments.
 - **Sellers** get reach, a credible sales channel, and instant AI-powered valuations.
-- **Gifters** can transfer plate ownership to a recipient via a smooth digital gift flow.
+- **Gifters** can transfer plate ownership to a recipient via a smooth digital gift flow with Madmoon's gift flow.
 
 ---
 

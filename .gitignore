@@ -27,3 +27,13 @@ yarn-error.log*
 .vscode/mcp.json
 
 /REVIEW_AND_IMPROVEMENTS.md
+
+# Internal planning docs (root .md files except README)
+/AGENTS.md
+/PLAN.md
+/DESIGN_IMPROVEMENTS.prompt.md
+/STITCH_DESIGN_PROMPT.md
+/FIREBASE_PLAN.md
+/DESIGN_PLAN.md
+/AUCTION_DESIGN_PROMPT.md
+/CLAUDE.md
