@@ -63,8 +63,10 @@ function EmiratePicker({
   }, []);
 
   const active = useMemo(
-    () => EMIRATE_OPTIONS.find((item) => item.value === value) ?? EMIRATE_OPTIONS[0],
-    [value]
+    () =>
+      EMIRATE_OPTIONS.find((item) => item.value === value) ??
+      EMIRATE_OPTIONS[0],
+    [value],
   );
 
   return (
@@ -81,7 +83,10 @@ function EmiratePicker({
           }}
         >
           <div className="flex items-center gap-3">
-            <span className="h-2.5 w-2.5 rounded-full" style={{ background: active.dot }} />
+            <span
+              className="h-2.5 w-2.5 rounded-full"
+              style={{ background: active.dot }}
+            />
             <span>{active.label}</span>
           </div>
           <ChevronDown
@@ -111,12 +116,17 @@ function EmiratePicker({
                   }}
                   className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors"
                   style={{
-                    background: isActive ? "rgba(12,191,184,0.1)" : "transparent",
+                    background: isActive
+                      ? "rgba(12,191,184,0.1)"
+                      : "transparent",
                     color: isActive ? "var(--primary)" : "var(--on-surface)",
                   }}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="h-2.5 w-2.5 rounded-full" style={{ background: item.dot }} />
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ background: item.dot }}
+                    />
                     <span className="text-[15px] font-bold">{item.label}</span>
                   </div>
                   {isActive && <Check size={16} />}
@@ -137,7 +147,10 @@ function EmiratePicker({
         }}
       >
         <div className="flex items-center gap-3">
-          <span className="h-2.5 w-2.5 rounded-full" style={{ background: active.dot }} />
+          <span
+            className="h-2.5 w-2.5 rounded-full"
+            style={{ background: active.dot }}
+          />
           <span>{active.label}</span>
         </div>
         <SlidersHorizontal size={16} style={{ color: "var(--outline)" }} />
@@ -155,7 +168,9 @@ function EmiratePicker({
             <div className="mx-auto h-1.5 w-14 rounded-full bg-[rgba(187,202,199,0.55)]" />
 
             <div className="mt-5 flex items-center justify-between">
-              <h3 className="text-[18px] font-black text-[var(--on-surface)]">Select Emirate</h3>
+              <h3 className="text-[18px] font-black text-[var(--on-surface)]">
+                Select Emirate
+              </h3>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
@@ -175,7 +190,9 @@ function EmiratePicker({
                     onClick={() => setDraft(item.value)}
                     className="flex w-full items-center justify-between rounded-[22px] px-4 py-4 text-left transition-all"
                     style={{
-                      background: isActive ? "rgba(12,191,184,0.1)" : "transparent",
+                      background: isActive
+                        ? "rgba(12,191,184,0.1)"
+                        : "transparent",
                       color: "var(--on-surface)",
                     }}
                   >
@@ -186,7 +203,9 @@ function EmiratePicker({
                       >
                         {item.short}
                       </div>
-                      <span className="text-[17px] font-bold">{item.label}</span>
+                      <span className="text-[17px] font-bold">
+                        {item.label}
+                      </span>
                     </div>
                     {isActive && (
                       <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--primary)] text-white">
@@ -246,8 +265,9 @@ function DigitsPicker({
   }, []);
 
   const active = useMemo(
-    () => DIGIT_OPTIONS.find((item) => item.value === value) ?? DIGIT_OPTIONS[0],
-    [value]
+    () =>
+      DIGIT_OPTIONS.find((item) => item.value === value) ?? DIGIT_OPTIONS[0],
+    [value],
   );
 
   return (
@@ -266,7 +286,10 @@ function DigitsPicker({
           <div className="flex items-center gap-3">
             <span
               className="flex h-8 w-8 items-center justify-center rounded-xl text-[11px] font-black"
-              style={{ background: "rgba(0,106,102,0.12)", color: "var(--primary)" }}
+              style={{
+                background: "rgba(0,106,102,0.12)",
+                color: "var(--primary)",
+              }}
             >
               {active.short}
             </span>
@@ -299,7 +322,9 @@ function DigitsPicker({
                   }}
                   className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors"
                   style={{
-                    background: isActive ? "rgba(12,191,184,0.1)" : "transparent",
+                    background: isActive
+                      ? "rgba(12,191,184,0.1)"
+                      : "transparent",
                     color: isActive ? "var(--primary)" : "var(--on-surface)",
                   }}
                 >
@@ -307,8 +332,12 @@ function DigitsPicker({
                     <span
                       className="flex h-8 w-8 items-center justify-center rounded-xl text-[11px] font-black"
                       style={{
-                        background: isActive ? "rgba(0,106,102,0.14)" : "rgba(148,163,184,0.12)",
-                        color: isActive ? "var(--primary)" : "var(--on-surface-variant)",
+                        background: isActive
+                          ? "rgba(0,106,102,0.14)"
+                          : "rgba(148,163,184,0.12)",
+                        color: isActive
+                          ? "var(--primary)"
+                          : "var(--on-surface-variant)",
                       }}
                     >
                       {item.short}
@@ -335,7 +364,10 @@ function DigitsPicker({
         <div className="flex items-center gap-3">
           <span
             className="flex h-8 w-8 items-center justify-center rounded-xl text-[11px] font-black"
-            style={{ background: "rgba(0,106,102,0.12)", color: "var(--primary)" }}
+            style={{
+              background: "rgba(0,106,102,0.12)",
+              color: "var(--primary)",
+            }}
           >
             {active.short}
           </span>
@@ -356,7 +388,9 @@ function DigitsPicker({
             <div className="mx-auto h-1.5 w-14 rounded-full bg-[rgba(187,202,199,0.55)]" />
 
             <div className="mt-5 flex items-center justify-between">
-              <h3 className="text-[18px] font-black text-[var(--on-surface)]">Select Digits</h3>
+              <h3 className="text-[18px] font-black text-[var(--on-surface)]">
+                Select Digits
+              </h3>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
@@ -376,7 +410,9 @@ function DigitsPicker({
                     onClick={() => setDraft(item.value)}
                     className="flex w-full items-center justify-between rounded-[22px] px-4 py-4 text-left transition-all"
                     style={{
-                      background: isActive ? "rgba(12,191,184,0.1)" : "transparent",
+                      background: isActive
+                        ? "rgba(12,191,184,0.1)"
+                        : "transparent",
                       color: "var(--on-surface)",
                     }}
                   >
@@ -384,13 +420,19 @@ function DigitsPicker({
                       <div
                         className="flex h-11 w-11 items-center justify-center rounded-xl text-[13px] font-black"
                         style={{
-                          background: isActive ? "var(--primary)" : "rgba(148,163,184,0.12)",
-                          color: isActive ? "white" : "var(--on-surface-variant)",
+                          background: isActive
+                            ? "var(--primary)"
+                            : "rgba(148,163,184,0.12)",
+                          color: isActive
+                            ? "white"
+                            : "var(--on-surface-variant)",
                         }}
                       >
                         {item.short}
                       </div>
-                      <span className="text-[17px] font-bold">{item.label}</span>
+                      <span className="text-[17px] font-bold">
+                        {item.label}
+                      </span>
                     </div>
                     {isActive && (
                       <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--primary)] text-white">
@@ -430,7 +472,9 @@ export default function SearchPage() {
   const [allPlates, setAllPlates] = useState<FSPlate[]>([]);
 
   useEffect(() => {
-    getPlates({ limitCount: 50 }).then(setAllPlates).catch(console.error);
+    getPlates({ limitCount: 50, listingType: "fixed" })
+      .then(setAllPlates)
+      .catch(console.error);
   }, []);
 
   const filtered = allPlates.filter((p) => {
