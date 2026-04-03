@@ -104,16 +104,19 @@ export default function AuctionsPage() {
           <div
             className="rounded-xl px-3.5 py-2.5 flex items-center gap-2.5"
             style={{
-              background: "#FFFBEB",
-              border: "1px solid rgba(217,119,6,0.25)",
+              background: "var(--surface-container-high)",
+              border: "1px solid var(--outline-variant)",
             }}
           >
             <Clock
               size={14}
               strokeWidth={2}
-              style={{ color: "#D97706", flexShrink: 0 }}
+              style={{ color: "var(--primary)", flexShrink: 0 }}
             />
-            <p className="text-sm font-semibold" style={{ color: "#92400E" }}>
+            <p
+              className="text-sm font-semibold"
+              style={{ color: "var(--on-surface)" }}
+            >
               3 premium auctions ending in less than 2 hours
             </p>
           </div>
@@ -221,12 +224,13 @@ export default function AuctionsPage() {
 
       {/* ══════════════════════ DESKTOP LAYOUT ══════════════════════ */}
       <div className="hidden lg:block">
-        {/* Full-width urgency banner — Stitch: bg-primary-container text-on-primary-container */}
+        {/* Full-width urgency banner */}
         <div
           className="flex items-center justify-center gap-2 px-8 py-3"
           style={{
-            background: "var(--primary-container)",
-            color: "var(--on-primary-container)",
+            background: "var(--surface-container-high)",
+            borderBottom: "1px solid var(--outline-variant)",
+            color: "var(--on-surface)",
           }}
         >
           <Clock size={15} strokeWidth={2} className="animate-pulse" />
@@ -352,7 +356,7 @@ export default function AuctionsPage() {
               <div>
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                  style={{ background: "rgba(0,106,102,0.1)" }}
+                  style={{ background: "var(--surface-container-high)" }}
                 >
                   <svg
                     width="22"
