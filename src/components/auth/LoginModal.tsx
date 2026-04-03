@@ -99,7 +99,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
               className="text-xs mt-0.5"
               style={{ color: "var(--on-surface-variant)" }}
             >
-              Number Plate Marketplace
+              UAE&apos;s Number Plate Marketplace
             </p>
           </div>
           <button

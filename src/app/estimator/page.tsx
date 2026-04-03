@@ -473,7 +473,7 @@ export default function EstimatorPage() {
               </div>
               <h3 className="text-xl font-black text-white">Escrow Protection</h3>
               <p className="text-sm font-medium leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
-                All transactions secured via our escrow system.
+                All transactions secured via our UAE-based escrow system.
               </p>
             </div>
           </Card>

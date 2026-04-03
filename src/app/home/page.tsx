@@ -145,8 +145,8 @@ function ComingSoonModal({
               style={{ color: "rgba(255,255,255,0.55)" }}
             >
               {isBike
-                ? "We're curating the finest motorcycle and bike plate listings. Exclusive numbers, special codes — launching very soon."
-                : "Exclusive maritime registration numbers and boat plate transfers across all marinas. Launching very soon."}
+                ? "We're curating the UAE's finest motorcycle and bike plate listings. Exclusive numbers, special codes — launching very soon."
+                : "Exclusive maritime registration numbers and boat plate transfers across all UAE marinas. Launching very soon."}
             </p>
           </div>
 
@@ -162,7 +162,7 @@ function ComingSoonModal({
               ? [
                   { v: "891", l: "Plates Ready" },
                   { v: "Q3", l: "Launch Target" },
-                  { v: "All", l: "Coverage" },
+                  { v: "UAE", l: "Coverage" },
                 ]
               : [
                   { v: "234", l: "Numbers Ready" },
@@ -327,7 +327,7 @@ export default function HomePage() {
               className="text-[11px] font-semibold"
               style={{ color: "var(--outline)" }}
             >
-              Browse number plates available for transfer
+              Browse UAE number plates available for transfer
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -371,7 +371,7 @@ export default function HomePage() {
                   size="md"
                   className="rounded-full !border-white/20 !bg-white/10 !px-3 !py-1 !text-[10px] !text-white sm:!px-4 sm:!py-1.5"
                 >
-                  PLATE MARKETPLACE
+                  UAE PLATE MARKETPLACE
                 </Badge>
                 <h1 className="text-3xl font-black leading-[0.95] tracking-tight text-white sm:text-4xl lg:text-6xl">
                   Secured Payment. <br />

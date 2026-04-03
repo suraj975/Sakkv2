@@ -316,7 +316,7 @@ export default function AuctionsPage() {
                   className="text-sm mt-2"
                   style={{ color: "var(--on-surface-variant)" }}
                 >
-                  Bid on exclusive number plates from across the emirates.
+                  Bid on exclusive UAE number plates from across the emirates.
                 </p>
               </div>
               <button
