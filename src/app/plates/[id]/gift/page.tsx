@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { notFound, useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Gift, Loader2, Sparkles, Star } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { ArrowLeft, Gift, Sparkles, Star } from "lucide-react";
+import { SkeletonBlock } from "@/components/ui/Skeleton";
 import PlateViz from "@/components/plates/PlateViz";
 import { getPlateById } from "@/lib/firestore";
 import { aed } from "@/lib/plates";
@@ -21,18 +22,36 @@ export default function GiftDetailPage() {
     });
   }, [id]);
 
-  if (loading) {
+  if (loading)
     return (
       <div
-        className="flex flex-1 items-center justify-center"
-        style={{ color: "var(--outline)" }}
+        className="flex-1 p-6 space-y-4"
+        style={{ background: "var(--surface)" }}
       >
-        <Loader2 size={26} className="animate-spin" />
+        <SkeletonBlock className="h-8 w-48" />
+        <SkeletonBlock className="h-40 rounded-2xl" />
+        <SkeletonBlock className="h-24 rounded-2xl" />
       </div>
     );
-  }
-
-  if (!plate) return notFound();
+  if (!plate)
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">🎁</span>
+        <h2
+          className="text-xl font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          Plate not found
+        </h2>
+        <button
+          onClick={() => router.push("/search")}
+          className="px-6 py-2.5 rounded-2xl text-sm font-bold cursor-pointer border-none"
+          style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+        >
+          Browse Plates
+        </button>
+      </div>
+    );
 
   const sellerName = plate.sellerName?.trim() || "Premier Seller";
 

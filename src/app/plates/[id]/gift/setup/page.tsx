@@ -1,8 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { notFound, useParams, useRouter } from "next/navigation";
-import { ArrowLeft, CalendarDays, Gift, Loader2, MessageSquare, User2 } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import {
+  ArrowLeft,
+  CalendarDays,
+  Gift,
+  MessageSquare,
+  User2,
+} from "lucide-react";
+import { SkeletonBlock } from "@/components/ui/Skeleton";
 import PlateViz from "@/components/plates/PlateViz";
 import { getPlateById } from "@/lib/firestore";
 import type { FSPlate } from "@/types/firebase";
@@ -26,15 +33,37 @@ export default function GiftSetupPage() {
     });
   }, [id]);
 
-  if (loadingPlate) {
+  if (loadingPlate)
     return (
-      <div className="flex flex-1 items-center justify-center" style={{ color: "var(--outline)" }}>
-        <Loader2 size={26} className="animate-spin" />
+      <div
+        className="flex-1 p-6 space-y-4"
+        style={{ background: "var(--surface)" }}
+      >
+        <SkeletonBlock className="h-8 w-40" />
+        <SkeletonBlock className="h-16 rounded-2xl" />
+        <SkeletonBlock className="h-16 rounded-2xl" />
+        <SkeletonBlock className="h-16 rounded-2xl" />
       </div>
     );
-  }
-
-  if (!plate) return notFound();
+  if (!plate)
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">🎁</span>
+        <h2
+          className="text-xl font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          Plate not found
+        </h2>
+        <button
+          onClick={() => router.push("/search")}
+          className="px-6 py-2.5 rounded-2xl text-sm font-bold cursor-pointer border-none"
+          style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+        >
+          Browse Plates
+        </button>
+      </div>
+    );
 
   const handleContinue = () => {
     const params = new URLSearchParams({ name, msg, date });
@@ -50,13 +79,17 @@ export default function GiftSetupPage() {
         >
           <ArrowLeft size={24} />
         </button>
-        <span className="text-base font-black text-[var(--on-surface)]">Gift Details</span>
+        <span className="text-base font-black text-[var(--on-surface)]">
+          Gift Details
+        </span>
       </div>
 
       <div className="mx-auto max-w-md px-4 py-5 pb-8">
         <div
           className="rounded-[28px] px-5 py-6"
-          style={{ background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)" }}
+          style={{
+            background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)",
+          }}
         >
           <div className="flex justify-center">
             <PlateViz
@@ -100,7 +133,9 @@ export default function GiftSetupPage() {
                 maxLength={140}
                 className={`${fieldClass} resize-none`}
               />
-              <p className="mt-2 text-right text-[11px] font-semibold text-[var(--outline)]">{msg.length}/140</p>
+              <p className="mt-2 text-right text-[11px] font-semibold text-[var(--outline)]">
+                {msg.length}/140
+              </p>
             </div>
 
             <div>
@@ -120,9 +155,14 @@ export default function GiftSetupPage() {
 
         <div
           className="mt-5 rounded-[22px] px-4 py-4 text-[14px] leading-7"
-          style={{ background: "#F3FBFB", border: "1px solid rgba(12,191,184,0.16)", color: "var(--on-surface-variant)" }}
+          style={{
+            background: "#F3FBFB",
+            border: "1px solid rgba(12,191,184,0.16)",
+            color: "var(--on-surface-variant)",
+          }}
         >
-          The recipient will receive a private reveal link and will need their TCF number to complete the transfer.
+          The recipient will receive a private reveal link and will need their
+          TCF number to complete the transfer.
         </div>
 
         <button

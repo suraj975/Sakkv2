@@ -1,8 +1,9 @@
 "use client";
 
-import { useParams, notFound, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { CheckCircle2, Download, Home, Loader2 } from "lucide-react";
+import { CheckCircle2, Download, Home } from "lucide-react";
+import { SkeletonBlock } from "@/components/ui/Skeleton";
 import PlateViz from "@/components/plates/PlateViz";
 import { aed } from "@/lib/plates";
 import { getPlateById } from "@/lib/firestore";
@@ -24,13 +25,33 @@ export default function CompletePage() {
   if (loading)
     return (
       <div
-        className="flex-1 flex items-center justify-center"
-        style={{ color: "var(--outline)" }}
+        className="flex-1 p-6 space-y-4"
+        style={{ background: "var(--surface)" }}
       >
-        <Loader2 size={24} className="animate-spin" />
+        <SkeletonBlock className="h-20 w-20 rounded-full mx-auto" />
+        <SkeletonBlock className="h-8 w-56 mx-auto" />
+        <SkeletonBlock className="h-32 rounded-2xl" />
       </div>
     );
-  if (!plate) return notFound();
+  if (!plate)
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">✅</span>
+        <h2
+          className="text-xl font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          Transaction not found
+        </h2>
+        <button
+          onClick={() => router.push("/home")}
+          className="px-6 py-2.5 rounded-2xl text-sm font-bold cursor-pointer border-none"
+          style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+        >
+          Go Home
+        </button>
+      </div>
+    );
 
   const txRef = `SKK-2024-50124`;
 

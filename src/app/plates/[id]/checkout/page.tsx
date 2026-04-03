@@ -1,16 +1,10 @@
 "use client";
 
-import { useParams, notFound, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import PlateViz from "@/components/plates/PlateViz";
-import {
-  ArrowLeft,
-  Lock,
-  Building2,
-  ShieldCheck,
-  Check,
-  Loader2,
-} from "lucide-react";
+import { ArrowLeft, Lock, Building2, ShieldCheck, Check } from "lucide-react";
+import { SkeletonBlock } from "@/components/ui/Skeleton";
 import { aed, escrowFee } from "@/lib/plates";
 import { getPlateById } from "@/lib/firestore";
 import type { FSPlate } from "@/types/firebase";
@@ -45,13 +39,36 @@ export default function CheckoutPage() {
   if (loading)
     return (
       <div
-        className="flex-1 flex items-center justify-center"
-        style={{ color: "var(--outline)" }}
+        className="flex-1 overflow-y-auto"
+        style={{ background: "var(--surface)" }}
       >
-        <Loader2 size={24} className="animate-spin" />
+        <div className="max-w-2xl mx-auto px-4 py-8 space-y-5">
+          <SkeletonBlock className="h-8 w-48" />
+          <SkeletonBlock className="h-48 rounded-2xl" />
+          <SkeletonBlock className="h-32 rounded-2xl" />
+          <SkeletonBlock className="h-14 rounded-2xl" />
+        </div>
       </div>
     );
-  if (!plate) return notFound();
+  if (!plate)
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">🛒</span>
+        <h2
+          className="text-xl font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          Plate not found
+        </h2>
+        <button
+          onClick={() => router.push("/search")}
+          className="px-6 py-2.5 rounded-2xl text-sm font-bold cursor-pointer border-none"
+          style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+        >
+          Browse Plates
+        </button>
+      </div>
+    );
 
   const fee = escrowFee(plate.price);
   const total = plate.price + fee;
@@ -309,8 +326,8 @@ export default function CheckoutPage() {
             className="text-center text-[10px] font-medium"
             style={{ color: "var(--outline)" }}
           >
-            By proceeding you agree to Madmoon&apos;s Terms of Service and Escrow
-            Agreement.
+            By proceeding you agree to Madmoon&apos;s Terms of Service and
+            Escrow Agreement.
           </p>
         </div>
       </div>

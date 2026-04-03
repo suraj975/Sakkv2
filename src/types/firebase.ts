@@ -9,7 +9,12 @@ export type Emirate =
   | "Fujairah"
   | "UAQ";
 
+/** Shared UI utility types (consolidated from legacy types/index.ts) */
+export type PlateSize = "sm" | "md" | "lg";
+
 export type PlateTypeFS = "gold" | "silver" | "abudhabi" | "sharjah";
+/** Alias kept for component compatibility */
+export type PlateType = PlateTypeFS;
 export type ListingType = "fixed" | "auction";
 export type PlateStatus =
   | "active"

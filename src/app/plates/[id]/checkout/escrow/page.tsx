@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, notFound, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
   CheckCircle2,
@@ -10,8 +10,8 @@ import {
   Receipt,
   ShieldCheck,
   AlertCircle,
-  Loader2,
 } from "lucide-react";
+import { SkeletonBlock } from "@/components/ui/Skeleton";
 import { getPlateById } from "@/lib/firestore";
 import type { FSPlate } from "@/types/firebase";
 import BottomNav from "@/components/layout/BottomNav";
@@ -52,17 +52,37 @@ export default function EscrowPage() {
   if (loading)
     return (
       <div
-        className="flex-1 flex items-center justify-center"
-        style={{ color: "var(--outline)" }}
+        className="flex-1 p-6 space-y-4"
+        style={{ background: "var(--surface)" }}
       >
-        <Loader2 size={24} className="animate-spin" />
+        <SkeletonBlock className="h-8 w-40" />
+        <SkeletonBlock className="h-64 rounded-2xl" />
+        <SkeletonBlock className="h-24 rounded-2xl" />
       </div>
     );
-  if (!plate) return notFound();
+  if (!plate)
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">🔒</span>
+        <h2
+          className="text-xl font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          Escrow record not found
+        </h2>
+        <button
+          onClick={() => router.push("/home")}
+          className="px-6 py-2.5 rounded-2xl text-sm font-bold cursor-pointer border-none"
+          style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+        >
+          Go Home
+        </button>
+      </div>
+    );
 
-  if (!plate) return notFound();
-
-  const txRef = `MDM-${String(plate.id ?? id).replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}-2401`;
+  const txRef = `MDM-${String(plate.id ?? id)
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .toUpperCase()}-2401`;
 
   return (
     <div

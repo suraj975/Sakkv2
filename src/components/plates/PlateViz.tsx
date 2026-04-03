@@ -1,4 +1,4 @@
-import type { PlateSize, PlateType } from "@/types";
+import type { PlateSize, PlateType } from "@/types/firebase";
 
 interface PlateVizProps {
   code: string;

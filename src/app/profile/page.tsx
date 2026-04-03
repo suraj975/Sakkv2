@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Bell,
   ChevronRight,
@@ -15,15 +16,75 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/context/AuthContext";
+import AuthGateModal from "@/components/auth/AuthGateModal";
 
 function stat(value: string, label: string) {
   return { value, label };
 }
 
 export default function ProfilePage() {
-  const { user, profile, logout } = useAuth();
+  const { user, profile, loading, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
+  const [loginOpen, setLoginOpen] = useState(false);
+
+  // Show auth gate for unauthenticated users
+  if (!loading && !user) {
+    return (
+      <>
+        {loginOpen && (
+          <AuthGateModal
+            destinationHref="/profile"
+            onClose={() => setLoginOpen(false)}
+          />
+        )}
+        <div className="flex-1 flex flex-col items-center justify-center gap-5 px-6 text-center">
+          <div
+            className="flex h-20 w-20 items-center justify-center rounded-full"
+            style={{ background: "var(--surface-container-high)" }}
+          >
+            <UserRound size={36} style={{ color: "var(--primary)" }} />
+          </div>
+          <div>
+            <h2
+              className="text-2xl font-black"
+              style={{ color: "var(--on-surface)" }}
+            >
+              Sign in to view your profile
+            </h2>
+            <p
+              className="mt-2 text-sm"
+              style={{ color: "var(--on-surface-variant)" }}
+            >
+              Track your bids, purchases, and wallet balance.
+            </p>
+          </div>
+          <button
+            onClick={() => setLoginOpen(true)}
+            className="px-8 py-3 rounded-2xl text-sm font-bold cursor-pointer border-none"
+            style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+          >
+            Sign In / Register
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  // Loading state while auth resolves
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <div
+          className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+          style={{
+            borderColor: "var(--primary)",
+            borderTopColor: "transparent",
+          }}
+        />
+      </div>
+    );
+  }
 
   const displayName = profile?.displayName ?? user?.displayName ?? "My Account";
   const email = profile?.email ?? user?.email ?? "No email connected";

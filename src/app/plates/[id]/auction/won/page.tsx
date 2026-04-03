@@ -1,8 +1,9 @@
 "use client";
 
-import { useParams, useRouter, notFound } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Hammer, CheckCircle, ArrowLeft, Clock, Loader2 } from "lucide-react";
+import { Hammer, CheckCircle, ArrowLeft, Clock } from "lucide-react";
+import { SkeletonBlock } from "@/components/ui/Skeleton";
 import PlateViz from "@/components/plates/PlateViz";
 import { aed, escrowFee } from "@/lib/plates";
 import { getPlateById } from "@/lib/firestore";
@@ -24,13 +25,33 @@ export default function AuctionWonPage() {
   if (loading)
     return (
       <div
-        className="flex-1 flex items-center justify-center"
-        style={{ color: "var(--outline)" }}
+        className="flex-1 p-6 space-y-4"
+        style={{ background: "var(--surface)" }}
       >
-        <Loader2 size={24} className="animate-spin" />
+        <SkeletonBlock className="h-8 w-48" />
+        <SkeletonBlock className="h-40 rounded-2xl" />
+        <SkeletonBlock className="h-24 rounded-2xl" />
       </div>
     );
-  if (!plate || plate.listingType !== "auction") return notFound();
+  if (!plate || plate.listingType !== "auction")
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">🏆</span>
+        <h2
+          className="text-xl font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          Auction not found
+        </h2>
+        <button
+          onClick={() => router.push("/auctions")}
+          className="px-6 py-2.5 rounded-2xl text-sm font-bold cursor-pointer border-none"
+          style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+        >
+          Browse Auctions
+        </button>
+      </div>
+    );
 
   const winningBid = plate.currentBid ?? plate.price;
   const fee = escrowFee(winningBid);
@@ -447,8 +468,8 @@ export default function AuctionWonPage() {
               className="text-xs text-center leading-relaxed"
               style={{ color: "var(--outline)" }}
             >
-              Madmoon escrow protects both parties. Your payment is held securely
-              until transfer is confirmed by authorities.
+              Madmoon escrow protects both parties. Your payment is held
+              securely until transfer is confirmed by authorities.
             </p>
           </div>
         </div>
