@@ -28,7 +28,7 @@ const STANDARD_EMIRATE_STYLES: Record<
   }
 > = {
   Dubai: {
-    cellBg: "#C9A84C",
+    cellBg: "#B8924A",
     cellText: "#FFFFFF",
     codeColor: "#111111",
     codeText: "code",

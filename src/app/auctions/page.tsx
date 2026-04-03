@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, ListFilter, Clock } from "lucide-react";
+import { Bell, ListFilter, Clock, Search as SearchIcon, X } from "lucide-react";
 import AuctionCard, {
   AuctionCardMobile,
 } from "@/components/plates/AuctionCard";
@@ -16,6 +16,8 @@ export default function AuctionsPage() {
   const [desktopTab, setDesktopTab] = useState(0);
   const [mobileTab, setMobileTab] = useState(0);
   const [auctionPlates, setAuctionPlates] = useState<FSPlate[]>([]);
+  const [search, setSearch] = useState("");
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -23,6 +25,17 @@ export default function AuctionsPage() {
       .then(setAuctionPlates)
       .catch((err) => console.error("Failed to load auctions:", err));
   }, []);
+
+  const filteredPlates = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return auctionPlates;
+    return auctionPlates.filter(
+      (p) =>
+        p.num.toLowerCase().includes(q) ||
+        p.code.toLowerCase().includes(q) ||
+        p.emirate.toLowerCase().includes(q),
+    );
+  }, [auctionPlates, search]);
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -39,16 +52,21 @@ export default function AuctionsPage() {
         </span>
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setMobileSearchOpen((v) => !v)}
             className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer bg-transparent border-none"
-            style={{ color: "var(--on-surface-variant)" }}
+            style={{
+              color: mobileSearchOpen
+                ? "var(--primary)"
+                : "var(--on-surface-variant)",
+            }}
           >
-            <Bell size={18} strokeWidth={1.8} />
+            <SearchIcon size={18} strokeWidth={1.8} />
           </button>
           <button
             className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer bg-transparent border-none"
             style={{ color: "var(--on-surface-variant)" }}
           >
-            <ListFilter size={18} strokeWidth={1.8} />
+            <Bell size={18} strokeWidth={1.8} />
           </button>
         </div>
       </nav>
@@ -75,18 +93,25 @@ export default function AuctionsPage() {
               width: 220,
             }}
           >
-            <svg
-              width="14"
-              height="14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-            <span className="text-[13px]">Search plates...</span>
+            <SearchIcon size={14} style={{ flexShrink: 0 }} />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search plates..."
+              className="flex-1 bg-transparent border-none outline-none text-[13px] min-w-0"
+              style={{ color: "var(--on-surface)" }}
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="bg-transparent border-none cursor-pointer p-0 flex items-center"
+                style={{ color: "var(--outline)" }}
+              >
+                <X size={12} />
+              </button>
+            )}
           </div>
           <button
             className="w-9 h-9 flex items-center justify-center cursor-pointer bg-transparent border-none"
@@ -173,9 +198,46 @@ export default function AuctionsPage() {
           </div>
         </div>
 
+        {/* Mobile search bar (collapsible) */}
+        {mobileSearchOpen && (
+          <div className="px-4 pb-3">
+            <div
+              className="flex items-center gap-2 px-3 h-11 rounded-2xl"
+              style={{
+                background: "var(--surface-container-low)",
+                border: "1px solid rgba(187,202,199,0.3)",
+              }}
+            >
+              <SearchIcon
+                size={16}
+                style={{ color: "var(--outline)", flexShrink: 0 }}
+              />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by plate number, code..."
+                autoFocus
+                className="flex-1 bg-transparent border-none outline-none text-[14px] min-w-0"
+                style={{ color: "var(--on-surface)" }}
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="bg-transparent border-none cursor-pointer p-0 flex items-center"
+                  style={{ color: "var(--outline)" }}
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* 2-col grid with mobile auction cards */}
         <div className="px-4 grid grid-cols-2 gap-3">
-          {auctionPlates.map((p, i) => (
+          {filteredPlates.map((p, i) => (
             <AuctionCardMobile key={p.id} plate={p} index={i} />
           ))}
         </div>
@@ -296,7 +358,7 @@ export default function AuctionsPage() {
 
           {/* 4-col grid with desktop auction cards */}
           <div className="grid grid-cols-4 gap-5">
-            {auctionPlates.map((p, i) => (
+            {filteredPlates.map((p, i) => (
               <AuctionCard key={p.id} plate={p} index={i} />
             ))}
           </div>

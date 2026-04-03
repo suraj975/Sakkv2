@@ -25,3 +25,5 @@ yarn-error.log*
 
 # VS Code — secrets
 .vscode/mcp.json
+
+/REVIEW_AND_IMPROVEMENTS.md
