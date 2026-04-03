@@ -1,6 +1,7 @@
-export type PlateType = "gold" | "silver" | "abudhabi" | "sharjah";
-export type PlateSize = "sm" | "md" | "lg";
+// Re-export shared UI types from the canonical source
+export type { PlateType, PlateSize } from "./firebase";
 
+// Legacy mock-data types used only by lib/plates.ts seed data
 export interface Bid {
   bidderInitials: string;
   bidderAlias: string;
@@ -16,7 +17,7 @@ export interface Plate {
   price: number;
   orig?: number;
   emirate: string;
-  type: PlateType;
+  type: import("./firebase").PlateType;
   verified: boolean;
   seller: string;
   days: number;

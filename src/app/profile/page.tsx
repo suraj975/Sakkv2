@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import {
   Bell,
   ChevronRight,
   CreditCard,
   Globe2,
   LogOut,
+  MessageSquare,
   Moon,
   ShieldCheck,
   Star,
@@ -15,15 +17,77 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/context/AuthContext";
+import AuthGateModal from "@/components/auth/AuthGateModal";
+import { useChatbotFlag } from "@/lib/chatbot/useChatbotFlag";
 
 function stat(value: string, label: string) {
   return { value, label };
 }
 
 export default function ProfilePage() {
-  const { user, profile, logout } = useAuth();
+  const { user, profile, loading, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
+  const [loginOpen, setLoginOpen] = useState(false);
+  const { enabled: chatbotEnabled, toggle: toggleChatbot } = useChatbotFlag();
+
+  // Show auth gate for unauthenticated users
+  if (!loading && !user) {
+    return (
+      <>
+        {loginOpen && (
+          <AuthGateModal
+            destinationHref="/profile"
+            onClose={() => setLoginOpen(false)}
+          />
+        )}
+        <div className="flex-1 flex flex-col items-center justify-center gap-5 px-6 text-center">
+          <div
+            className="flex h-20 w-20 items-center justify-center rounded-full"
+            style={{ background: "var(--surface-container-high)" }}
+          >
+            <UserRound size={36} style={{ color: "var(--primary)" }} />
+          </div>
+          <div>
+            <h2
+              className="text-2xl font-black"
+              style={{ color: "var(--on-surface)" }}
+            >
+              Sign in to view your profile
+            </h2>
+            <p
+              className="mt-2 text-sm"
+              style={{ color: "var(--on-surface-variant)" }}
+            >
+              Track your bids, purchases, and wallet balance.
+            </p>
+          </div>
+          <button
+            onClick={() => setLoginOpen(true)}
+            className="px-8 py-3 rounded-2xl text-sm font-bold cursor-pointer border-none"
+            style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+          >
+            Sign In / Register
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  // Loading state while auth resolves
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <div
+          className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+          style={{
+            borderColor: "var(--primary)",
+            borderTopColor: "transparent",
+          }}
+        />
+      </div>
+    );
+  }
 
   const displayName = profile?.displayName ?? user?.displayName ?? "My Account";
   const email = profile?.email ?? user?.email ?? "No email connected";
@@ -262,6 +326,61 @@ export default function ProfilePage() {
                   style={{
                     background: isDark ? "white" : "var(--outline)",
                     left: isDark ? "calc(100% - 1.25rem - 4px)" : "4px",
+                  }}
+                />
+              </button>
+            </div>
+          </div>
+
+          {/* Sakk Assistant toggle */}
+          <div
+            className="rounded-[26px] p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]"
+            style={{ background: "var(--surface-container-lowest)" }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-11 w-11 items-center justify-center rounded-full"
+                  style={{
+                    background: chatbotEnabled
+                      ? "rgba(12,191,184,0.15)"
+                      : "rgba(0,106,102,0.08)",
+                  }}
+                >
+                  <MessageSquare
+                    size={18}
+                    style={{ color: "var(--primary)" }}
+                  />
+                </div>
+                <div>
+                  <p
+                    className="text-[15px] font-black"
+                    style={{ color: "var(--on-surface)" }}
+                  >
+                    Madmoon AI
+                  </p>
+                  <p
+                    className="text-sm"
+                    style={{ color: "var(--on-surface-variant)" }}
+                  >
+                    {chatbotEnabled ? "AI chat enabled" : "AI chat disabled"}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={toggleChatbot}
+                className="relative h-7 w-12 rounded-full transition-all duration-300 border-none cursor-pointer"
+                style={{
+                  background: chatbotEnabled
+                    ? "var(--primary)"
+                    : "var(--surface-container-high)",
+                }}
+              >
+                <span
+                  className="absolute top-1 h-5 w-5 rounded-full transition-all duration-300"
+                  style={{
+                    background: chatbotEnabled ? "white" : "var(--outline)",
+                    left: chatbotEnabled ? "calc(100% - 1.25rem - 4px)" : "4px",
                   }}
                 />
               </button>

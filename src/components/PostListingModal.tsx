@@ -171,8 +171,8 @@ export default function PostListingModal({
                   className="font-medium max-w-xs mx-auto"
                   style={{ color: "var(--on-surface-variant)" }}
                 >
-                  Your plate is now live on the marketplace. We'll notify you of
-                  any offers.
+                  Your plate is now live on the marketplace. We&apos;ll notify
+                  you of any offers.
                 </p>
               </div>
               <Button className="w-full" onClick={resetAndClose}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter, notFound } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import PlateViz from "@/components/plates/PlateViz";
 import {
   ArrowLeft,
@@ -16,7 +16,6 @@ import {
   Eye,
   Bell,
   ShieldCheck,
-  Loader2,
 } from "lucide-react";
 import { aed, escrowFee } from "@/lib/plates";
 import {
@@ -29,6 +28,7 @@ import { toISOString } from "@/lib/utils";
 import CountdownTimer from "@/components/ui/CountdownTimer";
 import BidHistory from "@/components/ui/BidHistory";
 import AuthGateModal from "@/components/auth/AuthGateModal";
+import { PlateDetailSkeleton } from "@/components/ui/Skeleton";
 import { useAuth } from "@/context/AuthContext";
 
 export default function PlateDetailPage() {
@@ -54,16 +54,29 @@ export default function PlateDetailPage() {
     return unsub;
   }, [id]);
 
-  if (loading)
+  if (loading) return <PlateDetailSkeleton />;
+  if (!plate)
     return (
-      <div
-        className="flex-1 flex items-center justify-center"
-        style={{ color: "var(--outline)" }}
-      >
-        <Loader2 size={24} className="animate-spin" />
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">🔍</span>
+        <h2
+          className="text-xl font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          Plate not found
+        </h2>
+        <p className="text-sm" style={{ color: "var(--on-surface-variant)" }}>
+          This listing may have been removed or the link is incorrect.
+        </p>
+        <button
+          onClick={() => router.push("/search")}
+          className="mt-2 px-6 py-2.5 rounded-2xl text-sm font-bold cursor-pointer border-none"
+          style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+        >
+          Browse All Plates
+        </button>
       </div>
     );
-  if (!plate) return notFound();
 
   // Re-bind as non-null so closures below don't need null assertions
   const p = plate;

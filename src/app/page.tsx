@@ -557,7 +557,7 @@ export default function LandingPage() {
       </section>
 
       <div className="overflow-y-auto" style={{ background: "var(--surface)" }}>
-        {/* ── Why Trust Sakk / Why the Exchange ──────────────── */}
+        {/* ── Why Trust Madmoon / Why the Exchange ──────────────── */}
         <section className="max-w-7xl mx-auto px-6 lg:px-10 py-14 lg:py-20">
           <div className="text-center mb-10 lg:mb-14">
             <p

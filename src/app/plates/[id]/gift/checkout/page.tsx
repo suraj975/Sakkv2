@@ -1,8 +1,9 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { ArrowLeft, Gift, Loader2, ShieldCheck } from "lucide-react";
-import { notFound, useParams, useRouter, useSearchParams } from "next/navigation";
+import { ArrowLeft, Gift, ShieldCheck } from "lucide-react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { SkeletonBlock } from "@/components/ui/Skeleton";
 import PlateViz from "@/components/plates/PlateViz";
 import { getPlateById } from "@/lib/firestore";
 import { aed, escrowFee, priceTier } from "@/lib/plates";
@@ -22,15 +23,36 @@ function GiftCheckoutInner() {
     });
   }, [id]);
 
-  if (loading) {
+  if (loading)
     return (
-      <div className="flex flex-1 items-center justify-center" style={{ color: "var(--outline)" }}>
-        <Loader2 size={26} className="animate-spin" />
+      <div
+        className="flex-1 p-6 space-y-4"
+        style={{ background: "var(--surface)" }}
+      >
+        <SkeletonBlock className="h-8 w-40" />
+        <SkeletonBlock className="h-48 rounded-2xl" />
+        <SkeletonBlock className="h-32 rounded-2xl" />
       </div>
     );
-  }
-
-  if (!plate) return notFound();
+  if (!plate)
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">🎁</span>
+        <h2
+          className="text-xl font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          Plate not found
+        </h2>
+        <button
+          onClick={() => router.push("/search")}
+          className="px-6 py-2.5 rounded-2xl text-sm font-bold cursor-pointer border-none"
+          style={{ background: "var(--primary)", color: "var(--on-primary)" }}
+        >
+          Browse Plates
+        </button>
+      </div>
+    );
 
   const recipientName = searchParams.get("name") || "Recipient";
   const message = searchParams.get("msg") || "";
@@ -51,18 +73,24 @@ function GiftCheckoutInner() {
     <div className="flex-1 overflow-y-auto bg-[var(--surface)]">
       <div className="sticky top-0 z-40 flex h-14 items-center gap-3 bg-white px-4 shadow-[0_1px_0_rgba(187,202,199,0.18)]">
         <button
-          onClick={() => router.push(`/plates/${id}/gift/setup?${searchParams.toString()}`)}
+          onClick={() =>
+            router.push(`/plates/${id}/gift/setup?${searchParams.toString()}`)
+          }
           className="flex h-9 w-9 items-center justify-center rounded-xl border-none bg-transparent text-[var(--primary)]"
         >
           <ArrowLeft size={24} />
         </button>
-        <span className="text-base font-black text-[var(--on-surface)]">Gift Checkout</span>
+        <span className="text-base font-black text-[var(--on-surface)]">
+          Gift Checkout
+        </span>
       </div>
 
       <div className="mx-auto max-w-md px-4 py-5 pb-8">
         <div
           className="rounded-[28px] px-5 py-6"
-          style={{ background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)" }}
+          style={{
+            background: "linear-gradient(180deg, #133D3A 0%, #152F2F 100%)",
+          }}
         >
           <div className="flex justify-center">
             <PlateViz
@@ -80,9 +108,17 @@ function GiftCheckoutInner() {
 
         <div className="mt-5 space-y-4">
           <div className="rounded-[24px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
-            <p className="text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">Recipient</p>
-            <p className="mt-2 text-[22px] font-black text-[var(--on-surface)]">{recipientName}</p>
-            {message && <p className="mt-3 text-[15px] italic text-[var(--on-surface-variant)]">&ldquo;{message}&rdquo;</p>}
+            <p className="text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">
+              Recipient
+            </p>
+            <p className="mt-2 text-[22px] font-black text-[var(--on-surface)]">
+              {recipientName}
+            </p>
+            {message && (
+              <p className="mt-3 text-[15px] italic text-[var(--on-surface-variant)]">
+                &ldquo;{message}&rdquo;
+              </p>
+            )}
           </div>
 
           <div className="rounded-[24px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
@@ -100,38 +136,57 @@ function GiftCheckoutInner() {
                 <p className="text-[18px] font-black text-[var(--on-surface)]">
                   {plate.emirate} {plate.code} {plate.num}
                 </p>
-                <p className="mt-1 text-sm text-[var(--on-surface-variant)]">Sold by {plate.sellerName}</p>
+                <p className="mt-1 text-sm text-[var(--on-surface-variant)]">
+                  Sold by {plate.sellerName}
+                </p>
               </div>
             </div>
           </div>
 
           <div className="rounded-[24px] bg-white p-5 shadow-[0_10px_36px_rgba(25,28,29,0.08)]">
-            <p className="text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">Payment Breakdown</p>
+            <p className="text-[12px] font-black uppercase tracking-[0.16em] text-[var(--outline)]">
+              Payment Breakdown
+            </p>
             <div className="mt-4 space-y-3 text-[15px] text-[var(--on-surface-variant)]">
               <div className="flex items-center justify-between">
                 <span>Plate Price</span>
-                <span className="font-bold text-[var(--on-surface)]">{aed(plate.price)}</span>
+                <span className="font-bold text-[var(--on-surface)]">
+                  {aed(plate.price)}
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Service Fee · {priceTier(plate.price)}</span>
-                <span className="font-bold text-[var(--on-surface)]">{aed(fee)}</span>
+                <span className="font-bold text-[var(--on-surface)]">
+                  {aed(fee)}
+                </span>
               </div>
             </div>
             <div className="my-4 h-px bg-[rgba(187,202,199,0.2)]" />
             <div className="flex items-center justify-between">
-              <span className="text-[18px] font-black text-[var(--on-surface)]">Total</span>
-              <span className="text-[26px] font-black text-[var(--primary)]">{aed(total)}</span>
+              <span className="text-[18px] font-black text-[var(--on-surface)]">
+                Total
+              </span>
+              <span className="text-[26px] font-black text-[var(--primary)]">
+                {aed(total)}
+              </span>
             </div>
           </div>
 
           <div
             className="rounded-[22px] px-4 py-4 text-[14px] leading-7"
-            style={{ background: "#F3FBFB", border: "1px solid rgba(12,191,184,0.16)" }}
+            style={{
+              background: "#F3FBFB",
+              border: "1px solid rgba(12,191,184,0.16)",
+            }}
           >
             <div className="flex items-start gap-3">
-              <ShieldCheck size={18} className="mt-1 shrink-0 text-[var(--primary)]" />
+              <ShieldCheck
+                size={18}
+                className="mt-1 shrink-0 text-[var(--primary)]"
+              />
               <p className="text-[var(--on-surface-variant)]">
-                Funds stay in Madmoon escrow until the recipient accepts the gift and the transfer is confirmed.
+                Funds stay in Madmoon escrow until the recipient accepts the
+                gift and the transfer is confirmed.
               </p>
             </div>
           </div>
@@ -140,7 +195,9 @@ function GiftCheckoutInner() {
         <button
           onClick={handlePay}
           className="mt-5 flex h-16 w-full items-center justify-center gap-3 rounded-[16px] border-none text-[18px] font-black text-white shadow-[0_12px_30px_rgba(0,106,102,0.22)]"
-          style={{ background: "linear-gradient(90deg, #0E7F79 0%, #1CC6C3 100%)" }}
+          style={{
+            background: "linear-gradient(90deg, #0E7F79 0%, #1CC6C3 100%)",
+          }}
         >
           <Gift size={20} />
           Pay &amp; Send Gift

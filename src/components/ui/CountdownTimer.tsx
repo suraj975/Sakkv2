@@ -18,6 +18,7 @@ export default function CountdownTimer({
 
   useEffect(() => {
     // Set real value on client only (avoids SSR/client Date.now() mismatch)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTime(timeRemaining(endTime));
     const id = setInterval(() => setTime(timeRemaining(endTime)), 1000);
     return () => clearInterval(id);
