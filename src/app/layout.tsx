@@ -32,8 +32,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="h-full">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <body className="h-full" suppressHydrationWarning>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+        >
           <AuthProvider>
             <AppShell>{children}</AppShell>
           </AuthProvider>

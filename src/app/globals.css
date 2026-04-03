@@ -129,6 +129,10 @@ body {
   from { opacity: 0; transform: translateX(-10px); }
   to   { opacity: 1; transform: translateX(0); }
 }
+@keyframes chatDot {
+  0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+  40%           { transform: scale(1);   opacity: 1; }
+}
 
 .animate-fade-up   { animation: fadeUp   0.35s ease both; }
 .animate-fade-in   { animation: fadeIn   0.25s ease both; }
