@@ -9,7 +9,11 @@ interface PageHeaderProps {
   actions?: React.ReactNode;
 }
 
-export default function PageHeader({ title, backHref, actions }: PageHeaderProps) {
+export default function PageHeader({
+  title,
+  backHref,
+  actions,
+}: PageHeaderProps) {
   const router = useRouter();
 
   return (
@@ -19,13 +23,21 @@ export default function PageHeader({ title, backHref, actions }: PageHeaderProps
     >
       <div className="flex items-center gap-3">
         <button
-          onClick={() => backHref ? router.push(backHref) : router.back()}
-          className="w-9 h-9 flex items-center justify-center rounded-xl border-none cursor-pointer transition-colors hover:bg-[var(--surface-container-low)]"
-          style={{ background: "var(--teal-light)", color: "var(--primary)" }}
+          onClick={() => (backHref ? router.push(backHref) : router.back())}
+          className="w-9 h-9 flex items-center justify-center rounded-xl border-none cursor-pointer transition-colors"
+          style={{
+            background: "var(--surface-container-high)",
+            color: "var(--primary)",
+          }}
         >
           <ArrowLeft size={16} strokeWidth={2.5} />
         </button>
-        <span className="text-base font-black" style={{ color: "var(--on-surface)" }}>{title}</span>
+        <span
+          className="text-base font-black"
+          style={{ color: "var(--on-surface)" }}
+        >
+          {title}
+        </span>
       </div>
       {actions && <div>{actions}</div>}
     </div>

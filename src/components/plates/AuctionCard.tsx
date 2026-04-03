@@ -105,11 +105,10 @@ export default function AuctionCard({ plate, index = 0 }: AuctionCardProps) {
 
       {/* ── Plate visualisation ── */}
       <div
-        className="flex items-center justify-center rounded-[4px] mb-5 overflow-hidden"
+        className="flex items-center justify-center rounded-[8px] mb-5 overflow-hidden"
         style={{
-          background: "var(--surface-container-low)",
+          background: "var(--primary)",
           height: 128,
-          boxShadow: "0 4px 18px rgba(25,28,29,0.12)",
         }}
       >
         <PlateViz
@@ -216,7 +215,7 @@ export function AuctionCardMobile({ plate, index = 0 }: AuctionCardProps) {
       {/* Plate */}
       <div
         className="flex items-center justify-center pt-8 pb-3 px-3"
-        style={{ background: "var(--surface-container-low)", minHeight: 110 }}
+        style={{ background: "var(--primary)", minHeight: 110 }}
       >
         <PlateViz
           code={plate.code}

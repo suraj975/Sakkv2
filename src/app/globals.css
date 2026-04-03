@@ -78,6 +78,33 @@ html, body {
   height: 100%;
 }
 
+/* ── Dark mode token overrides ─────────────────────────── */
+.dark {
+  --primary:                  #0CBFB8;
+  --primary-container:        #9CF0EC;
+  --on-primary:               #003735;
+  --on-primary-container:     #004845;
+  --surface:                  #111111;
+  --surface-bright:           #1C1C1C;
+  --surface-dim:              #0A0A0A;
+  --surface-container-lowest: #111111;
+  --surface-container-low:    #1A1A1A;
+  --surface-container:        #222222;
+  --surface-container-high:   #2A2A2A;
+  --surface-container-highest:#303030;
+  --on-surface:               #E8EAEB;
+  --on-surface-variant:       #C0C8C7;
+  --outline:                  #8A9A98;
+  --outline-variant:          #2E3D3C;
+  --teal-darker:              #063D3A;
+  --sakk-bg:                  #111111;
+  --sakk-card:                #1A1A1A;
+  --sakk-border:              rgba(255,255,255,0.08);
+  --sakk-text:                #E8EAEB;
+  --sakk-text2:               #C0C8C7;
+  --sakk-text3:               #8A9A98;
+}
+
 body {
   background: var(--sakk-bg);
   color: var(--sakk-text);
@@ -144,6 +171,11 @@ body {
   color: var(--teal-dark) !important;
   border-color: var(--teal) !important;
 }
+.dark .btn-outline:hover {
+  background: rgba(12,191,184,0.12) !important;
+  color: var(--primary-container) !important;
+  border-color: var(--primary) !important;
+}
 
 /* ── Sidebar nav item ── */
 .sidebar-item {
@@ -168,13 +200,24 @@ body {
 .ambient-shadow {
   box-shadow: 0 4px 18px rgba(25,28,29,0.08);
 }
+.dark .ambient-shadow {
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+}
 .plate-viz-shadow {
   box-shadow: 0 4px 18px rgba(25,28,29,0.12);
+}
+.dark .plate-viz-shadow {
+  box-shadow: 0 4px 18px rgba(0,0,0,0.4);
 }
 
 /* ── Glassmorphism nav ── */
 .glass-nav {
   background: rgba(248,250,251,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.dark .glass-nav {
+  background: rgba(17,17,17,0.88);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
