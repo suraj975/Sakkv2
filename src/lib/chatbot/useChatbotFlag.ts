@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 const KEY = "sakk_chatbot_enabled";
 
 export function useChatbotFlag() {
-  const [enabled, setEnabled] = useState(true);
+  // Start as undefined so we never render during SSR — avoids hydration mismatch
+  const [enabled, setEnabled] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     const stored = localStorage.getItem(KEY);
-    if (stored !== null) setEnabled(stored === "true");
+    setEnabled(stored === null ? true : stored === "true");
   }, []);
 
   function toggle() {

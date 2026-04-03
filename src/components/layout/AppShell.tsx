@@ -36,7 +36,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <BottomNav />
         </div>
       </div>
-      {chatbotEnabled && <ChatWidget />}
+      {chatbotEnabled === true && <ChatWidget />}
     </div>
   );
 }
