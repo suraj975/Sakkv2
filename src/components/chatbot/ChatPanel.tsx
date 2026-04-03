@@ -34,7 +34,7 @@ export default function ChatPanel({ open, onClose }: ChatPanelProps) {
         id: "welcome",
         role: "assistant",
         content:
-          "Hi! I'm صك — your guide to the Sakk marketplace. I can help with buying, selling, auctions, gifting plates, and more. What would you like to know?",
+          "Hi! I'm Madmoon AI — your guide to the Madmoon marketplace. I can help with buying, selling, auctions, gifting plates, and more. What would you like to know?",
       },
     ]);
   }, []);
@@ -120,6 +120,7 @@ export default function ChatPanel({ open, onClose }: ChatPanelProps) {
         style={{
           background: "var(--background)",
           boxShadow: "0 -4px 40px rgba(0,0,0,0.18)",
+          minHeight: "60dvh",
           maxHeight: "85dvh",
         }}
       >
@@ -132,10 +133,10 @@ export default function ChatPanel({ open, onClose }: ChatPanelProps) {
             className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
             style={{ background: "var(--teal)" }}
           >
-            صك
+            M
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-white">صك</p>
+            <p className="text-sm font-semibold text-white">Madmoon AI</p>
             <p className="text-xs text-teal-300">Always here to help</p>
           </div>
           <button

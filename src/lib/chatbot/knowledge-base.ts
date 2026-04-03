@@ -1,22 +1,22 @@
 /**
- * Sakk AI Chatbot — Local Knowledge Base
+ * Madmoon AI Chatbot — Local Knowledge Base
  *
  * This file is the single source of truth for the chatbot.
  * All content is fed into the OpenAI system prompt so the bot
- * only answers questions about Sakk and navigates within the app.
+ * only answers questions about Madmoon and navigates within the app.
  */
 
 export const SAKK_KNOWLEDGE_BASE = `
-# About Sakk (صك)
+# About Madmoon
 
-Sakk (صك) — meaning "deed" in Arabic — is a UAE-based digital marketplace for buying, selling, auctioning, and gifting vehicle licence plates. The platform's core promise is trust: every transaction is secured through an escrow engine that holds funds until the official RTA plate transfer is verified and complete. Sakk is the only fully safe, end-to-end digital channel to discover, purchase, transfer, or gift plates in the UAE.
+Madmoon — is a UAE-based digital marketplace for buying, selling, auctioning, and gifting vehicle licence plates. The platform's core promise is trust: every transaction is secured through an escrow engine that holds funds until the official RTA plate transfer is verified and complete. Madmoon is the only fully safe, end-to-end digital channel to discover, purchase, transfer, or gift plates in the UAE.
 
 **Tagline:** Your deal. Your deed. / صك لكل صفقة  
 **Primary colour:** Teal #0CBFB8  
 **Website:** sakk.ae / sakk.com
 
-## The Problem Sakk Solves
-Vehicle plate transfers in the UAE currently happen without secured payment, exposing buyers and sellers to fraud. Existing platforms (SHUB, PlateMarket) offer discovery but zero payment protection — transactions happen off-platform via unprotected bank transfers or cash. Sakk fixes this with an e-escrow engine.
+## The Problem Madmoon Solves
+Vehicle plate transfers in the UAE currently happen without secured payment, exposing buyers and sellers to fraud. Existing platforms (SHUB, PlateMarket) offer discovery but zero payment protection — transactions happen off-platform via unprotected bank transfers or cash. Madmoon fixes this with an e-escrow engine.
 
 ---
 
@@ -136,13 +136,13 @@ User notification inbox:
 # Escrow System
 
 ## How Escrow Works
-Sakk uses an e-escrow engine. Funds NEVER move directly from buyer to seller.
+Madmoon uses an e-escrow engine. Funds NEVER move directly from buyer to seller.
 
 **Flow:**
-1. Buyer pays → funds go into Sakk escrow
+1. Buyer pays → funds go into Madmoon escrow
 2. Seller initiates RTA transfer
 3. Transfer is verified
-4. Funds released to seller; escrow fee retained by Sakk
+4. Funds released to seller; escrow fee retained by Madmoon
 
 **If anything goes wrong:** Full refund to buyer including escrow fee.
 
@@ -178,11 +178,11 @@ Buyer Payment Pending → Action Required → Transfer in Progress → Verificat
 | Premium | AED 100,000 – 999,000 | AED 2,000 |
 | Elite | AED 1,000,000+ | AED 5,000 |
 
-The escrow fee is a flat fixed amount per tier — Sakk does NOT take a percentage of the plate value. There are no hidden fees.
+The escrow fee is a flat fixed amount per tier — Madmoon does NOT take a percentage of the plate value. There are no hidden fees.
 
 ---
 
-# Plates on Sakk
+# Plates on Madmoon
 
 ## Plate Types
 - **Gold** — Dubai gold-background plates
@@ -271,8 +271,8 @@ For specific plates, the path is /plates/[id] where [id] is the plate ID.
 
 # FAQs
 
-**Q: Is Sakk safe?**
-A: Yes. Sakk uses an e-escrow engine — your funds are never sent directly to the seller. Money is held securely until the RTA plate transfer is officially confirmed.
+**Q: Is Madmoon safe?**
+A: Yes. Madmoon uses an e-escrow engine — your funds are never sent directly to the seller. Money is held securely until the RTA plate transfer is officially confirmed.
 
 **Q: What payment methods are accepted?**
 A: Currently Bank Transfer. Card and Apple Pay are coming soon.
@@ -284,10 +284,10 @@ A: The target SLA is 48 hours from escrow funded to transfer initiated. Total en
 A: Yes, buyers can cancel before the seller initiates the RTA transfer. A full refund including escrow fee is issued.
 
 **Q: What if there's a dispute?**
-A: Open a dispute from your transaction page. Funds are frozen and Sakk's operations team reviews manually. Target dispute rate is below 2%.
+A: Open a dispute from your transaction page. Funds are frozen and Madmoon's operations team reviews manually. Target dispute rate is below 2%.
 
 **Q: How do I gift a plate?**
-A: Open any plate listing, tap "Gift This Plate", fill in the recipient's name and optional message, pay, and Sakk sends the recipient a personalised reveal link. The recipient enters their TCF number to accept the transfer.
+A: Open any plate listing, tap "Gift This Plate", fill in the recipient's name and optional message, pay, and Madmoon sends the recipient a personalised reveal link. The recipient enters their TCF number to accept the transfer.
 
 **Q: Do I need to verify my identity to buy?**
 A: You need to be registered and logged in. Sellers need full verification. Buyers need basic account setup.
@@ -299,46 +299,47 @@ A: Currently no listing fees. Revenue comes from escrow fees only. Listing fees 
 A: TCF stands for Traffic Code File. It's your unique identifier with UAE traffic authorities (RTA) — required for plate ownership transfers.
 
 **Q: Can I buy plates from all emirates?**
-A: Yes. Sakk lists plates from all 7 UAE emirates: Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, and Umm Al Quwain.
+A: Yes. Madmoon lists plates from all 7 UAE emirates: Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, and Umm Al Quwain.
 
-**Q: Is Sakk available outside the UAE?**
+**Q: Is Madmoon available outside the UAE?**
 A: Currently UAE only. GCC expansion (Saudi Arabia, Qatar, Kuwait, Bahrain, Oman) is planned.
 
-**Q: How do I contact Sakk support?**
-A: Support contact options are available on the Profile page. Email support@sakk.ae.
+**Q: How do I contact Madmoon support?**
+A: Support contact options are available on the Profile page. Email support@madmoon.ae.
 
 **Q: What does "Boosted" or "Quick Sale" mean?**
 A: Quick Sale listings are from sellers wanting a fast exit — often priced below market. Boosted listings are promoted for higher visibility.
 `;
 
 export const SYSTEM_PROMPT = (currentPage: string) => `
-You are صك — the friendly, helpful AI for the Sakk (صك) plate marketplace app. You only answer questions about Sakk and its features. If someone asks something completely unrelated to Sakk, politely say you can only help with Sakk-related questions.
+You are Madmoon AI — the friendly, helpful AI assistant built into the Madmoon plate marketplace app.
 
 The user is currently on: ${currentPage}
 
 ## Your Capabilities
-1. Answer questions about how Sakk works, its features, fees, escrow system, auctions, gifting, etc.
-2. Guide users to the right page within the app by responding with a navigation action
-3. Explain processes step by step (e.g. "how do I bid?", "how does escrow work?")
+1. Answer ANY question about Madmoon — what it is, how it works, its features, fees, escrow, auctions, gifting, plate values, etc.
+2. Welcome and orient new users who ask general questions like "what is this?", "what can I do here?", "how does this work?" — these are valid and common
+3. Guide users to the right page within the app by including a navigation action
+4. Give step-by-step guidance for any Madmoon process (bidding, buying, selling, gifting, escrow, etc.)
+5. Use the get_page_context tool whenever the user asks what they can do, what they see, or needs UI guidance on their current page
 
 ## Navigation
 When a user wants to go to a specific section, include a JSON navigation block at the END of your message in this exact format:
 <nav>{"path":"/auctions","label":"Browse Auctions"}</nav>
 
-Only include one navigation block per message. Only include it when the user is explicitly asking to go somewhere or when navigation would clearly help them (e.g. "show me auctions" → navigate to /auctions).
+Only include one navigation block per message. Only include it when the user explicitly wants to go somewhere or when it would clearly help them.
 
 ## Tone
-- Friendly, concise, professional
-- Use simple language (users may not be tech-savvy)
-- Keep responses short unless a detailed explanation is needed
+- Friendly, warm, and concise
+- Use simple language — assume users may be new to the app
+- Keep responses short unless detail is genuinely needed
 - Use AED for currency
-- You can use Arabic words where natural (e.g. "صك" for the platform name)
 
 ## Rules
-- ONLY answer questions using the knowledge base below
-- Do NOT make up plate prices, specific listings, or user data
-- Do NOT answer questions about topics outside Sakk (no general knowledge, no coding, no politics, etc.)
-- If you don't know something specific, say "I don't have that information right now — please contact support@sakk.ae"
+- Answer all questions about Madmoon enthusiastically — including "what is this site?", "who is this for?", "what can I do here?" etc.
+- Do NOT make up plate prices, specific listings, or user account data
+- Only decline if the question is completely unrelated to Madmoon AND to UAE plate marketplace topics (e.g. cooking recipes, sports scores) — in that case politely say you can only help with Madmoon questions
+- If you don't know a specific detail, say "I don't have that information right now — please contact support@madmoon.ae"
 
 ## Knowledge Base
 ${SAKK_KNOWLEDGE_BASE}
@@ -346,7 +347,7 @@ ${SAKK_KNOWLEDGE_BASE}
 
 export const QUICK_REPLIES_BY_PAGE: Record<string, string[]> = {
   "/": [
-    "How does Sakk work?",
+    "How does Madmoon work?",
     "Is it safe to buy here?",
     "Browse auctions",
     "What are the fees?",
@@ -375,7 +376,7 @@ export const QUICK_REPLIES_BY_PAGE: Record<string, string[]> = {
     "How do I list at this price?",
   ],
   default: [
-    "How does Sakk work?",
+    "How does Madmoon work?",
     "What are the escrow fees?",
     "How do I buy a plate?",
     "How do auctions work?",
@@ -384,4 +385,278 @@ export const QUICK_REPLIES_BY_PAGE: Record<string, string[]> = {
 
 export function getQuickReplies(pathname: string): string[] {
   return QUICK_REPLIES_BY_PAGE[pathname] ?? QUICK_REPLIES_BY_PAGE["default"];
+}
+
+// ─── Page Context Tool ────────────────────────────────────────────────────────
+
+export interface PageContext {
+  title: string;
+  description: string;
+  visibleElements: string[];
+  availableActions: string[];
+  tips: string[];
+}
+
+export const PAGE_CONTEXT_MAP: Record<string, PageContext> = {
+  "/": {
+    title: "Landing Page",
+    description: "The Madmoon marketing/entry page for new visitors.",
+    visibleElements: [
+      "Hero banner",
+      "Featured plate listings",
+      "Search bar",
+      "Sign up / Log in buttons",
+    ],
+    availableActions: [
+      "Search for a plate",
+      "Sign up",
+      "Log in",
+      "Tap a featured plate",
+    ],
+    tips: ["Sign up is free — you need an account to place bids or buy plates"],
+  },
+  "/home": {
+    title: "Home Feed",
+    description: "Main discovery feed shown after login.",
+    visibleElements: [
+      "Category tabs: Car / Bike / Boat",
+      "Featured plate cards",
+      "Live auction previews",
+      "Bottom navigation",
+    ],
+    availableActions: [
+      "Tap a plate card",
+      "Tap Auctions tab",
+      "Tap + to list your plate",
+      "Tap Search",
+    ],
+    tips: ["Plates with a countdown timer are live auctions — tap to bid"],
+  },
+  "/search": {
+    title: "Search & Browse",
+    description: "Filter and search all available plate listings.",
+    visibleElements: [
+      "Search input bar",
+      "Emirate filter",
+      "Digit count filter",
+      "Listing type toggle",
+      "Results grid",
+    ],
+    availableActions: [
+      "Type a number in the search bar",
+      "Filter by emirate",
+      "Filter by digit count",
+      "Tap a result to view the plate",
+    ],
+    tips: [
+      "Try popular searches: 786, 1234, 5555, 1001",
+      "Mirror numbers (1221) and repeating digits (7777) tend to be premium",
+    ],
+  },
+  "/auctions": {
+    title: "Auctions",
+    description: "Live auction listings with real-time countdowns.",
+    visibleElements: [
+      "Tabs: Ending Soon / Newly Listed / All / Premium Only",
+      "Auction cards with countdown, current bid, bid count",
+    ],
+    availableActions: ["Switch tabs to filter", "Tap an auction card to bid"],
+    tips: [
+      "'Ending Soon' tab shows auctions expiring in the next 2 hours",
+      "You must be logged in to place a bid",
+    ],
+  },
+  "/estimator": {
+    title: "Plate Value Estimator",
+    description: "Estimate the market value of any UAE plate.",
+    visibleElements: [
+      "Emirate selector",
+      "Plate Code input",
+      "Plate Number input",
+      "Estimate button",
+      "Price range result",
+      "Market gauge",
+    ],
+    availableActions: [
+      "Select emirate",
+      "Enter plate code and number",
+      "Tap Estimate",
+      "Tap 'Find similar plates'",
+      "Tap 'List at this price'",
+    ],
+    tips: [
+      "Fewer digits = higher value",
+      "Repeating numbers like 7777 have strong demand",
+    ],
+  },
+  "/notifications": {
+    title: "Notifications",
+    description: "Your notification inbox.",
+    visibleElements: [
+      "Notification list",
+      "Mark All Read button",
+      "Unread count badge",
+    ],
+    availableActions: [
+      "Tap a notification to navigate to the listing",
+      "Tap Mark All Read",
+    ],
+    tips: [
+      "Outbid notifications are time-sensitive — tap quickly to counter-bid",
+    ],
+  },
+  "/profile": {
+    title: "Profile & Settings",
+    description: "Your account overview, stats, and preferences.",
+    visibleElements: [
+      "Avatar, display name, email",
+      "Stats: Sales, Purchases, Rating",
+      "Verification Status, Wallet Balance, Payment Methods",
+      "Dark/Light mode toggle",
+      "Madmoon AI Assistant toggle",
+      "Log Out button",
+    ],
+    availableActions: [
+      "Toggle Dark/Light mode",
+      "Enable or disable the Madmoon AI chatbot",
+      "Check verification status",
+      "Log Out",
+    ],
+    tips: [
+      "You must be verified to list plates for sale",
+      "The Madmoon AI toggle here controls whether the chat button appears",
+    ],
+  },
+};
+
+export function getPageContext(pathname: string): PageContext | null {
+  const clean = pathname.split("?")[0].split("#")[0];
+  if (PAGE_CONTEXT_MAP[clean]) return PAGE_CONTEXT_MAP[clean];
+
+  if (clean.startsWith("/plates/") && clean.endsWith("/auction/bid")) {
+    return {
+      title: "Place a Bid",
+      description: "Real-time bid placement screen for an active auction.",
+      visibleElements: [
+        "Plate visual with current bid",
+        "Live countdown timer",
+        "Minimum next bid amount",
+        "Bid amount input",
+        "Place Bid button",
+      ],
+      availableActions: [
+        "Enter a bid amount ≥ the minimum shown",
+        "Tap Place Bid to submit",
+      ],
+      tips: [
+        "Your bid must be at least the minimum shown",
+        "After bidding you will be taken to the watching screen",
+      ],
+    };
+  }
+  if (clean.startsWith("/plates/") && clean.endsWith("/auction/watching")) {
+    return {
+      title: "Watching Auction",
+      description:
+        "Live auction watch screen tracking your position in real-time.",
+      visibleElements: [
+        "Live countdown",
+        "Your status: Leading / Outbid",
+        "Current highest bid",
+        "Bid history",
+        "Quick increment buttons: +500, +1,000, +5,000 AED",
+      ],
+      availableActions: [
+        "Tap a quick increment button for a counter-bid",
+        "Tap Re-bid to go back to the bid screen",
+      ],
+      tips: [
+        "Use the +500/+1000/+5000 buttons if you are outbid",
+        "Page updates live — no need to refresh",
+      ],
+    };
+  }
+  if (
+    clean.startsWith("/plates/") &&
+    clean.endsWith("/checkout/bank-transfer")
+  ) {
+    return {
+      title: "Bank Transfer Details",
+      description:
+        "Madmoon escrow bank account details for completing payment.",
+      visibleElements: [
+        "Madmoon Escrow Account name",
+        "Bank: Emirates NBD",
+        "IBAN (copy button)",
+        "SWIFT code (copy button)",
+        "Transaction reference (copy button)",
+      ],
+      availableActions: [
+        "Copy IBAN, SWIFT, or reference to clipboard",
+        "Make the bank transfer using these details",
+      ],
+      tips: [
+        "Include the transaction reference in the bank transfer remarks",
+        "Funds go to Madmoon escrow — not directly to the seller",
+      ],
+    };
+  }
+  if (clean.startsWith("/plates/") && clean.endsWith("/checkout/escrow")) {
+    return {
+      title: "Escrow Tracker",
+      description: "5-step live escrow status tracker.",
+      visibleElements: [
+        "Step 1: Payment Received",
+        "Step 2: Seller Notified",
+        "Step 3: Transfer in Progress",
+        "Step 4: Verification",
+        "Step 5: Ready to Collect",
+      ],
+      availableActions: ["Wait for each step — updates are automatic"],
+      tips: [
+        "If transfer is delayed beyond SLA, Madmoon support will contact you",
+        "Full refund if anything goes wrong",
+      ],
+    };
+  }
+  if (clean.startsWith("/plates/") && clean.includes("/checkout")) {
+    return {
+      title: "Checkout",
+      description: "Order summary and payment initiation screen.",
+      visibleElements: [
+        "Plate preview",
+        "Plate price (AED)",
+        "Escrow fee",
+        "Total payable",
+        "Proceed to Payment button",
+      ],
+      availableActions: ["Review order summary", "Tap Proceed to Payment"],
+      tips: ["The escrow fee is a flat amount — not a percentage"],
+    };
+  }
+  if (clean.startsWith("/plates/")) {
+    return {
+      title: "Plate Detail",
+      description: "Full listing page for a specific plate.",
+      visibleElements: [
+        "Plate visual",
+        "Price or current bid",
+        "Market price gauge",
+        "Verified seller info",
+        "Escrow protection banner",
+        "Place Bid / Buy Now / Gift This Plate buttons",
+      ],
+      availableActions: [
+        "Tap Place Bid to bid",
+        "Tap Buy Now to purchase",
+        "Tap Gift This Plate to gift",
+        "Add to watchlist",
+      ],
+      tips: [
+        "All purchases go through Madmoon escrow — funds are never sent directly to the seller",
+        "You must be logged in to buy or bid",
+      ],
+    };
+  }
+  return null;
 }

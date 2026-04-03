@@ -47,7 +47,7 @@ export default function ChatInput({
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        placeholder="Ask صك..."
+        placeholder="Ask Madmoon AI anything..."
         className="flex-1 resize-none rounded-xl border px-3 py-2 text-sm outline-none transition-colors placeholder:opacity-50 disabled:opacity-50"
         style={{
           background: "var(--sakk-bg)",

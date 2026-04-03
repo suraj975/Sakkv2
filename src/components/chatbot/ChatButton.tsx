@@ -9,7 +9,7 @@ export default function ChatButton({ onClick, hasUnread }: ChatButtonProps) {
   return (
     <button
       onClick={onClick}
-      aria-label="Open صك chat"
+      aria-label="Open Madmoon chat"
       className="fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 md:bottom-6"
       style={{ background: "var(--teal)" }}
     >

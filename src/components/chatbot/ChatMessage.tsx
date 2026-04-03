@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 
 interface NavAction {
   path: string;
@@ -51,7 +52,7 @@ export default function ChatMessage({
           className="mr-2 mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
           style={{ background: "var(--teal)" }}
         >
-          صك
+          M
         </div>
       )}
       <div
@@ -71,13 +72,51 @@ export default function ChatMessage({
                 }
           }
         >
-          {/* Render newlines as line breaks */}
-          {content.split("\n").map((line, i) => (
-            <span key={i}>
-              {line}
-              {i < content.split("\n").length - 1 && <br />}
-            </span>
-          ))}
+          {isUser ? (
+            // User messages: plain text, preserve line breaks
+            content.split("\n").map((line, i) => (
+              <span key={i}>
+                {line}
+                {i < content.split("\n").length - 1 && <br />}
+              </span>
+            ))
+          ) : (
+            // Assistant messages: render markdown
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => (
+                  <p className="mb-1 last:mb-0">{children}</p>
+                ),
+                strong: ({ children }) => (
+                  <strong className="font-bold">{children}</strong>
+                ),
+                em: ({ children }) => <em className="italic">{children}</em>,
+                ul: ({ children }) => (
+                  <ul className="mb-1 ml-4 list-disc space-y-0.5">
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="mb-1 ml-4 list-decimal space-y-0.5">
+                    {children}
+                  </ol>
+                ),
+                li: ({ children }) => (
+                  <li className="leading-relaxed">{children}</li>
+                ),
+                code: ({ children }) => (
+                  <code
+                    className="rounded px-1 py-0.5 text-xs font-mono"
+                    style={{ background: "var(--sakk-bg)" }}
+                  >
+                    {children}
+                  </code>
+                ),
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+          )}
         </div>
 
         {navAction && (
@@ -116,7 +155,7 @@ export function TypingIndicator() {
         className="mr-2 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
         style={{ background: "var(--teal)" }}
       >
-        صك
+        M
       </div>
       <div
         className="flex items-center gap-1 rounded-2xl rounded-bl-sm border px-4 py-3"

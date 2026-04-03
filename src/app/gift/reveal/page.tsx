@@ -68,7 +68,7 @@ function GiftRevealInner() {
             <ArrowLeft size={24} />
           </button>
           <span className="text-[18px] font-black tracking-[0.18em] text-[var(--primary)]">
-            MADMOON
+            SAKK
           </span>
         </div>
         <div className="rounded-full bg-[var(--teal-light)] px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[var(--primary)]">

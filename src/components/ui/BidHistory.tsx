@@ -20,6 +20,7 @@ export default function BidHistory({
 
   const relativeTime = (bid: FSBid): string => {
     if (!bid.createdAt) return "";
+    // eslint-disable-next-line react-hooks/purity
     const diff = Date.now() - bid.createdAt.toDate().getTime();
     const mins = Math.floor(diff / 60000);
     if (mins < 1) return "just now";

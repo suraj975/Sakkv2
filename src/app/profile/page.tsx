@@ -357,7 +357,7 @@ export default function ProfilePage() {
                     className="text-[15px] font-black"
                     style={{ color: "var(--on-surface)" }}
                   >
-                    صك
+                    Madmoon AI
                   </p>
                   <p
                     className="text-sm"

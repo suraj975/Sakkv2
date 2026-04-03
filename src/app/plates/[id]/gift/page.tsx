@@ -66,7 +66,7 @@ export default function GiftDetailPage() {
             <ArrowLeft size={24} />
           </button>
           <span className="text-[18px] font-black tracking-[0.18em] text-[var(--primary)]">
-            MADMOON
+            SAKK
           </span>
         </div>
         <div

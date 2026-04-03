@@ -22,6 +22,7 @@ function useCountdown(endTime: string) {
     total: 0,
   });
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTime(timeRemaining(endTime));
     const id = setInterval(() => setTime(timeRemaining(endTime)), 1000);
     return () => clearInterval(id);
