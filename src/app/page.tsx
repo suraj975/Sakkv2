@@ -204,8 +204,8 @@ const FAQS = [
     a: "No hidden charges. The buyer sees the plate price and service fee, while the seller settles any RTA transfer charges separately.",
   },
   {
-    q: "Can I buy a plate if I don't live in the UAE?",
-    a: "Yes, all digital certificates remain a proper legal title once registered within our on-chain exchange framework. You will need a UAE representative or notary to book the assets. Contact our concierge for guidance.",
+    q: "Can I buy a plate if I'm abroad?",
+    a: "Yes, all digital certificates remain a proper legal title once registered within our on-chain exchange framework. You will need a local representative or notary to book the assets. Contact our concierge for guidance.",
   },
   {
     q: "How long does a typical transfer take?",
@@ -426,7 +426,7 @@ export default function LandingPage() {
               }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary-container)]" />
-              Browse verified UAE listings
+              Browse verified listings
             </div>
 
             {/* Desktop headline */}
@@ -456,12 +456,12 @@ export default function LandingPage() {
               style={{ color: "rgba(255,255,255,0.72)" }}
             >
               <span className="hidden lg:inline">
-                Browse premium UAE plates with protected payments,
+                Browse premium plates with protected payments,
                 authority-confirmed transfers, and a fully digital buyer
                 journey.
               </span>
               <span className="lg:hidden">
-                Browse rare UAE plates with protected payments and full escrow
+                Browse rare plates with protected payments and full escrow
                 protection from start to finish.
               </span>
             </p>
@@ -742,7 +742,7 @@ export default function LandingPage() {
               className="text-sm mb-8"
               style={{ color: "var(--on-surface-variant)" }}
             >
-              Search from thousands of UAE plates by number, code, or emirate
+              Search from thousands of plates by number, code, or emirate
             </p>
             <form onSubmit={handleSearch} className="flex gap-3">
               <input
@@ -923,7 +923,7 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <p className="text-2xl font-black text-white leading-snug">
-                  Exclusive monthly events for the UAE&apos;s rarest
+                  Exclusive monthly events for the rarest
                   single-digit numbers.
                 </p>
               </div>
@@ -1084,13 +1084,13 @@ export default function LandingPage() {
                   >
                     Madmoon
                   </span>
-                  <span className="text-xl font-black text-white/70">UAE</span>
+                  <span className="text-xl font-black text-white/70">Madmoon</span>
                 </div>
                 <p
                   className="text-xs leading-relaxed"
                   style={{ color: "rgba(255,255,255,0.5)" }}
                 >
-                  The premier digital exchange for rare UAE heritage number
+                  The premier digital exchange for rare heritage number
                   plate investments.
                 </p>
               </div>
@@ -1153,7 +1153,7 @@ export default function LandingPage() {
                 className="text-[11px]"
                 style={{ color: "rgba(255,255,255,0.35)" }}
               >
-                © 2026 Madmoon. The trusted digital marketplace for UAE plate
+                © 2026 Madmoon. The trusted digital marketplace for plate
                 investments.
               </p>
               <div className="flex items-center gap-5">

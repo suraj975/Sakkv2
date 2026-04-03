@@ -22,7 +22,7 @@ const PAYMENT_METHODS = [
   {
     id: "bank",
     label: "Bank Transfer",
-    sub: "Instant via UAE Central Bank",
+    sub: "Instant via Central Bank",
     Icon: Building2,
   },
 ];

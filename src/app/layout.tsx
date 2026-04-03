@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Madmoon — UAE Plate Marketplace",
+  title: "Madmoon — Plate Marketplace",
   description:
-    "Buy, sell, and gift UAE number plates with full e-escrow payment protection.",
+    "Buy, sell, and gift number plates with full e-escrow payment protection.",
 };
 
 export default function RootLayout({

@@ -40,7 +40,7 @@ interface PageMeta {
 
 const PAGE_META: Record<string, PageMeta> = {
   search: {
-    headline: "Discover UAE Plates",
+    headline: "Discover Plates",
     sub: "Browse thousands of verified listings from all seven Emirates.",
     icon: BadgeCheck,
     accentColor: "#2563EB",
@@ -69,7 +69,7 @@ const PAGE_META: Record<string, PageMeta> = {
   },
   gift: {
     headline: "Gift a Plate",
-    sub: "Send a prestigious UAE plate as a digital gift.",
+    sub: "Send a prestigious plate as a digital gift.",
     icon: ShieldCheck,
     accentColor: "#7C3AED",
     accentBg: "rgba(124,58,237,0.12)",
@@ -344,7 +344,7 @@ export default function AuthGateModal({ destinationHref, onClose }: Props) {
             >
               {tab === "login"
                 ? "Sign in to access your plates, bids & transfers."
-                : "Join 15,000+ UAE plate investors today."}
+                : "Join 15,000+ plate investors today."}
             </p>
           </div>
 

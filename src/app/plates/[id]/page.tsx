@@ -271,7 +271,7 @@ export default function PlateDetailPage() {
                     style={{ color: "var(--on-surface-variant)" }}
                   >
                     <MapPin size={13} strokeWidth={1.8} />
-                    <span>{plate.emirate}, UAE</span>
+                    <span>{plate.emirate}</span>
                     <span className="mx-1 opacity-30">•</span>
                     <span>Auction · LOT #{plate.lotNumber}</span>
                   </div>
@@ -375,7 +375,7 @@ export default function PlateDetailPage() {
                     style={{ color: "var(--on-surface-variant)" }}
                   >
                     <MapPin size={13} strokeWidth={1.8} />
-                    <span>{plate.emirate}, UAE</span>
+                    <span>{plate.emirate}</span>
                     <span className="mx-1 opacity-30">•</span>
                     <span>Direct Sale</span>
                   </div>

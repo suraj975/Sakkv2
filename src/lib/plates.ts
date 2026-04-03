@@ -89,7 +89,7 @@ export const PLATES: Plate[] = [
     emirate: "Dubai",
     type: "gold",
     verified: true,
-    seller: "Golden Plates UAE",
+    seller: "Golden Plates",
     days: 1,
     listingType: "auction",
     auctionEndTime: "2025-08-15T23:00:00.000Z",
